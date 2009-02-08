@@ -1,0 +1,22 @@
+#summary Design #1.
+#labels Phase-Design
+
+= Introduction =
+Parser Style Design
+= Details =
+Query passes to select, update, or delete function (returns whatever select, update, delete return)
+
+*SELECT* calls *FROM* function to get table, selects data, passes to *WHERE* (returns whatever where returns)
+*UPDATE* calls *FROM* function to get table, passes to *WHERE*, modifies entries. (pointers?)
+*DELETE*  calls *FROM* function to get table, passes to *WHERE*, deletes entries. (pointers?)
+
+*WHERE* will parse and pass to functions of these 3 categories: table operators, binary operators, comparison operators
+table: IN, EXISTS, ALL, ANY, these will call a *SELECT*
+binary: AND, OR, NOT
+comparison: =, !=, >, <, >=, <=
+
+Additional detail
+*SELECT* needs to preform: AS, COUNT, MIN, MAX
+
+Design Difficulty/Flaw:
+Preforming the table operators without a *SELECT* call per row.
