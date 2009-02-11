@@ -1,4 +1,4 @@
-Easy Contact Info
+#summary Easy Contact Info
 
 = Introduction =
 In case we need to talk to each other, it might be handy to have several ways to get in touch.
