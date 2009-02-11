@@ -9,4 +9,4 @@ Brandon - select, from, update and delete funcitons
 
 Drew - and, or, not, and boolean comparison functions
 
-Gabriel - any, all, exists subfunctions 
+Gabriel - where, any, all, exists subfunctions
