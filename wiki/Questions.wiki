@@ -19,30 +19,33 @@ send any given operator two single column JTables and expect a return
 of a single column JTable containing "true, false, true, false, true,
 true" etc. Example for '>': Query: "number>3"
  
-LColumn
-5
-7
-1
-3
-9
-10
+LColumn <br>
+5 <br>
+7 <br>
+1 <br>
+3 <br>
+9 <br>
+10 <br>
  
-RColumn
-3
-3
-3
-3
-3
-3
+RColumn <br>
+3 <br>
+3 <br>
+3 <br>
+3 <br>
+3 <br>
+3 <br>
  
-Return:
-true
-true
-false
-false
-true
-true
+Return: <br>
+true <br>
+true <br>
+false <br>
+false <br>
+true <br>
+true <br>
 
 A: Drew
 
-As opposed to just columns where the number is greater than 3?
+As opposed to just *edit: rows* where the number is greater than 3?
+ <br>
+Response: Gabriel
+Yes, because the response from a given operator will be passed on to the next operator in the sequence.  If one of the next operators happen to be "OR" then the false could become true.  (This also helps the NOT case since NOT merely has to invert true to false and vice-versa).  The response JTable can be either string or boolean, for now I will assume "string."<br>
