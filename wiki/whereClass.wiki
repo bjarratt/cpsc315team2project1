@@ -1,0 +1,21 @@
+#summary Documentation of whereClass
+#labels Phase-Design
+==Overview==
+=== Input ===
+where(JTable table, String query)<br>
+
+The query portion is in bold for:<br>
+`SELECT *`<br>
+`  FROM myTable`<br>
+` WHERE `<b>a=5;</b>
+
+=== Output ===
+Modified version of the JTable containing only the rows specified by the query
+
+==To Implement==
+Support for more than one JTable.  Array? Vector? Another argument?<br>
+Operators, need names for the operators, currently commented out<br>
+Qualified variable names: *table.a* is unsupported<br>
+
+==Known Bugs==
+none, class is completely *untested*.
