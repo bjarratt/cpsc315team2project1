@@ -13,36 +13,43 @@ class whereClass {
 		whereClass whereObj=new whereClass(argTable);
 		int selectIndex;
 		int subQueryIndex;
+		int oParenIndex;
+		String[] args;
 		String subQuery;
 		//Handle any sub queries
 		while((selectIndex=commands.indexOf("(SELECT"))!=-1) {
 			if((subQueryIndex=commands.substring(0, selectIndex).indexOf("EXISTS"))!=-1) {
 				subQuery=whereObj.getSubQuery(commands.substring(subQueryIndex+6));
-//				whereObj.subQueries.add(exists(subQuery));
+				whereObj.subQueries.add(subQueryOperators.existsOp(whereObj.table, subQuery));
 				commands=commands.substring(0,subQueryIndex) +
 				whereObj.ctrlString + whereObj.subQueries.size() +
-				commands.substring(subQueryIndex+subQuery.length()+6, commands.length());
+				commands.substring(subQueryIndex+6+subQuery.length(), commands.length());
 			}
 			else if((subQueryIndex=commands.substring(0, selectIndex).indexOf("IN"))!=-1) {
-				subQuery=whereObj.getSubQuery(commands.substring(subQueryIndex+6));
-//				whereObj.subQueries.add(in(getSubQuery(subQueryIndex+2)));
+				subQuery=whereObj.getSubQuery(commands.substring(subQueryIndex+2));
+				oParenIndex=commands.substring(0, subQueryIndex).lastIndexOf('(');
+//				whereObj.subQueries.add(in(helperFunctions.convertToTable(whereObj.table, commands.substring(oParenIndex+1, subQueryIndex-1)), subQuery));
 				commands=commands.substring(0,subQueryIndex) +
 				whereObj.ctrlString + whereObj.subQueries.size() +
-				commands.substring(subQueryIndex+subQuery.length()+2, commands.length());
+				commands.substring(subQueryIndex+2+subQuery.length(), commands.length());
 			}
 			else if((subQueryIndex=commands.substring(0, selectIndex).indexOf("ANY"))!=-1) {
-				subQuery=whereObj.getSubQuery(commands.substring(subQueryIndex+6));
-//				whereObj.subQueries.add(any(getSubQuery(subQueryIndex+3)));
-				commands=commands.substring(0,subQueryIndex) +
+				subQuery=whereObj.getSubQuery(commands.substring(subQueryIndex+3));
+				oParenIndex=commands.substring(0, subQueryIndex).lastIndexOf('(');
+				args=commands.substring(oParenIndex+1, subQueryIndex-1).split(" ");
+				whereObj.subQueries.add(subQueryOperators.anyOp(helperFunctions.convertToTable(whereObj.table, args[0].trim()), args[1].trim(), subQuery));
+				commands=commands.substring(0,oParenIndex) +
 				whereObj.ctrlString + whereObj.subQueries.size() +
-				commands.substring(subQueryIndex+subQuery.length()+3, commands.length());
+				commands.substring(subQueryIndex+3+subQuery.length(), commands.length());
 			}
 			else if((subQueryIndex=commands.substring(0, selectIndex).indexOf("ALL"))!=-1) {
-				subQuery=whereObj.getSubQuery(commands.substring(subQueryIndex+6));
-//				whereObj.subQueries.add(all(getSubQuery(subQueryIndex+3)));
-				commands=commands.substring(0,subQueryIndex) +
+				subQuery=whereObj.getSubQuery(commands.substring(subQueryIndex+3));
+				oParenIndex=commands.substring(0, subQueryIndex).lastIndexOf('(');
+				args=commands.substring(oParenIndex+1, subQueryIndex-1).split(" ");
+				whereObj.subQueries.add(subQueryOperators.allOp(helperFunctions.convertToTable(whereObj.table, args[0].trim()), args[1].trim(), subQuery));
+				commands=commands.substring(0,oParenIndex) +
 				whereObj.ctrlString + whereObj.subQueries.size() +
-				commands.substring(subQueryIndex+subQuery.length()+3, commands.length());
+				commands.substring(subQueryIndex+3+subQuery.length(), commands.length());
 			}
 		}
 		//Handle everything else
@@ -79,21 +86,6 @@ class whereClass {
 		subQueries=new Vector<JTable>();
 		table=argTable;
 	}
-	//Converts a given variable into a JTable
-	private JTable convertToTable(String variable) {
-	    JTable retTable=new JTable(table.getRowCount(), 1);
-		int curCol=0;
-		for(curCol=0; curCol<table.getColumnCount() && table.getColumnName(curCol)!=variable; ++curCol);
-		if(curCol!=table.getColumnCount()) {
-			for(int curRow=0; curRow<retTable.getRowCount(); ++curRow)
-				retTable.setValueAt(table.getValueAt(curRow,curCol), curRow, 0);
-		}
-		else {
-			for(int curRow=0; curRow<retTable.getRowCount(); ++curRow)
-				retTable.setValueAt(variable, curRow, 0);
-		}
-		return retTable;
-	}
 	//Runs the given command
 	private JTable runOperator(String command) {
 		String[] args;
@@ -105,12 +97,12 @@ class whereClass {
 				lArg=subQueries.elementAt(Integer.valueOf((args[0].substring(args[0].indexOf("ctrlString")+ctrlString.length()))));
 			}
 			else
-				lArg=convertToTable(args[0].trim());
+				lArg=helperFunctions.convertToTable(table, args[0].trim());
 			if(args[1].startsWith(ctrlString)) {
 				rArg=subQueries.elementAt(Integer.valueOf((args[1].substring(args[1].indexOf("ctrlString")+ctrlString.length()))));
 			}
 			else
-				rArg=convertToTable(args[1].trim());
+				rArg=helperFunctions.convertToTable(table, args[1].trim());
 //			andOperator(rArg, lArg);
 		}
 		else if(command.contains("OR")) {
@@ -119,12 +111,12 @@ class whereClass {
 				lArg=subQueries.elementAt(Integer.valueOf((args[0].substring(args[0].indexOf("ctrlString")+ctrlString.length()))));
 			}
 			else
-				lArg=convertToTable(args[0].trim());
+				lArg=helperFunctions.convertToTable(table, args[0].trim());
 			if(args[1].startsWith(ctrlString)) {
 				rArg=subQueries.elementAt(Integer.valueOf((args[1].substring(args[1].indexOf("ctrlString")+ctrlString.length()))));
 			}
 			else
-				rArg=convertToTable(args[1].trim());
+				rArg=helperFunctions.convertToTable(table, args[1].trim());
 //			orOperator(rArg, lArg);
 		}
 		else if(command.startsWith("NOT")) {
@@ -133,7 +125,7 @@ class whereClass {
 				rArg=subQueries.elementAt(Integer.valueOf((args[1].substring(args[1].indexOf("ctrlString")+ctrlString.length()))));
 			}
 			else
-				rArg=convertToTable(args[1].trim());
+				rArg=helperFunctions.convertToTable(table, args[1].trim());
 //			notOperator(lArg);
 		}
 		else if(command.contains("!=")) {
@@ -142,12 +134,12 @@ class whereClass {
 				lArg=subQueries.elementAt(Integer.valueOf((args[0].substring(args[0].indexOf("ctrlString")+ctrlString.length()))));
 			}
 			else
-				lArg=convertToTable(args[0].trim());
+				lArg=helperFunctions.convertToTable(table, args[0].trim());
 			if(args[1].startsWith(ctrlString)) {
 				rArg=subQueries.elementAt(Integer.valueOf((args[1].substring(args[1].indexOf("ctrlString")+ctrlString.length()))));
 			}
 			else
-				rArg=convertToTable(args[1].trim());
+				rArg=helperFunctions.convertToTable(table, args[1].trim());
 //			!=Operator(rArg, lArg);
 		}
 		else if(command.contains("<=")) {
@@ -156,12 +148,12 @@ class whereClass {
 				lArg=subQueries.elementAt(Integer.valueOf((args[0].substring(args[0].indexOf("ctrlString")+ctrlString.length()))));
 			}
 			else
-				lArg=convertToTable(args[0].trim());
+				lArg=helperFunctions.convertToTable(table, args[0].trim());
 			if(args[1].startsWith(ctrlString)) {
 				rArg=subQueries.elementAt(Integer.valueOf((args[1].substring(args[1].indexOf("ctrlString")+ctrlString.length()))));
 			}
 			else
-				rArg=convertToTable(args[1].trim());
+				rArg=helperFunctions.convertToTable(table, args[1].trim());
 //			<=Operator(rArg, lArg);
 		}
 		else if(command.contains(">=")) {
@@ -170,12 +162,12 @@ class whereClass {
 				lArg=subQueries.elementAt(Integer.valueOf((args[0].substring(args[0].indexOf("ctrlString")+ctrlString.length()))));
 			}
 			else
-				lArg=convertToTable(args[0].trim());
+				lArg=helperFunctions.convertToTable(table, args[0].trim());
 			if(args[1].startsWith(ctrlString)) {
 				rArg=subQueries.elementAt(Integer.valueOf((args[1].substring(args[1].indexOf("ctrlString")+ctrlString.length()))));
 			}
 			else
-				rArg=convertToTable(args[1].trim());
+				rArg=helperFunctions.convertToTable(table, args[1].trim());
 //			>=Operator(rArg, lArg);
 		}
 		else if(command.contains(">")) {
@@ -184,12 +176,12 @@ class whereClass {
 				lArg=subQueries.elementAt(Integer.valueOf((args[0].substring(args[0].indexOf("ctrlString")+ctrlString.length()))));
 			}
 			else
-				lArg=convertToTable(args[0].trim());
+				lArg=helperFunctions.convertToTable(table, args[0].trim());
 			if(args[1].startsWith(ctrlString)) {
 				rArg=subQueries.elementAt(Integer.valueOf((args[1].substring(args[1].indexOf("ctrlString")+ctrlString.length()))));
 			}
 			else
-				rArg=convertToTable(args[1].trim());
+				rArg=helperFunctions.convertToTable(table, args[1].trim());
 //			>Operator(rArg, lArg);
 		}
 		else if(command.contains("<")) {
@@ -198,12 +190,12 @@ class whereClass {
 				lArg=subQueries.elementAt(Integer.valueOf((args[0].substring(args[0].indexOf("ctrlString")+ctrlString.length()))));
 			}
 			else
-				lArg=convertToTable(args[0].trim());
+				lArg=helperFunctions.convertToTable(table, args[0].trim());
 			if(args[1].startsWith(ctrlString)) {
 				rArg=subQueries.elementAt(Integer.valueOf((args[1].substring(args[1].indexOf("ctrlString")+ctrlString.length()))));
 			}
 			else
-				rArg=convertToTable(args[1].trim());
+				rArg=helperFunctions.convertToTable(table, args[1].trim());
 //			<Operator(rArg, lArg);
 		}
 		else if(command.contains("=")) {
@@ -212,12 +204,12 @@ class whereClass {
 				lArg=subQueries.elementAt(Integer.valueOf((args[0].substring(args[0].indexOf("ctrlString")+ctrlString.length()))));
 			}
 			else
-				lArg=convertToTable(args[0].trim());
+				lArg=helperFunctions.convertToTable(table, args[0].trim());
 			if(args[1].startsWith(ctrlString)) {
 				rArg=subQueries.elementAt(Integer.valueOf((args[1].substring(args[1].indexOf("ctrlString")+ctrlString.length()))));
 			}
 			else
-				rArg=convertToTable(args[1].trim());
+				rArg=helperFunctions.convertToTable(table, args[1].trim());
 //			=Operator(rArg, lArg);
 		}
 		return table;
