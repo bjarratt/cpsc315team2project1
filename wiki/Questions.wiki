@@ -1,18 +1,19 @@
 #summary Open Questions
+#labels Phase-Requirements
 
 = Introduction =
 
 Post any questions that someone else might be able to address if a particular problem is giving you trouble. Probably best in
 
-Q:
-A:
+<u>Q:</u><br>
+<u>A:</u>
 
 format.
 
 
 = Details =
 
-Q: Gabriel
+<u>Q: Gabriel</u>
 
 running into an issue with programming the where function.  Could I
 send any given operator two single column JTables and expect a return
@@ -43,9 +44,21 @@ false <br>
 true <br>
 true <br>
 
-A: Drew
+<u>A: Drew</u>
 
 As opposed to just *edit: rows* where the number is greater than 3?
  <br>
 Response: Gabriel
 Yes, because the response from a given operator will be passed on to the next operator in the sequence.  If one of the next operators happen to be "OR" then the false could become true.  (This also helps the NOT case since NOT merely has to invert true to false and vice-versa).  The response JTable can be either string or boolean, for now I will assume "string."<br>
+
+<u>Q: Drew</u>
+
+Because we apparently can't set the names of the columns or extract the types in cells, do we want to do something like this?
+
+{{{
+class myTable extends JTable {
+     Vector<String> colNames;
+     Vector<String> colTypes;
+     // maybe more nice things here?
+}
+}}}
