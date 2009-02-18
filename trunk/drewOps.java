@@ -7,7 +7,7 @@ class drewOps {
     String FALSE = "FALSE";
 
     // AND
-    JTable andOperator(JTable lTable, JTable rTable) {
+    JTable and(JTable lTable, JTable rTable) {
         int colNums = lTable.getColumnCount();
         JTable retTable = new JTable(colNums, 1);
         for (int i = 0; i < colNums; i++) {
@@ -24,7 +24,7 @@ class drewOps {
     }
 
     // OR
-    JTable orOperator(JTable lTable, JTable rTable) {
+    JTable or(JTable lTable, JTable rTable) {
         int colNums = lTable.getColumnCount();
         JTable retTable = new JTable(colNums, 1);
         for (int i = 0; i < colNums; i++) {
@@ -41,7 +41,7 @@ class drewOps {
     }
 
     // NOT
-    JTable notOperator(JTable table) {
+    JTable not(JTable table) {
         int colNums = table.getColumnCount();
         JTable retTable = new JTable(colNums, 1);
         for (int i = 0; i < colNums; i++) {
@@ -56,7 +56,7 @@ class drewOps {
     }
 
     // != not equal
-    JTable notEqOp(JTable lTable, JTable rTable) {
+    JTable notEqual(JTable lTable, JTable rTable) {
         int colNums = lTable.getColumnCount();
         JTable retTable = new JTable(colNums, 1);
         for (int i = 0; i < colNums; i++) {
@@ -73,7 +73,7 @@ class drewOps {
     }
 
     // = equals
-    JTable eqOp(JTable lTable, JTable rTable) {
+    JTable equals(JTable lTable, JTable rTable) {
         int colNums = lTable.getColumnCount();
         JTable retTable = new JTable(colNums, 1);
         for (int i=0; i<colNums; i++) {
@@ -88,7 +88,7 @@ class drewOps {
         return retTable;
     }
 
-    JTable lessEqOp(JTable lTable, JTable rTable) {
+    JTable lessEqual(JTable lTable, JTable rTable) {
         int colNums = lTable.getColumnCount();
         JTable retTable = new JTable(colNums, 1);
         for (int i=0; i<colNums; i++) {
@@ -103,7 +103,7 @@ class drewOps {
         return retTable;
     }
 
-    JTable greaterEqOp(JTable lTable, JTable rTable) {
+    JTable greaterEqual(JTable lTable, JTable rTable) {
         int colNums = lTable.getColumnCount();
         JTable retTable = new JTable(colNums, 1);
         for (int i=0; i<colNums; i++) {
@@ -118,7 +118,7 @@ class drewOps {
         return retTable;
     }
 
-    JTable greaterThanOp(JTable lTable, JTable rTable) {
+    JTable greaterThan(JTable lTable, JTable rTable) {
         int colNums = lTable.getColumnCount();
         JTable retTable = new JTable(colNums, 1);
         for (int i=0; i<colNums; i++) {
@@ -133,7 +133,7 @@ class drewOps {
         return retTable;
     }
 
-    JTable lessThanOp(JTable lTable, JTable rTable) {
+    JTable lessThan(JTable lTable, JTable rTable) {
         int colNums = lTable.getColumnCount();
         JTable retTable = new JTable(colNums, 1);
         for (int i=0; i<colNums; i++) {
