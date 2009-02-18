@@ -1,21 +1,22 @@
-import javax.swing.JTable;
+
 
 class subQueryOperators {
-	public static JTable existsOp(JTable table, String query) {
-		drewOps drewOps=new drewOps();
+	public static table existsOp(table myTable, String query) {
+		compareOps drewOps=new compareOps();
+		tableOps tableOps=new tableOps();
 		System.out.println("EXISTS");
-		JTable subQueryTable=tableOps.select(query);
-		JTable retTable=helperFunctions.createTable(table.getRowCount(), drewOps.FALSE);
+		table subQueryTable=tableOps.select(query);
+		table retTable=helperFunctions.createTable(myTable.getRowCount(), drewOps.FALSE);
 		int tableColCtr=0;
 		int tableRowCtr=0;
 		int existsColCtr=0;
 		int existsRowCtr=0;
 		for(existsColCtr=0; existsColCtr<subQueryTable.getColumnCount(); ++existsColCtr) {
-			for(tableColCtr=0; tableColCtr<table.getColumnCount(); ++tableColCtr) {
-				if(table.getColumnName(tableColCtr)==subQueryTable.getColumnName(existsColCtr)) {
+			for(tableColCtr=0; tableColCtr<myTable.getColumnCount(); ++tableColCtr) {
+				if(myTable.getColumnName(tableColCtr)==subQueryTable.getColumnName(existsColCtr)) {
 					for(existsRowCtr=0; existsRowCtr<subQueryTable.getRowCount(); ++existsRowCtr) {
 						for(tableRowCtr=0; tableRowCtr<retTable.getRowCount(); ++tableRowCtr) {
-							if((String) table.getValueAt(tableRowCtr, tableColCtr)==(String) subQueryTable.getValueAt(existsRowCtr, existsColCtr)) {
+							if((String) myTable.getValueAt(tableRowCtr, tableColCtr)==(String) subQueryTable.getValueAt(existsRowCtr, existsColCtr)) {
 								retTable.setValueAt(drewOps.TRUE, tableRowCtr, 0);
 							}
 						}
@@ -25,13 +26,14 @@ class subQueryOperators {
 		}
 		return retTable;
 	}
-	public static JTable anyOp(JTable table, String op, String query) {
-		drewOps drewOps=new drewOps();
+	public static table anyOp(table myTable, String op, String query) {
+		compareOps drewOps=new compareOps();
+		tableOps tableOps=new tableOps();
 		//System.out.println("ANY");
-		JTable subQueryTable=tableOps.select(query);
+		table subQueryTable=tableOps.select(query);
 		double maxVal=Double.parseDouble((String)subQueryTable.getValueAt(0, 0));
 		double nextVal=0;
-		JTable retTable=helperFunctions.createTable(table.getRowCount(), drewOps.FALSE);
+		table retTable=helperFunctions.createTable(myTable.getRowCount(), drewOps.FALSE);
 		if(op.contains(">")) {
 			for(int ctr=0; ctr<subQueryTable.getRowCount(); ++ctr) {
 				nextVal=Double.parseDouble((String)subQueryTable.getValueAt(ctr, 0));
@@ -39,11 +41,11 @@ class subQueryOperators {
 					maxVal=nextVal;
 				}
 			}
-			subQueryTable=helperFunctions.createTable(table.getRowCount(), String.valueOf(maxVal));
+			subQueryTable=helperFunctions.createTable(myTable.getRowCount(), String.valueOf(maxVal));
 			if(op.contains("="))
-				retTable=drewOps.greaterEqual(table, subQueryTable);
+				retTable=drewOps.greaterEqual(myTable, subQueryTable);
 			else
-				retTable=drewOps.equals(table, subQueryTable);
+				retTable=drewOps.equals(myTable, subQueryTable);
 		}
 		else if(op.contains("<")) {
 			for(int ctr=0; ctr<subQueryTable.getRowCount(); ++ctr) {
@@ -52,26 +54,27 @@ class subQueryOperators {
 					maxVal=nextVal;
 				}
 			}
-			subQueryTable=helperFunctions.createTable(table.getRowCount(), String.valueOf(maxVal));
+			subQueryTable=helperFunctions.createTable(myTable.getRowCount(), String.valueOf(maxVal));
 			if(op.contains("="))
-				retTable=drewOps.lessEqual(table, subQueryTable);
+				retTable=drewOps.lessEqual(myTable, subQueryTable);
 			else
-				retTable=drewOps.lessThan(table, subQueryTable);
+				retTable=drewOps.lessThan(myTable, subQueryTable);
 		}
 		else {
 			for(int ctr=0; ctr<subQueryTable.getColumnCount(); ++ctr) {
-				retTable=drewOps.or(retTable, drewOps.equals(table, helperFunctions.createTable(table.getRowCount(), (String) subQueryTable.getValueAt(ctr, 0))));
+				retTable=drewOps.or(retTable, drewOps.equals(myTable, helperFunctions.createTable(myTable.getRowCount(), (String) subQueryTable.getValueAt(ctr, 0))));
 			}
 		}
 		return retTable;
 	}
-	public static JTable allOp(JTable table, String op, String query) {
-		drewOps drewOps=new drewOps();
+	public static table allOp(table myTable, String op, String query) {
+		compareOps drewOps=new compareOps();
+		tableOps tableOps=new tableOps();
 		//System.out.println("ALL");
-		JTable subQueryTable=tableOps.select(query);
+		table subQueryTable=tableOps.select(query);
 		double maxVal=Double.parseDouble((String)subQueryTable.getValueAt(0, 0));
 		double nextVal=0;
-		JTable retTable=helperFunctions.createTable(table.getRowCount(), drewOps.FALSE);
+		table retTable=helperFunctions.createTable(myTable.getRowCount(), drewOps.FALSE);
 		if(op.contains(">")) {
 			for(int ctr=0; ctr<subQueryTable.getRowCount(); ++ctr) {
 				nextVal=Double.parseDouble((String)subQueryTable.getValueAt(ctr, 0));
@@ -79,11 +82,11 @@ class subQueryOperators {
 					maxVal=nextVal;
 				}
 			}
-			subQueryTable=helperFunctions.createTable(table.getRowCount(), String.valueOf(maxVal));
+			subQueryTable=helperFunctions.createTable(myTable.getRowCount(), String.valueOf(maxVal));
 			if(op.contains("="))
-				retTable=drewOps.greaterEqual(table, subQueryTable);
+				retTable=drewOps.greaterEqual(myTable, subQueryTable);
 			else
-				retTable=drewOps.equals(table, subQueryTable);
+				retTable=drewOps.equals(myTable, subQueryTable);
 		}
 		else if(op.contains("<")) {
 			for(int ctr=0; ctr<subQueryTable.getRowCount(); ++ctr) {
@@ -92,15 +95,15 @@ class subQueryOperators {
 					maxVal=nextVal;
 				}
 			}
-			subQueryTable=helperFunctions.createTable(table.getRowCount(), String.valueOf(maxVal));
+			subQueryTable=helperFunctions.createTable(myTable.getRowCount(), String.valueOf(maxVal));
 			if(op.contains("="))
-				retTable=drewOps.lessEqual(table, subQueryTable);
+				retTable=drewOps.lessEqual(myTable, subQueryTable);
 			else
-				retTable=drewOps.lessThan(table, subQueryTable);
+				retTable=drewOps.lessThan(myTable, subQueryTable);
 		}
 		else {
 			for(int ctr=0; ctr<subQueryTable.getColumnCount(); ++ctr) {
-				retTable=drewOps.or(retTable, drewOps.equals(table, helperFunctions.createTable(table.getRowCount(), (String) subQueryTable.getValueAt(ctr, 0))));
+				retTable=drewOps.or(retTable, drewOps.equals(myTable, helperFunctions.createTable(myTable.getRowCount(), (String) subQueryTable.getValueAt(ctr, 0))));
 			}
 		}
 		return retTable;

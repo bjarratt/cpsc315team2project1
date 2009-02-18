@@ -1,45 +1,45 @@
-import javax.swing.JTable;
+
 
 class helperFunctions {
-	//Converts a given variable into a JTable
-	public static JTable convertToTable(JTable table, String variable) {
+	//Converts a given variable into a table
+	public static table convertToTable(table myTable, String variable) {
 		variable=variable.trim();
-		//System.out.println("Parsing: " + variable);
-		drewOps drewOps=new drewOps();
-		JTable retTable;
+		System.out.println("Parsing: " + variable);
+		compareOps drewOps=new compareOps();
+		table retTable;
 		int curCol=0;
-		for(curCol=0; curCol<table.getColumnCount() && table.getColumnName(curCol)!=variable; ++curCol);
-//		//System.out.println(table.getColumnName(0));
+		for(curCol=0; curCol<myTable.getColumnCount() && myTable.getColumnName(curCol)!=variable; ++curCol);
+//		System.out.println(table.getColumnName(0));
 //		if(curCol!=table.getColumnCount()) {
 		if(variable.equals("A")) {
-		//System.out.println("Parsing3: " + variable);
-			//System.out.println("Converted to table");
-		    retTable=new JTable(table.getRowCount(), 1);
-			for(int curRow=0; curRow<table.getRowCount(); ++curRow)
-				retTable.setValueAt(table.getValueAt(curRow,0), curRow, 0);
-			//System.out.println("Converted to table success");
+		System.out.println("Parsing3: " + variable);
+			System.out.println("Converted to table");
+		    retTable=new table(myTable.getRowCount(), 1);
+			for(int curRow=0; curRow<myTable.getRowCount(); ++curRow)
+				retTable.setValueAt(myTable.getValueAt(curRow,0), curRow, 0);
+			System.out.println("Converted to table success");
 		}
 		else {
-			//System.out.println("Parsing4: " + variable);
+			System.out.println("Parsing4: " + variable);
 			if(variable.contains(".")) {
-				//System.out.println("Double: " + variable);
-				retTable=createTable(table.getRowCount(), Double.parseDouble(variable));
+				System.out.println("Double: " + variable);
+				retTable=createTable(myTable.getRowCount(), Double.parseDouble(variable));
 			}
 			else if(variable==String.valueOf(drewOps.TRUE))
-				retTable=createTable(table.getRowCount(), drewOps.TRUE);				
+				retTable=createTable(myTable.getRowCount(), drewOps.TRUE);				
 			else if(variable==String.valueOf(drewOps.FALSE))
-				retTable=createTable(table.getRowCount(), drewOps.FALSE);				
+				retTable=createTable(myTable.getRowCount(), drewOps.FALSE);				
 			else try {
-				retTable=createTable(table.getRowCount(), Integer.parseInt(variable));
+				retTable=createTable(myTable.getRowCount(), Integer.parseInt(variable));
 			} catch(NumberFormatException e) {
-				retTable=createTable(table.getRowCount(), variable);
+				retTable=createTable(myTable.getRowCount(), variable);
 			}
 		}
 		return retTable;
 	}
-	//creates a JTable with initial value variable, cols=1, and the given number of rows
-	public static JTable createTable(int rows, Object variable) {
-	    JTable retTable=new JTable(rows, 1);
+	//creates a table with initial value variable, cols=1, and the given number of rows
+	public static table createTable(int rows, Object variable) {
+	    table retTable=new table(rows, 1);
 		for(int curRow=0; curRow<rows; ++curRow)
 			retTable.setValueAt(variable, curRow, 0);
 		return retTable;
