@@ -63,6 +63,15 @@ class myTable extends JTable {
 }
 }}}
 
+
 <u>Q: Drew</u>
 
 We need a constructor for table. Does anyone know how to go about doing this? I'm not sure how it's done with a subclass.
+
+<u>A: Gabriel</u>
+Add these two lines to table:
+{{{
+    public table () {super();}
+    public table (int x, int y) {super(x,y);}
+}}}
+You will then be able to use the (), and (int,int) constructors.
