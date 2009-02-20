@@ -74,4 +74,23 @@ Add these two lines to table:
     public table () {super();}
     public table (int x, int y) {super(x,y);}
 }}}
-You will then be able to use the (), and (int,int) constructors.
+Alternately these allow the use of colTypes/colNames as well:
+{{{
+    public table () {super();colTypes=new Vector<String>();colNames=new Vector<String>();}
+    public table (int x, int y) {super(x,y);colTypes=new Vector<String>();colNames=new Vector<String>();}
+}}}
+
+<u>Q: Gabriel</u>
+Missing two functions on work assignments:
+http://www.1keydata.com/sql/sqlcreate.html
+{{{
+CREATE TABLE "table_name"
+("column 1" "data_type_for_column_1",
+"column 2" "data_type_for_column_2",
+... )
+}}}
+http://www.1keydata.com/sql/sqlinsert.html
+{{{
+INSERT INTO "table_name" ("column1", "column2", ...)
+VALUES ("value1", "value2", ...)
+}}}
