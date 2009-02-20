@@ -9,7 +9,10 @@ class whereClass {
 	Vector<table> subQueries;
 	table myTable;
 
-	public static JTable where(table argTable, String commands) {
+	public static table where(table argTable, String commands) {
+		for(int ctr=0; ctr<argTable.getColumnCount(); ++ctr) {
+			System.out.println("argTable 14: " + argTable.getValueAt(ctr, 0));
+		}
 		compareOps drewOps=new compareOps();
 		System.out.println("Where Entry " + commands);
 		whereClass whereObj=new whereClass(argTable);
@@ -118,7 +121,7 @@ class whereClass {
 			for(int ctr=0; ctr<lArg.getRowCount(); ++ctr) {
 				System.out.println("AND" + lArg.getValueAt(ctr, 0));
 			}
-			return(drewOps.and(rArg, lArg));
+			return(drewOps.and(lArg, rArg));
 		}
 		else if(command.contains("OR")) {
 			args=command.split(" OR ");
@@ -132,7 +135,7 @@ class whereClass {
 			}
 			else
 				rArg=helperFunctions.convertToTable(myTable, args[1].trim());
-			return drewOps.or(rArg, lArg);
+			return drewOps.or(lArg, rArg);
 		}
 		else if(command.startsWith("NOT")) {
 			args=command.split(" NOT ");
@@ -155,7 +158,7 @@ class whereClass {
 			}
 			else
 				rArg=helperFunctions.convertToTable(myTable, args[1].trim());
-			return drewOps.notEqual(rArg, lArg);
+			return drewOps.notEqual(lArg, rArg);
 		}
 		else if(command.contains("<=")) {
 			args=command.split(" <= ");
@@ -169,7 +172,7 @@ class whereClass {
 			}
 			else
 				rArg=helperFunctions.convertToTable(myTable, args[1].trim());
-			return drewOps.lessEqual(rArg, lArg);
+			return drewOps.lessEqual(lArg, rArg);
 		}
 		else if(command.contains(">=")) {
 			args=command.split(" >= ");
@@ -183,22 +186,33 @@ class whereClass {
 			}
 			else
 				rArg=helperFunctions.convertToTable(myTable, args[1].trim());
-			return drewOps.greaterEqual(rArg, lArg);
+			return drewOps.greaterEqual(lArg, rArg);
 		}
 		else if(command.contains(">")) {
 			System.out.println("Run2 " + command);
+			for(int ctr=0; ctr<myTable.getRowCount(); ++ctr) {
+				System.out.println(">myTable 191: " + myTable.getValueAt(ctr, 0));
+			}
 			args=command.split(" > ");
 			if(args[0].startsWith(ctrlString)) {
 				lArg=subQueries.elementAt(Integer.valueOf((args[0].substring(args[0].indexOf("ctrlString")+ctrlString.length()+1)))-1);
 			}
-			else
+			else {
 				lArg=helperFunctions.convertToTable(myTable, args[0].trim());
+				System.out.println("LARG CONVERT");
+			}
 			if(args[1].startsWith(ctrlString)) {
 				rArg=subQueries.elementAt(Integer.valueOf((args[1].substring(args[1].indexOf("ctrlString")+ctrlString.length()+1))));
 			}
 			else
 				rArg=helperFunctions.convertToTable(myTable, args[1].trim());
-			return drewOps.greaterThan(rArg, lArg);
+			for(int ctr=0; ctr<lArg.getRowCount(); ++ctr) {
+				System.out.println("LArg: " + lArg.getValueAt(ctr, 0));
+			}
+			for(int ctr=0; ctr<rArg.getRowCount(); ++ctr) {
+				System.out.println("RArg: " + rArg.getValueAt(ctr, 0));
+			}
+			return drewOps.greaterThan(lArg, rArg);
 		}
 		else if(command.contains("<")) {
 			args=command.split(" < ");
@@ -212,7 +226,7 @@ class whereClass {
 			}
 			else
 				rArg=helperFunctions.convertToTable(myTable, args[1].trim());
-			return drewOps.lessThan(rArg, lArg);
+			return drewOps.lessThan(lArg, rArg);
 		}
 		else if(command.contains("=")) {
 			args=command.split(" = ");
@@ -226,7 +240,7 @@ class whereClass {
 			}
 			else
 				rArg=helperFunctions.convertToTable(myTable, args[1].trim());
-			return drewOps.equals(rArg, lArg);
+			return drewOps.equals(lArg, rArg);
 		}
 		//Should be unreachable
 		return myTable;
