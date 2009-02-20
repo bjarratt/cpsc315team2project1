@@ -59,31 +59,36 @@ class compareOps {
     static table notEqual(table lTable, table rTable) {
         int colNums = lTable.getColumnCount();
         table retTable = new table(colNums, 1);
-        Object lval;
-        Object rval;
         
         for (int i = 0; i < colNums; i++) {
         	// Check type and assign
-            if (table.colTypes.get(0).equals(STRING)) {
-            	lval = (String) lTable.getValueAt(i, 0);
-            	rval = (String) rTable.getValueAt(i, 0);
+            if (lTable.colTypes.get(0).equals(STRING)) {
+            	String lval = (String) lTable.getValueAt(i, 0);
+            	String rval = (String) rTable.getValueAt(i, 0);
+                if (lval.compareTo(rval)!=0)
+                    retTable.setValueAt(TRUE, i, 0);
+                else
+                    retTable.setValueAt(FALSE,i, 0);
             }
-            else if (table.colTypes.get(0).equals(DOUBLE)) {
-            	lval = (Double) lTable.getValueAt(i, 0);
-            	rval = (Double) rTable.getValueAt(i, 0);
+            else if (lTable.colTypes.get(0).equals(DOUBLE)) {
+            	Double lval = (Double) lTable.getValueAt(i, 0);
+            	Double rval = (Double) rTable.getValueAt(i, 0);
+                if (lval.compareTo(rval)!=0)
+                    retTable.setValueAt(TRUE, i, 0);
+                else
+                    retTable.setValueAt(FALSE,i, 0);
             }
-            else if (table.colTypes.get(0).equals(INTEGER)) {
-            	lval = (Integer) lTable.getValueAt(i, 0);
-            	rval = (Integer) rTable.getValueAt(i, 0);
+            else if (lTable.colTypes.get(0).equals(INTEGER)) {
+            	Integer lval = (Integer) lTable.getValueAt(i, 0);
+            	Integer rval = (Integer) rTable.getValueAt(i, 0);
+                if (lval.compareTo(rval)!=0)
+                    retTable.setValueAt(TRUE, i, 0);
+                else
+                    retTable.setValueAt(FALSE,i, 0);
             }
-            
-            // 0 means they are same
-            if (lval.compareTo(rval)!=0)
-                retTable.setValueAt(TRUE, i, 0);
             else
-                retTable.setValueAt(FALSE,i, 0);
+                return retTable;
          }
-
 
         return retTable;
     }
@@ -92,31 +97,37 @@ class compareOps {
     static table equals(table lTable, table rTable) {
     	int colNums = lTable.getColumnCount();
         table retTable = new table(colNums, 1);
-        Object lval;
-        Object rval;
         
         for (int i = 0; i < colNums; i++) {
         	// Check type and assign
-            if (table.colTypes.get(0).equals(STRING)) {
-            	lval = (String) lTable.getValueAt(i, 0);
-            	rval = (String) rTable.getValueAt(i, 0);
+            if (lTable.colTypes.get(0).equals(STRING)) {
+            	String lval = (String) lTable.getValueAt(i, 0);
+            	String rval = (String) rTable.getValueAt(i, 0);
+                // 0 means they are same
+                if (lval.compareTo(rval)==0)
+                    retTable.setValueAt(TRUE, i, 0);
+                else
+                    retTable.setValueAt(FALSE,i, 0);
             }
-            else if (table.colTypes.get(0).equals(DOUBLE)) {
-            	lval = (Double) lTable.getValueAt(i, 0);
-            	rval = (Double) rTable.getValueAt(i, 0);
+            else if (lTable.colTypes.get(0).equals(DOUBLE)) {
+                Double lval = (Double) lTable.getValueAt(i, 0);
+            	Double rval = (Double) rTable.getValueAt(i, 0);
+                // 0 means they are same
+                if (lval.compareTo(rval)==0)
+                    retTable.setValueAt(TRUE, i, 0);
+                else
+                    retTable.setValueAt(FALSE,i, 0);
             }
-            else if (table.colTypes.get(0).equals(INTEGER)) {
-            	lval = (Integer) lTable.getValueAt(i, 0);
-            	rval = (Integer) rTable.getValueAt(i, 0);
+            else if (lTable.colTypes.get(0).equals(INTEGER)) {
+            	Integer lval = (Integer) lTable.getValueAt(i, 0);
+            	Integer rval = (Integer) rTable.getValueAt(i, 0);
+                // 0 means they are same
+                if (lval.compareTo(rval)==0)
+                    retTable.setValueAt(TRUE, i, 0);
+                else
+                    retTable.setValueAt(FALSE,i, 0);
             }
-
-            // 0 means they are same
-            if (lval.compareTo(rval)==0)
-                retTable.setValueAt(TRUE, i, 0);
-            else
-                retTable.setValueAt(FALSE,i, 0);
          }
-
 
         return retTable;
     }
@@ -125,32 +136,37 @@ class compareOps {
     static table lessEqual(table lTable, table rTable) {
     	int colNums = lTable.getColumnCount();
         table retTable = new table(colNums, 1);
-        Object lval;
-        Object rval;
-        
+
         for (int i = 0; i < colNums; i++) {
         	// Check type and assign
-            if (table.colTypes.get(0).equals(STRING)) {
-            	lval = (String) lTable.getValueAt(i, 0);
-            	rval = (String) rTable.getValueAt(i, 0);
+            if (lTable.colTypes.get(0).equals(STRING)) {
+            	String lval = (String) lTable.getValueAt(i, 0);
+            	String rval = (String) rTable.getValueAt(i, 0);
+                // 0 means they are same
+                if (lval.compareTo(rval)<=0)
+                    retTable.setValueAt(TRUE, i, 0);
+                else
+                    retTable.setValueAt(FALSE,i, 0);
             }
-            else if (table.colTypes.get(0).equals(DOUBLE)) {
-            	lval = (Double) lTable.getValueAt(i, 0);
-            	rval = (Double) rTable.getValueAt(i, 0);
+            else if (lTable.colTypes.get(0).equals(DOUBLE)) {
+                Double lval = (Double) lTable.getValueAt(i, 0);
+            	Double rval = (Double) rTable.getValueAt(i, 0);
+                // 0 means they are same
+                if (lval.compareTo(rval)<=0)
+                    retTable.setValueAt(TRUE, i, 0);
+                else
+                    retTable.setValueAt(FALSE,i, 0);
             }
-            else if (table.colTypes.get(0).equals(INTEGER)) {
-            	lval = (Integer) lTable.getValueAt(i, 0);
-            	rval = (Integer) rTable.getValueAt(i, 0);
+            else if (lTable.colTypes.get(0).equals(INTEGER)) {
+            	Integer lval = (Integer) lTable.getValueAt(i, 0);
+            	Integer rval = (Integer) rTable.getValueAt(i, 0);
+                // 0 means they are same
+                if (lval.compareTo(rval)<=0)
+                    retTable.setValueAt(TRUE, i, 0);
+                else
+                    retTable.setValueAt(FALSE,i, 0);
             }
-            
-            // 0 means they are same
-            // -1 means lval is less
-            if (lval.compareTo(rval)<=0)
-                retTable.setValueAt(TRUE, i, 0);
-            else
-                retTable.setValueAt(FALSE,i, 0);
          }
-
 
         return retTable;
     }
@@ -159,32 +175,40 @@ class compareOps {
     static table greaterEqual(table lTable, table rTable) {
     	int colNums = lTable.getColumnCount();
         table retTable = new table(colNums, 1);
-        Object lval;
-        Object rval;
-        
+
         for (int i = 0; i < colNums; i++) {
         	// Check type and assign
-            if (table.colTypes.get(0).equals(STRING)) {
-            	lval = (String) lTable.getValueAt(i, 0);
-            	rval = (String) rTable.getValueAt(i, 0);
+            if (lTable.colTypes.get(0).equals(STRING)) {
+            	String lval = (String) lTable.getValueAt(i, 0);
+            	String rval = (String) rTable.getValueAt(i, 0);
+                // 0 means they are same
+                // -1 means less
+                if (lval.compareTo(rval)>=0)
+                    retTable.setValueAt(TRUE, i, 0);
+                else
+                    retTable.setValueAt(FALSE,i, 0);
             }
-            else if (table.colTypes.get(0).equals(DOUBLE)) {
-            	lval = (Double) lTable.getValueAt(i, 0);
-            	rval = (Double) rTable.getValueAt(i, 0);
+            else if (lTable.colTypes.get(0).equals(DOUBLE)) {
+                Double lval = (Double) lTable.getValueAt(i, 0);
+            	Double rval = (Double) rTable.getValueAt(i, 0);
+                // 0 means they are same
+                // -1 means less
+                if (lval.compareTo(rval)>=0)
+                    retTable.setValueAt(TRUE, i, 0);
+                else
+                    retTable.setValueAt(FALSE,i, 0);
             }
-            else if (table.colTypes.get(0).equals(INTEGER)) {
-            	lval = (Integer) lTable.getValueAt(i, 0);
-            	rval = (Integer) rTable.getValueAt(i, 0);
+            else if (lTable.colTypes.get(0).equals(INTEGER)) {
+            	Integer lval = (Integer) lTable.getValueAt(i, 0);
+            	Integer rval = (Integer) rTable.getValueAt(i, 0);
+                // 0 means they are same
+                // -1 means less
+                if (lval.compareTo(rval)>=0)
+                    retTable.setValueAt(TRUE, i, 0);
+                else
+                    retTable.setValueAt(FALSE,i, 0);
             }
-            
-            // 0 means they are same
-            // 1 means lval is greater
-            if (lval.compareTo(rval)>=0)
-                retTable.setValueAt(TRUE, i, 0);
-            else
-                retTable.setValueAt(FALSE,i, 0);
          }
-
 
         return retTable;
     }
@@ -193,61 +217,77 @@ class compareOps {
     static table greaterThan(table lTable, table rTable) {
     	int colNums = lTable.getColumnCount();
         table retTable = new table(colNums, 1);
-        Object lval;
-        Object rval;
-        
+
         for (int i = 0; i < colNums; i++) {
         	// Check type and assign
-            if (table.colTypes.get(0).equals(STRING)) {
-            	lval = (String) lTable.getValueAt(i, 0);
-            	rval = (String) rTable.getValueAt(i, 0);
+            if (lTable.colTypes.get(0).equals(STRING)) {
+            	String lval = (String) lTable.getValueAt(i, 0);
+            	String rval = (String) rTable.getValueAt(i, 0);
+                // 1 means greater than
+                if (lval.compareTo(rval)==1)
+                    retTable.setValueAt(TRUE, i, 0);
+                else
+                    retTable.setValueAt(FALSE,i, 0);
             }
-            else if (table.colTypes.get(0).equals(DOUBLE)) {
-            	lval = (Double) lTable.getValueAt(i, 0);
-            	rval = (Double) rTable.getValueAt(i, 0);
+            else if (lTable.colTypes.get(0).equals(DOUBLE)) {
+                Double lval = (Double) lTable.getValueAt(i, 0);
+            	Double rval = (Double) rTable.getValueAt(i, 0);
+                // 1 means greater than
+                if (lval.compareTo(rval)==1)
+                    retTable.setValueAt(TRUE, i, 0);
+                else
+                    retTable.setValueAt(FALSE,i, 0);
             }
-            else if (table.colTypes.get(0).equals(INTEGER)) {
-            	lval = (Integer) lTable.getValueAt(i, 0);
-            	rval = (Integer) rTable.getValueAt(i, 0);
+            else if (lTable.colTypes.get(0).equals(INTEGER)) {
+            	Integer lval = (Integer) lTable.getValueAt(i, 0);
+            	Integer rval = (Integer) rTable.getValueAt(i, 0);
+                // 1 means greater than
+                if (lval.compareTo(rval)==1)
+                    retTable.setValueAt(TRUE, i, 0);
+                else
+                    retTable.setValueAt(FALSE,i, 0);
             }
-            
-            // 1 means lval is greater
-            if (lval.compareTo(rval)==1)
-                retTable.setValueAt(TRUE, i, 0);
-            else
-                retTable.setValueAt(FALSE,i, 0);
          }
 
+        return retTable;
     }
 
     // < less than
     static table lessThan(table lTable, table rTable) {
     	int colNums = lTable.getColumnCount();
         table retTable = new table(colNums, 1);
-        Object lval;
-        Object rval;
-        
+
         for (int i = 0; i < colNums; i++) {
         	// Check type and assign
-            if (table.colTypes.get(0).equals(STRING)) {
-            	lval = (String) lTable.getValueAt(i, 0);
-            	rval = (String) rTable.getValueAt(i, 0);
+            if (lTable.colTypes.get(0).equals(STRING)) {
+            	String lval = (String) lTable.getValueAt(i, 0);
+            	String rval = (String) rTable.getValueAt(i, 0);
+                // -1 means less than
+                if (lval.compareTo(rval)==-1)
+                    retTable.setValueAt(TRUE, i, 0);
+                else
+                    retTable.setValueAt(FALSE,i, 0);
             }
-            else if (table.colTypes.get(0).equals(DOUBLE)) {
-            	lval = (Double) lTable.getValueAt(i, 0);
-            	rval = (Double) rTable.getValueAt(i, 0);
+            else if (lTable.colTypes.get(0).equals(DOUBLE)) {
+                Double lval = (Double) lTable.getValueAt(i, 0);
+            	Double rval = (Double) rTable.getValueAt(i, 0);
+                // -1 means less than
+                if (lval.compareTo(rval)==-1)
+                    retTable.setValueAt(TRUE, i, 0);
+                else
+                    retTable.setValueAt(FALSE,i, 0);
             }
-            else if (table.colTypes.get(0).equals(INTEGER)) {
-            	lval = (Integer) lTable.getValueAt(i, 0);
-            	rval = (Integer) rTable.getValueAt(i, 0);
+            else if (lTable.colTypes.get(0).equals(INTEGER)) {
+            	Integer lval = (Integer) lTable.getValueAt(i, 0);
+            	Integer rval = (Integer) rTable.getValueAt(i, 0);
+                // -1 means less than
+                if (lval.compareTo(rval)==-1)
+                    retTable.setValueAt(TRUE, i, 0);
+                else
+                    retTable.setValueAt(FALSE,i, 0);
             }
-            
-            // -1 means lval is less
-            if (lval.compareTo(rval)==-1)
-                retTable.setValueAt(TRUE, i, 0);
-            else
-                retTable.setValueAt(FALSE,i, 0);
          }
 
+        return retTable;
     }
 }
