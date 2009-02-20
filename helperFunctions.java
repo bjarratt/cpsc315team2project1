@@ -3,6 +3,9 @@
 class helperFunctions {
 	//Converts a given variable into a table
 	public static table convertToTable(table myTable, String variable) {
+		for(int ctr=0; ctr<myTable.getColumnCount(); ++ctr) {
+			System.out.println("MYTABLE: " + myTable.getValueAt(ctr, 0));
+		}
 		variable=variable.trim();
 		System.out.println("Parsing: " + variable);
 		compareOps drewOps=new compareOps();
@@ -17,6 +20,10 @@ class helperFunctions {
 		    retTable=new table(myTable.getRowCount(), 1);
 			for(int curRow=0; curRow<myTable.getRowCount(); ++curRow)
 				retTable.setValueAt(myTable.getValueAt(curRow,0), curRow, 0);
+
+			for(int ctr=0; ctr<myTable.getRowCount(); ++ctr) {
+				System.out.println("LArg: " + myTable.getValueAt(ctr, 0));
+			}
 			System.out.println("Converted to table success");
 		}
 		else {
