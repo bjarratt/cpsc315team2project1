@@ -100,9 +100,11 @@ class WhereClass {
 			System.out.println("TRUE/FALSE " + results.getValueAt(ctr, 0));
 		}
 
-		for(int curRow=results.getRowCount()-1; curRow>0; --curRow) {
-			if((String)results.getValueAt(curRow, 0)==CompareOps.FALSE)
-			{}//				model.removeRow(curRow);
+		for(int curRow=results.getRowCount()-1; curRow>=0; --curRow) {
+			if((String)results.getValueAt(curRow, 0)==CompareOps.FALSE) {
+				System.out.println("Removing Row");
+				whereObj.myTable.removeRow(curRow);
+			}
 		}
 		return whereObj.myTable;
 	}
