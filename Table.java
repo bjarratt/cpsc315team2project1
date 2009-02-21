@@ -4,7 +4,7 @@ import java.util.Vector;
 public class Table {
 
     private Vector<Vector<Object>> database;
-    private Vector<String> colTypes;
+    private Vector<String> colType;
     private Vector<String> colNames;
     private String tableName;
     private int numRows = 0;
@@ -24,12 +24,22 @@ public class Table {
         }
     }
 
+    Table(int rows, int columns) {
+        tableName = "Unnamed";
+        numRows = rows;
+        numCols = columns;
+        database = new Vector<Vector<Object>>(rows);
+        for(int i = 0; i< numRows; i++) {
+            database.get(i).setSize(columns);
+        }
+    }
+
     // This constructor SHOULD be the one used
     Table(String name, Vector<String> columnNames, Vector<String> columnTypes) {
         tableName = name;
         numCols = columnNames.size();
         colNames = columnNames;
-        colTypes = columnTypes;
+        colType = columnTypes;
 
         database = new Vector<Vector<Object>>();
         database.get(0).setSize(numCols);
@@ -43,11 +53,11 @@ public class Table {
         database.get(row).set(row, value);
     }
 
-    int rowCount() {
+    int getRowCount() {
         return numRows;
     }
 
-    int columnCount() {
+    int getColumnCount() {
         return numCols;
     }
 
@@ -57,6 +67,10 @@ public class Table {
 
     String getColName(int index) {
         return colNames.get(index);
+    }
+
+    String colType(int index) {
+        return colType.get(index);
     }
 
     void addRow(Vector<Object> stuff) {
