@@ -1,4 +1,4 @@
-class compareOps {
+class CompareOps {
 
     static final String TRUE    = "TRUE";
     static final String FALSE   = "FALSE";
@@ -59,7 +59,7 @@ class compareOps {
     static Table notEqual(Table lTable, Table rTable) {
         int numRows = lTable.getRowCount();
         Table retTable = new Table("OpTable",numRows, 1);
-        
+
         for (int i = 0; i < numRows; i++) {
         	// Check type and assign
             if (lTable.colType(0).equals(STRING)) {
@@ -97,7 +97,7 @@ class compareOps {
     static Table equals(Table lTable, Table rTable) {
     	int numRows = lTable.getRowCount();
         Table retTable = new Table(numRows, 1);
-        
+
         for (int i = 0; i < numRows; i++) {
         	// Check type and assign
             if (lTable.colType(0).equals(STRING)) {
