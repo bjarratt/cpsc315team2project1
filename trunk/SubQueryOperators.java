@@ -5,10 +5,9 @@
 
 class SubQueryOperators {
 	public static Table existsOp(Table myTable, String query) {
-		TableOps tableOps=new TableOps();
 		System.out.println("EXISTS");
-		Table subQueryTable=tableOps.select(query);
-		Table retTable=HelperFunctions.createTable(myTable.getRowCount(), CompareOps.FALSE);
+		Table subQueryTable=TableOps.select(query);
+		Table retTable=HelperFunctions.createTable(CompareOps.BOOLEAN, myTable.getRowCount(), CompareOps.FALSE);
 		int tableColCtr=0;
 		int tableRowCtr=0;
 		int existsColCtr=0;
@@ -29,81 +28,64 @@ class SubQueryOperators {
 		return retTable;
 	}
 	public static Table anyOp(Table myTable, String op, String query) {
-		TableOps tableOps=new TableOps();
 		//System.out.println("ANY");
-		Table subQueryTable=tableOps.select(query);
-		double maxVal=Double.parseDouble((String)subQueryTable.getValueAt(0, 0));
-		double nextVal=0;
-		Table retTable=HelperFunctions.createTable(myTable.getRowCount(), CompareOps.FALSE);
+		Table subQueryTable=TableOps.select(query);
+		Table retTable;
+		double minMaxVal;
 		if(op.contains(">")) {
-			for(int ctr=0; ctr<subQueryTable.getRowCount(); ++ctr) {
-				nextVal=Double.parseDouble((String)subQueryTable.getValueAt(ctr, 0));
-				if(maxVal<nextVal) {
-					maxVal=nextVal;
-				}
-			}
-			subQueryTable=HelperFunctions.createTable(myTable.getRowCount(), String.valueOf(maxVal));
+			minMaxVal=SingleValOps.min(myTable);
+			subQueryTable=HelperFunctions.createTable(CompareOps.DOUBLE, myTable.getRowCount(), String.valueOf(minMaxVal));
 			if(op.contains("="))
 				retTable=CompareOps.greaterEqual(myTable, subQueryTable);
 			else
 				retTable=CompareOps.equals(myTable, subQueryTable);
 		}
 		else if(op.contains("<")) {
-			for(int ctr=0; ctr<subQueryTable.getRowCount(); ++ctr) {
-				nextVal=Double.parseDouble((String)subQueryTable.getValueAt(ctr, 0));
-				if(maxVal>nextVal) {
-					maxVal=nextVal;
-				}
-			}
-			subQueryTable=HelperFunctions.createTable(myTable.getRowCount(), String.valueOf(maxVal));
+			minMaxVal=SingleValOps.max(myTable);
+			subQueryTable=HelperFunctions.createTable(CompareOps.DOUBLE, myTable.getRowCount(), String.valueOf(minMaxVal));
 			if(op.contains("="))
 				retTable=CompareOps.lessEqual(myTable, subQueryTable);
 			else
 				retTable=CompareOps.lessThan(myTable, subQueryTable);
 		}
 		else {
-			for(int ctr=0; ctr<subQueryTable.getColumnCount(); ++ctr) {
-				retTable=CompareOps.or(retTable, CompareOps.equals(myTable, HelperFunctions.createTable(myTable.getRowCount(), (String) subQueryTable.getValueAt(ctr, 0))));
+			retTable=HelperFunctions.createTable(CompareOps.BOOLEAN, myTable.getRowCount(), CompareOps.FALSE);
+			for(int ctr=0; ctr<subQueryTable.getRowCount(); ++ctr) {
+				retTable=CompareOps.or(retTable, CompareOps.equals(myTable, HelperFunctions.createTable(CompareOps.STRING, myTable.getRowCount(), (String) subQueryTable.getValueAt(ctr, 0))));
 			}
 		}
 		return retTable;
 	}
 	public static Table allOp(Table myTable, String op, String query) {
-		TableOps tableOps=new TableOps();
 		//System.out.println("ALL");
-		Table subQueryTable=tableOps.select(query);
-		double maxVal=Double.parseDouble((String)subQueryTable.getValueAt(0, 0));
-		double nextVal=0;
-		Table retTable=HelperFunctions.createTable(myTable.getRowCount(), CompareOps.FALSE);
+		Table subQueryTable=TableOps.select(query);
+		Table retTable;
+		double minMaxVal;
 		if(op.contains(">")) {
-			for(int ctr=0; ctr<subQueryTable.getRowCount(); ++ctr) {
-				nextVal=Double.parseDouble((String)subQueryTable.getValueAt(ctr, 0));
-				if(maxVal>nextVal) {
-					maxVal=nextVal;
-				}
-			}
-			subQueryTable=HelperFunctions.createTable(myTable.getRowCount(), String.valueOf(maxVal));
+			minMaxVal=SingleValOps.max(myTable);
+			subQueryTable=HelperFunctions.createTable(CompareOps.DOUBLE, myTable.getRowCount(), String.valueOf(minMaxVal));
 			if(op.contains("="))
 				retTable=CompareOps.greaterEqual(myTable, subQueryTable);
 			else
 				retTable=CompareOps.equals(myTable, subQueryTable);
 		}
 		else if(op.contains("<")) {
-			for(int ctr=0; ctr<subQueryTable.getRowCount(); ++ctr) {
-				nextVal=Double.parseDouble((String)subQueryTable.getValueAt(ctr, 0));
-				if(maxVal<nextVal) {
-					maxVal=nextVal;
-				}
-			}
-			subQueryTable=HelperFunctions.createTable(myTable.getRowCount(), String.valueOf(maxVal));
+			minMaxVal=SingleValOps.min(myTable);
+			subQueryTable=HelperFunctions.createTable(CompareOps.DOUBLE, myTable.getRowCount(), String.valueOf(minMaxVal));
 			if(op.contains("="))
 				retTable=CompareOps.lessEqual(myTable, subQueryTable);
 			else
 				retTable=CompareOps.lessThan(myTable, subQueryTable);
 		}
 		else {
-			for(int ctr=0; ctr<subQueryTable.getColumnCount(); ++ctr) {
-				retTable=CompareOps.or(retTable, CompareOps.equals(myTable, HelperFunctions.createTable(myTable.getRowCount(), (String) subQueryTable.getValueAt(ctr, 0))));
+			retTable=HelperFunctions.createTable(CompareOps.BOOLEAN, myTable.getRowCount(), CompareOps.FALSE);
+			if(subQueryTable.getRowCount()!=0) {
+				int ctr;
+				Object allVal=subQueryTable.getValueAt(0, 0);
+				//everything will be false if == with two different variables
+				for(ctr=0; allVal==subQueryTable.getValueAt(ctr, 0) && ctr<subQueryTable.getRowCount(); ++ctr);
+				if(ctr==subQueryTable.getRowCount())
+					retTable=CompareOps.equals(myTable, HelperFunctions.createTable(subQueryTable.colType(0), myTable.getRowCount(), allVal));
 			}
 		}
 		return retTable;
