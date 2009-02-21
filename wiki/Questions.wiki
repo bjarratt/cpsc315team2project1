@@ -81,7 +81,7 @@ Alternately these allow the use of colTypes/colNames as well:
 }}}
 
 <u>Q: Gabriel</u>
-Missing two functions on work assignments:
+Missing MANY functions on work assignments:
 http://www.1keydata.com/sql/sqlcreate.html
 {{{
 CREATE TABLE "table_name"
@@ -94,3 +94,4 @@ http://www.1keydata.com/sql/sqlinsert.html
 INSERT INTO "table_name" ("column1", "column2", ...)
 VALUES ("value1", "value2", ...)
 }}}
+SUM, COUNT, MIN, MAX
