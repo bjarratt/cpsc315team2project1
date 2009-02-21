@@ -7,10 +7,10 @@ class compareOps {
     static final String INTEGER = "INTEGER";
 
     // AND
-    static table and(table lTable, table rTable) {
-        int colNums = lTable.getColumnCount();
-        table retTable = new table(colNums, 1);
-        for (int i = 0; i < colNums; i++) {
+    static Table and(Table lTable, Table rTable) {
+        int rowNums = lTable.getRowCount();
+        Table retTable = new Table(rowNums, 1);
+        for (int i = 0; i < rowNums; i++) {
             String lval = (String) lTable.getValueAt(i, 0);
             String rval = (String) rTable.getValueAt(i, 0);
             if (lval.equals(TRUE) && rval.equals(TRUE)) {
@@ -24,9 +24,9 @@ class compareOps {
     }
 
     // OR
-    static table or(table lTable, table rTable) {
-        int colNums = lTable.getColumnCount();
-        table retTable = new table(colNums, 1);
+    static Table or(Table lTable, Table rTable) {
+        int colNums = lTable.getRowCount();
+        Table retTable = new Table(colNums, 1);
         for (int i = 0; i < colNums; i++) {
             String lval = (String) lTable.getValueAt(i, 0);
             String rval = (String) rTable.getValueAt(i, 0);
@@ -41,24 +41,24 @@ class compareOps {
     }
 
     // NOT
-    static table not(table table) {
-        int colNums = table.getColumnCount();
-        table retTable = new table(colNums, 1);
+    static Table not(Table Table) {
+        int colNums = Table.getRowCount();
+        Table retTable = new Table(colNums, 1);
         for (int i = 0; i < colNums; i++) {
-            String val = (String) table.getValueAt(i, 0);
+            String val = (String) Table.getValueAt(i, 0);
             if (val.equals(TRUE))
-                table.setValueAt(FALSE, i, 0);
+                Table.setValueAt(FALSE, i, 0);
             else
-                table.setValueAt(TRUE, i, 0);
+                Table.setValueAt(TRUE, i, 0);
         }
 
         return retTable;
     }
 
     // != not equal
-    static table notEqual(table lTable, table rTable) {
-        int colNums = lTable.getColumnCount();
-        table retTable = new table(colNums, 1);
+    static Table notEqual(Table lTable, Table rTable) {
+        int colNums = lTable.getRowCount();
+        Table retTable = new Table(colNums, 1);
         
         for (int i = 0; i < colNums; i++) {
         	// Check type and assign
@@ -94,9 +94,9 @@ class compareOps {
     }
 
     // = equals
-    static table equals(table lTable, table rTable) {
-    	int colNums = lTable.getColumnCount();
-        table retTable = new table(colNums, 1);
+    static Table equals(Table lTable, Table rTable) {
+    	int colNums = lTable.getRowCount();
+        Table retTable = new Table(colNums, 1);
         
         for (int i = 0; i < colNums; i++) {
         	// Check type and assign
@@ -133,9 +133,9 @@ class compareOps {
     }
 
     // <= less than or equal to
-    static table lessEqual(table lTable, table rTable) {
-    	int colNums = lTable.getColumnCount();
-        table retTable = new table(colNums, 1);
+    static Table lessEqual(Table lTable, Table rTable) {
+    	int colNums = lTable.getRowCount();
+        Table retTable = new Table(colNums, 1);
 
         for (int i = 0; i < colNums; i++) {
         	// Check type and assign
@@ -172,9 +172,9 @@ class compareOps {
     }
 
     // >= greater than or equal to
-    static table greaterEqual(table lTable, table rTable) {
-    	int colNums = lTable.getColumnCount();
-        table retTable = new table(colNums, 1);
+    static Table greaterEqual(Table lTable, Table rTable) {
+    	int colNums = lTable.getRowCount();
+        Table retTable = new Table(colNums, 1);
 
         for (int i = 0; i < colNums; i++) {
         	// Check type and assign
@@ -214,9 +214,9 @@ class compareOps {
     }
 
     // > greater than
-    static table greaterThan(table lTable, table rTable) {
-    	int colNums = lTable.getColumnCount();
-        table retTable = new table(colNums, 1);
+    static Table greaterThan(Table lTable, Table rTable) {
+    	int colNums = lTable.getRowCount();
+        Table retTable = new Table(colNums, 1);
 
         for (int i = 0; i < colNums; i++) {
         	// Check type and assign
@@ -253,9 +253,9 @@ class compareOps {
     }
 
     // < less than
-    static table lessThan(table lTable, table rTable) {
-    	int colNums = lTable.getColumnCount();
-        table retTable = new table(colNums, 1);
+    static Table lessThan(Table lTable, Table rTable) {
+    	int colNums = lTable.getRowCount();
+        Table retTable = new Table(colNums, 1);
 
         for (int i = 0; i < colNums; i++) {
         	// Check type and assign
