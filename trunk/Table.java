@@ -4,7 +4,7 @@ import java.util.Vector;
 public class Table {
 
     private Vector<Vector<Object>> database;
-    private Vector<String> colType;
+    private Vector<String> colTypes;
     private Vector<String> colNames;
     private String tableName;
     private int numRows = 0;
@@ -14,6 +14,7 @@ public class Table {
         tableName = name;
         database = new Vector<Vector<Object>>();
     }
+
     Table(String name, int rows, int columns) {
         tableName = name;
         numRows = rows;
@@ -70,7 +71,7 @@ public class Table {
     }
 
     String colType(int index) {
-        return colType.get(index);
+        return colTypes.get(index);
     }
 
     void addRow(Vector<Object> stuff) {
