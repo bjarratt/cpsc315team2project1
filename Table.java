@@ -3,7 +3,7 @@ import java.util.Vector;
 
 public class Table {
 
-    private Vector<Vector<Object>> database;
+    private Vector<Vector<Object>> table;
     private Vector<String> colTypes;
     private Vector<String> colNames;
     private String tableName;
@@ -12,16 +12,16 @@ public class Table {
 
     Table(String name) {
         tableName = name;
-        database = new Vector<Vector<Object>>();
+        table = new Vector<Vector<Object>>();
     }
 
     Table(String name, int rows, int columns) {
         tableName = name;
         numRows = rows;
         numCols = columns;
-        database = new Vector<Vector<Object>>(rows);
+        table = new Vector<Vector<Object>>(rows);
         for(int i = 0; i< numRows; i++) {
-            database.get(i).setSize(columns);
+            table.get(i).setSize(columns);
         }
     }
 
@@ -29,9 +29,9 @@ public class Table {
         tableName = "Unnamed";
         numRows = rows;
         numCols = columns;
-        database = new Vector<Vector<Object>>(rows);
+        table = new Vector<Vector<Object>>(rows);
         for(int i = 0; i< numRows; i++) {
-            database.get(i).setSize(columns);
+            table.get(i).setSize(columns);
         }
     }
 
@@ -42,16 +42,16 @@ public class Table {
         colNames = columnNames;
         colTypes = columnTypes;
 
-        database = new Vector<Vector<Object>>();
-        database.get(0).setSize(numCols);
+        table = new Vector<Vector<Object>>();
+        table.get(0).setSize(numCols);
     }
 
     Object getValueAt(int row, int column) {
-        return database.get(row).get(column);
+        return table.get(row).get(column);
     }
 
     void setValueAt(Object value, int row, int column) {
-        database.get(row).set(row, value);
+        table.get(row).set(row, value);
     }
 
     int getRowCount() {
@@ -75,18 +75,18 @@ public class Table {
     }
 
     void addRow(Vector<Object> stuff) {
-        database.add(stuff);
+        table.add(stuff);
         numRows++;
     }
 
     void removeRow(int index) {
-        database.remove(index);
+        table.remove(index);
         numRows--;
     }
 
     void removeColumn(int index) {
-        for(int i=0; i<database.size(); i++) {
-            database.get(i).remove(index);
+        for(int i=0; i<table.size(); i++) {
+            table.get(i).remove(index);
         }
         numCols--;
     }
