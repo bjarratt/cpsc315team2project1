@@ -29,8 +29,11 @@ public class Table {
         tableName = "Unnamed";
         numRows = rows;
         numCols = columns;
-        table = new Vector<Vector<Object>>(rows);
-        for(int i = 0; i< numRows; i++) {
+        table = new Vector<Vector<Object>>();
+        for(int i=0; i<rows; ++i) {
+        	table.add(new Vector<Object>());
+        }
+        for(int i = 0; i< numRows; ++i) {
             table.get(i).setSize(columns);
         }
     }
@@ -43,7 +46,6 @@ public class Table {
         colTypes = columnTypes;
 
         table = new Vector<Vector<Object>>();
-        table.get(0).setSize(numCols);
     }
 
     Object getValueAt(int row, int column) {
@@ -51,7 +53,7 @@ public class Table {
     }
 
     void setValueAt(Object value, int row, int column) {
-        table.get(row).set(row, value);
+        table.get(row).set(column, value);
     }
 
     int getRowCount() {
@@ -75,7 +77,7 @@ public class Table {
     }
 
     void addRow(Vector<Object> stuff) {
-        table.add(stuff);
+        table.add(new Vector<Object>(stuff));
         numRows++;
     }
 
