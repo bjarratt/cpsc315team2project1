@@ -88,6 +88,8 @@ public class Table {
         for(int i=0; i<table.size(); i++) {
             table.get(i).remove(index);
         }
+        colNames.remove(index);
+        colTypes.remove(index);
         numCols--;
     }
 
