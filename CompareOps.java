@@ -5,6 +5,7 @@ class CompareOps {
     static final String STRING  = "STRING";
     static final String DOUBLE  = "DOUBLE";
     static final String INTEGER = "INTEGER";
+    static final String BOOLEAN = "BOOLEAN";
 
     // AND
     static Table and(Table lTable, Table rTable) {

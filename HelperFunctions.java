@@ -20,7 +20,7 @@ class HelperFunctions {
 		for(curCol=0; curCol<myTable.getColumnCount() && !myTable.getColName(curCol).equals(variable); ++curCol);
 		if(curCol!=myTable.getColumnCount()) {
 			colNames.add(variable);
-			colTypes.add(myTable.getColType(curCol));
+			colTypes.add(myTable.colType(curCol));
 			System.out.println("helperFuncs Parsing3: " + variable);
 			System.out.println("helperFuncs Converted to table");
 		    retTable=new Table(myTable.name() + " variable", colNames, colTypes);
