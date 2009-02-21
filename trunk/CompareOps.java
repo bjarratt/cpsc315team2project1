@@ -59,7 +59,7 @@ class CompareOps {
     // != not equal
     static Table notEqual(Table lTable, Table rTable) {
         int numRows = lTable.getRowCount();
-        Table retTable = new Table("OpTable",numRows, 1);
+        Table retTable = new Table(numRows, 1);
 
         for (int i = 0; i < numRows; i++) {
         	// Check type and assign
