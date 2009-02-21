@@ -40,7 +40,7 @@ public class Table {
         tableName = name;
         numCols = columnNames.size();
         colNames = columnNames;
-        colType = columnTypes;
+        colTypes = columnTypes;
 
         database = new Vector<Vector<Object>>();
         database.get(0).setSize(numCols);
