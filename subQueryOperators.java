@@ -15,7 +15,7 @@ class SubQueryOperators {
 		int existsRowCtr=0;
 		for(existsColCtr=0; existsColCtr<subQueryTable.getColumnCount(); ++existsColCtr) {
 			for(tableColCtr=0; tableColCtr<myTable.getColumnCount(); ++tableColCtr) {
-				if(myTable.colNames.get(tableColCtr)==subQueryTable.colNames.get(existsColCtr)) {
+				if(myTable.getColName(tableColCtr)==subQueryTable.getColName(existsColCtr)) {
 					for(existsRowCtr=0; existsRowCtr<subQueryTable.getRowCount(); ++existsRowCtr) {
 						for(tableRowCtr=0; tableRowCtr<retTable.getRowCount(); ++tableRowCtr) {
 							if((String) myTable.getValueAt(tableRowCtr, tableColCtr)==(String) subQueryTable.getValueAt(existsRowCtr, existsColCtr)) {

@@ -1,8 +1,12 @@
+import java.util.Vector;
+
 class TestMain {
 	public static void main(String args[]) {
-		Table testObj=new Table(5,1);
-		testObj.colNames.add("A");
-		testObj.colTypes.add(CompareOps.DOUBLE);
+		Vector<String> colNames=new Vector<String>();
+		Vector<String> colTypes=new Vector<String>();
+		colNames.add("A");
+		colTypes.add(CompareOps.DOUBLE);
+		Table testObj=new Table("Test Table", colNames, colTypes);
 		testObj.setValueAt(0.0,0,0);
 		testObj.setValueAt(1.0,1,0);
 		testObj.setValueAt(2.0,2,0);

@@ -6,8 +6,6 @@
 import java.util.Stack;
 import java.util.Vector;
 
-import javax.swing.table.DefaultTableModel;
-
 class WhereClass {
 	final String ctrlString="####";
 	Vector<Table> subQueries;
@@ -209,7 +207,6 @@ class WhereClass {
 			}
 			else {
 				lArg=HelperFunctions.convertToTable(myTable, args[0].trim());
-				System.out.println("WHERE>222 "+ lArg.colTypes.size());
 				System.out.println("LARG CONVERT");
 			}
 			if(args[1].startsWith(ctrlString)) {
