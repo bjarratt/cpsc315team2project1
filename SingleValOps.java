@@ -1,7 +1,7 @@
 class SingleValOps {
 	static Double max(Table myTable, String colName) {
 		double maxVal=0;
-		int colNum=myTable.getColNum(colName);
+		int colNum=myTable.colWithName(colName);
 		//What to do if user gives an invalid colName? return 0 I guess.
 		if(colNum!=-1) {
 			if(myTable.getRowCount()>0) {
@@ -25,7 +25,7 @@ class SingleValOps {
 	}
 	static Double min(Table myTable, String colName) {
 		double minVal=0;
-		int colNum=myTable.getColNum(colName);
+		int colNum=myTable.colWithName(colName);
 		//What to do if user gives an invalid colName? return 0 I guess.
 		if(colNum!=-1) {
 			if(myTable.getRowCount()>0) {
@@ -49,13 +49,13 @@ class SingleValOps {
 	}
 	static int count(Table myTable, String colName) {
 		//No nulls currently
-		if(myTable.getColNum(colName)==-1)
+		if(myTable.colWithName(colName)==-1)
 			return 0;
 		return(myTable.getRowCount());
 	}
 	static double sum(Table myTable, String colName) {
 		double sumVal=0;
-		int colNum=myTable.getColNum(colName);
+		int colNum=myTable.colWithName(colName);
 		if(colNum!=-1) {
 			if(myTable.colType(colNum)==CompareOps.DOUBLE) {
 				sumVal=(Double) myTable.getValueAt(0,colNum);
