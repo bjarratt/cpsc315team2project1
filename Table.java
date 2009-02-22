@@ -5,6 +5,7 @@ public class Table {
     private Vector<Vector<Object>> table;
     private Vector<String> colTypes;
     private Vector<String> colNames;
+    private Vector<Object> defaultValues;
     private String tableName;
     private int numRows = 0;
     private int numCols = 0;
@@ -43,6 +44,17 @@ public class Table {
         numCols = columnNames.size();
         colNames = columnNames;
         colTypes = columnTypes;
+        defaultValues = new Vector<Object>(numCols);
+
+        table = new Vector<Vector<Object>>();
+    }
+    
+    Table(String name, Vector<String> columnNames, Vector<String> columnTypes, Vector<Object> defaultVals) {
+        tableName = name;
+        numCols = columnNames.size();
+        colNames = columnNames;
+        colTypes = columnTypes;
+        defaultValues = defaultVals;
 
         table = new Vector<Vector<Object>>();
     }
@@ -89,6 +101,14 @@ public class Table {
         numRows++;
     }
 
+    // Use above if possible. This function adds
+    void addRow() {
+    	Vector<Object> toAdd = new Vector<Object>(numCols);
+    	for (int i=0; i<numCols; ++i)
+    		toAdd.add(defaultValues.get(i));
+    	table.add(toAdd);
+    }
+    
     void removeRow(int index) {
         table.remove(index);
         numRows--;
