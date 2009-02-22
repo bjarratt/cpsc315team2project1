@@ -63,6 +63,15 @@ public class Table {
         return numCols;
     }
 
+    int colWithName(String name) {
+    	for (int i=0; i< colNames.size(); i++) {
+    		if (colNames.get(i).equals(name))
+    			return i;
+    	}
+    	// No column exists with this name. Throw an error value.
+    	return -1;
+    }
+    
     void setColName(int index, String name) {
         colNames.set(index, name);
     }
