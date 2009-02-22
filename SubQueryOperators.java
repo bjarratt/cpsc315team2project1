@@ -33,7 +33,7 @@ class SubQueryOperators {
 		Table retTable;
 		double minMaxVal;
 		if(op.contains(">")) {
-			minMaxVal=SingleValOps.min(myTable);
+			minMaxVal=SingleValOps.min(myTable, myTable.getColName(0));
 			subQueryTable=HelperFunctions.createTable(CompareOps.DOUBLE, myTable.getRowCount(), String.valueOf(minMaxVal));
 			if(op.contains("="))
 				retTable=CompareOps.greaterEqual(myTable, subQueryTable);
@@ -41,7 +41,7 @@ class SubQueryOperators {
 				retTable=CompareOps.equals(myTable, subQueryTable);
 		}
 		else if(op.contains("<")) {
-			minMaxVal=SingleValOps.max(myTable);
+			minMaxVal=SingleValOps.max(myTable, myTable.getColName(0));
 			subQueryTable=HelperFunctions.createTable(CompareOps.DOUBLE, myTable.getRowCount(), String.valueOf(minMaxVal));
 			if(op.contains("="))
 				retTable=CompareOps.lessEqual(myTable, subQueryTable);
@@ -62,7 +62,7 @@ class SubQueryOperators {
 		Table retTable;
 		double minMaxVal;
 		if(op.contains(">")) {
-			minMaxVal=SingleValOps.max(myTable);
+			minMaxVal=SingleValOps.max(myTable, myTable.getColName(0));
 			subQueryTable=HelperFunctions.createTable(CompareOps.DOUBLE, myTable.getRowCount(), String.valueOf(minMaxVal));
 			if(op.contains("="))
 				retTable=CompareOps.greaterEqual(myTable, subQueryTable);
@@ -70,7 +70,7 @@ class SubQueryOperators {
 				retTable=CompareOps.equals(myTable, subQueryTable);
 		}
 		else if(op.contains("<")) {
-			minMaxVal=SingleValOps.min(myTable);
+			minMaxVal=SingleValOps.min(myTable, myTable.getColName(0));
 			subQueryTable=HelperFunctions.createTable(CompareOps.DOUBLE, myTable.getRowCount(), String.valueOf(minMaxVal));
 			if(op.contains("="))
 				retTable=CompareOps.lessEqual(myTable, subQueryTable);

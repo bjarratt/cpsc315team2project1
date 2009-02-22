@@ -15,6 +15,17 @@ public class Table {
         table = new Vector<Vector<Object>>();
     }
 
+    Table(Table oldTable) {
+    	for(int i=0; i<oldTable.numRows; ++i) {
+    		table.add(new Vector<Object>(oldTable.table.get(i)));
+    	}
+    	colTypes=new Vector<String>(oldTable.colTypes);
+    	colNames=new Vector<String>(oldTable.colNames);
+    	defaultValues=new Vector<Object>(oldTable.defaultValues);
+    	tableName=oldTable.tableName;
+    	numRows=oldTable.numRows;
+    	numCols=oldTable.numCols;
+    }
     Table(String name, int rows, int columns) {
         tableName = name;
         numRows = rows;
@@ -103,9 +114,7 @@ public class Table {
 
     // Use above if possible. This function adds
     void addRow() {
-    	Vector<Object> toAdd = new Vector<Object>(numCols);
-    	for (int i=0; i<numCols; ++i)
-    		toAdd.add(defaultValues.get(i));
+    	Vector<Object> toAdd = new Vector<Object>(defaultValues);
     	table.add(toAdd);
     }
     
@@ -132,6 +141,21 @@ public class Table {
         numCols++;
     }
 
+    void addColumn(String type, String name, Vector<Vector<Object>> newCol) {
+    	int ctr=0;
+    	colTypes.add(type);
+    	colNames.add(name);
+    	if(newCol.size() <= numCols) {
+    		for(ctr=0; ctr<newCol.size(); ++ctr)
+    			table.get(ctr).add(new Vector<Object>(newCol.get(ctr)));
+    		for(; ctr<numCols; ++ctr)
+    			table.get(ctr).add(null);
+    	}
+    	else {
+    		for(ctr=0; ctr<numCols; ++ctr)
+    			table.get(ctr).add(new Vector<Object>(newCol.get(ctr)));
+    	}
+    }
     void name(String newName) {
         tableName = newName;
     }
