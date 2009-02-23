@@ -63,7 +63,7 @@ class CompareOps {
 
         for (int i = 0; i < numRows; i++) {
         	// Check type and assign
-            if (lTable.colType(0).equals(STRING)) {
+            if (lTable.getColType(0).equals(STRING)) {
             	String lval = (String) lTable.getValueAt(i, 0);
             	String rval = (String) rTable.getValueAt(i, 0);
                 if (lval.compareTo(rval)!=0)
@@ -71,7 +71,7 @@ class CompareOps {
                 else
                     retTable.setValueAt(FALSE,i, 0);
             }
-            else if (lTable.colType(0).equals(DOUBLE)) {
+            else if (lTable.getColType(0).equals(DOUBLE)) {
             	Double lval = (Double) lTable.getValueAt(i, 0);
             	Double rval = (Double) rTable.getValueAt(i, 0);
                 if (lval.compareTo(rval)!=0)
@@ -79,7 +79,7 @@ class CompareOps {
                 else
                     retTable.setValueAt(FALSE,i, 0);
             }
-            else if (lTable.colType(0).equals(INTEGER)) {
+            else if (lTable.getColType(0).equals(INTEGER)) {
             	Integer lval = (Integer) lTable.getValueAt(i, 0);
             	Integer rval = (Integer) rTable.getValueAt(i, 0);
                 if (lval.compareTo(rval)!=0)
@@ -101,7 +101,7 @@ class CompareOps {
 
         for (int i = 0; i < numRows; i++) {
         	// Check type and assign
-            if (lTable.colType(0).equals(STRING)) {
+            if (lTable.getColType(0).equals(STRING)) {
             	String lval = (String) lTable.getValueAt(i, 0);
             	String rval = (String) rTable.getValueAt(i, 0);
                 // 0 means they are same
@@ -110,7 +110,7 @@ class CompareOps {
                 else
                     retTable.setValueAt(FALSE,i, 0);
             }
-            else if (lTable.colType(0).equals(DOUBLE)) {
+            else if (lTable.getColType(0).equals(DOUBLE)) {
                 Double lval = (Double) lTable.getValueAt(i, 0);
             	Double rval = (Double) rTable.getValueAt(i, 0);
                 // 0 means they are same
@@ -119,7 +119,7 @@ class CompareOps {
                 else
                     retTable.setValueAt(FALSE,i, 0);
             }
-            else if (lTable.colType(0).equals(INTEGER)) {
+            else if (lTable.getColType(0).equals(INTEGER)) {
             	Integer lval = (Integer) lTable.getValueAt(i, 0);
             	Integer rval = (Integer) rTable.getValueAt(i, 0);
                 // 0 means they are same
@@ -140,7 +140,7 @@ class CompareOps {
 
         for (int i = 0; i < numRows; i++) {
         	// Check type and assign
-            if (lTable.colType(0).equals(STRING)) {
+            if (lTable.getColType(0).equals(STRING)) {
             	String lval = (String) lTable.getValueAt(i, 0);
             	String rval = (String) rTable.getValueAt(i, 0);
                 // 0 means they are same
@@ -149,7 +149,7 @@ class CompareOps {
                 else
                     retTable.setValueAt(FALSE,i, 0);
             }
-            else if (lTable.colType(0).equals(DOUBLE)) {
+            else if (lTable.getColType(0).equals(DOUBLE)) {
                 Double lval = (Double) lTable.getValueAt(i, 0);
             	Double rval = (Double) rTable.getValueAt(i, 0);
                 // 0 means they are same
@@ -158,7 +158,7 @@ class CompareOps {
                 else
                     retTable.setValueAt(FALSE,i, 0);
             }
-            else if (lTable.colType(0).equals(INTEGER)) {
+            else if (lTable.getColType(0).equals(INTEGER)) {
             	Integer lval = (Integer) lTable.getValueAt(i, 0);
             	Integer rval = (Integer) rTable.getValueAt(i, 0);
                 // 0 means they are same
@@ -179,7 +179,7 @@ class CompareOps {
 
         for (int i = 0; i < numRows; i++) {
         	// Check type and assign
-            if (lTable.colType(0).equals(STRING)) {
+            if (lTable.getColType(0).equals(STRING)) {
             	String lval = (String) lTable.getValueAt(i, 0);
             	String rval = (String) rTable.getValueAt(i, 0);
                 // 0 means they are same
@@ -189,7 +189,7 @@ class CompareOps {
                 else
                     retTable.setValueAt(FALSE,i, 0);
             }
-            else if (lTable.colType(0).equals(DOUBLE)) {
+            else if (lTable.getColType(0).equals(DOUBLE)) {
                 Double lval = (Double) lTable.getValueAt(i, 0);
             	Double rval = (Double) rTable.getValueAt(i, 0);
                 // 0 means they are same
@@ -199,7 +199,7 @@ class CompareOps {
                 else
                     retTable.setValueAt(FALSE,i, 0);
             }
-            else if (lTable.colType(0).equals(INTEGER)) {
+            else if (lTable.getColType(0).equals(INTEGER)) {
             	Integer lval = (Integer) lTable.getValueAt(i, 0);
             	Integer rval = (Integer) rTable.getValueAt(i, 0);
                 // 0 means they are same
@@ -221,7 +221,7 @@ class CompareOps {
 
         for (int i = 0; i < numRows; i++) {
         	// Check type and assign
-            if (lTable.colType(0).equals(STRING)) {
+            if (lTable.getColType(0).equals(STRING)) {
             	String lval = (String) lTable.getValueAt(i, 0);
             	String rval = (String) rTable.getValueAt(i, 0);
                 // 1 means greater than
@@ -230,7 +230,7 @@ class CompareOps {
                 else
                     retTable.setValueAt(FALSE,i, 0);
             }
-            else if (lTable.colType(0).equals(DOUBLE)) {
+            else if (lTable.getColType(0).equals(DOUBLE)) {
                 Double lval = (Double) lTable.getValueAt(i, 0);
             	Double rval = (Double) rTable.getValueAt(i, 0);
                 // 1 means greater than
@@ -239,7 +239,7 @@ class CompareOps {
                 else
                     retTable.setValueAt(FALSE,i, 0);
             }
-            else if (lTable.colType(0).equals(INTEGER)) {
+            else if (lTable.getColType(0).equals(INTEGER)) {
             	Integer lval = (Integer) lTable.getValueAt(i, 0);
             	Integer rval = (Integer) rTable.getValueAt(i, 0);
                 // 1 means greater than
@@ -260,7 +260,7 @@ class CompareOps {
 
         for (int i = 0; i < numRows; i++) {
         	// Check type and assign
-            if (lTable.colType(0).equals(STRING)) {
+            if (lTable.getColType(0).equals(STRING)) {
             	String lval = (String) lTable.getValueAt(i, 0);
             	String rval = (String) rTable.getValueAt(i, 0);
                 // -1 means less than
@@ -269,7 +269,7 @@ class CompareOps {
                 else
                     retTable.setValueAt(FALSE,i, 0);
             }
-            else if (lTable.colType(0).equals(DOUBLE)) {
+            else if (lTable.getColType(0).equals(DOUBLE)) {
                 Double lval = (Double) lTable.getValueAt(i, 0);
             	Double rval = (Double) rTable.getValueAt(i, 0);
                 // -1 means less than
@@ -278,7 +278,7 @@ class CompareOps {
                 else
                     retTable.setValueAt(FALSE,i, 0);
             }
-            else if (lTable.colType(0).equals(INTEGER)) {
+            else if (lTable.getColType(0).equals(INTEGER)) {
             	Integer lval = (Integer) lTable.getValueAt(i, 0);
             	Integer rval = (Integer) rTable.getValueAt(i, 0);
                 // -1 means less than
