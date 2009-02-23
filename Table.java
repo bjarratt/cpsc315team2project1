@@ -60,6 +60,8 @@ public class Table {
     }
     Table(String name, int rows, int columns) {
         tableName = name;
+        colTypes = new Vector<String>(columns);
+        colNames = new Vector<String>(columns);
         table = new Vector<Vector<Object>>(rows);
         for(int i = 0; i< rows; i++) {
             table.get(i).setSize(columns);
@@ -69,6 +71,8 @@ public class Table {
     Table(int rows, int columns) {
         tableName = "Unnamed";
         table = new Vector<Vector<Object>>();
+        colTypes = new Vector<String>(columns);
+        colNames = new Vector<String>(columns);
         for(int i=0; i<rows; ++i) {
                 table.add(new Vector<Object>());
         }
