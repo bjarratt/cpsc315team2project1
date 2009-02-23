@@ -5,46 +5,71 @@ public class Table {
     private Vector<Vector<Object>> table;
     private Vector<String> colTypes;
     private Vector<String> colNames;
-    private Vector<Object> defaultValues;
     private String tableName;
-    private int numRows = 0;
-    private int numCols = 0;
 
-    Table(String name) {
-        tableName = name;
+    //Blank
+    Table() {
         table = new Vector<Vector<Object>>();
     }
 
+    //Copy
     Table(Table oldTable) {
-    	for(int i=0; i<oldTable.numRows; ++i) {
+    	for(int i=0; i<oldTable.table.size(); ++i) {
     		table.add(new Vector<Object>(oldTable.table.get(i)));
     	}
     	colTypes=new Vector<String>(oldTable.colTypes);
     	colNames=new Vector<String>(oldTable.colNames);
-    	defaultValues=new Vector<Object>(oldTable.defaultValues);
     	tableName=oldTable.tableName;
-    	numRows=oldTable.numRows;
-    	numCols=oldTable.numCols;
+    }
+    //JOIN for two tables
+    Table(String name, Table lTable, Table rTable) {
+    	//Use copy constructor to get the lTable setup
+    	this(lTable);
+    	Table rTableCpy=new Table(rTable);
+    	
+    	tableName=name;
+    	int rTableCol;
+    	int rTableRow;
+    	int lTableCtr;
+    	boolean nJoin=false;
+    	for(lTableCtr=0; lTableCtr<lTable.getColumnCount(); ++lTableCtr) {
+    		if((rTableCol=rTableCpy.colNames.indexOf(colNames.get(lTableCtr)))!=-1) {
+    			nJoin=true;
+				Table tempTable=new Table();
+    			for(int rowCtr=getRowCount()-1; rowCtr>=0; --rowCtr) {
+    				if((rTableRow=getRowIndex(table.get(lTableCtr).get(rowCtr), rTableCol))!=-1)
+    					tempTable.addRow(rTableCpy.table.get(rTableRow));
+    				else
+    					removeRow(rowCtr);
+    			}
+    			tempTable.removeColumn(rTableCol);
+    			rTableCpy=new Table(tempTable);
+    		}
+    	}
+    	if(nJoin) {
+    		for(int ctr=0; ctr<rTableCpy.getColumnCount(); ++ctr) {
+    			addColumns(rTableCpy.getColumn(ctr));
+    		}
+    	}
+    	else if(!nJoin) {
+//TODO: Implement cartesian join
+    	}
     }
     Table(String name, int rows, int columns) {
         tableName = name;
-        numRows = rows;
-        numCols = columns;
         table = new Vector<Vector<Object>>(rows);
-        for(int i = 0; i< numRows; i++) {
+        for(int i = 0; i< rows; i++) {
             table.get(i).setSize(columns);
         }
     }
 
     Table(int rows, int columns) {
         tableName = "Unnamed";
-        numRows = rows;
-        numCols = columns;
         table = new Vector<Vector<Object>>();
         for(int i=0; i<rows; ++i) {
                 table.add(new Vector<Object>());
         }
-        for(int i = 0; i< numRows; ++i) {
+        for(int i = 0; i< table.size(); ++i) {
             table.get(i).setSize(columns);
         }
     }
@@ -52,20 +77,8 @@ public class Table {
     // This constructor SHOULD be the one used
     Table(String name, Vector<String> columnNames, Vector<String> columnTypes) {
         tableName = name;
-        numCols = columnNames.size();
-        colNames = columnNames;
-        colTypes = columnTypes;
-        defaultValues = new Vector<Object>(numCols);
-
-        table = new Vector<Vector<Object>>();
-    }
-    
-    Table(String name, Vector<String> columnNames, Vector<String> columnTypes, Vector<Object> defaultVals) {
-        tableName = name;
-        numCols = columnNames.size();
-        colNames = columnNames;
-        colTypes = columnTypes;
-        defaultValues = defaultVals;
+        colNames = new Vector<String>(columnNames);
+        colTypes = new Vector<String>(columnTypes);
 
         table = new Vector<Vector<Object>>();
     }
@@ -79,11 +92,11 @@ public class Table {
     }
 
     int getRowCount() {
-        return numRows;
+        return table.size();
     }
 
     int getColumnCount() {
-        return numCols;
+        return colTypes.size();
     }
 
     int colWithName(String name) {
@@ -103,64 +116,105 @@ public class Table {
         return colNames.get(index);
     }
 
-    String colType(int index) {
+    String getColType(int index) {
         return colTypes.get(index);
     }
 
     void addRow(Vector<Object> stuff) {
         table.add(new Vector<Object>(stuff));
-        numRows++;
     }
 
-    // Use above if possible. This function adds
-    void addRow() {
-    	Vector<Object> toAdd = new Vector<Object>(defaultValues);
-    	table.add(toAdd);
+    Vector<Object> getRow(int index) {
+        return (table.get(index));
     }
-    
+
     void removeRow(int index) {
         table.remove(index);
-        numRows--;
     }
 
+    int getRowIndex(Object o, int colIndex) {
+    	int rowCtr=0;
+    	if(getColType(colIndex)==CompareOps.STRING) {
+    		for(rowCtr=0; rowCtr<getRowCount() && ((String) table.get(rowCtr).get(colIndex)).equals(o););
+    		if(rowCtr==getRowCount())
+    			return -1;
+    		else
+    			return rowCtr;
+    	}
+    	else if(getColType(colIndex)==CompareOps.DOUBLE) {
+    		for(rowCtr=0; rowCtr<getRowCount() && ((Double) table.get(rowCtr).get(colIndex)).equals(o););
+    		if(rowCtr==getRowCount())
+    			return -1;
+    		else
+    			return rowCtr;
+    	}
+    	else if(getColType(colIndex)==CompareOps.INTEGER) {
+    		for(rowCtr=0; rowCtr<getRowCount() && ((Integer) table.get(rowCtr).get(colIndex)).equals(o););
+    		if(rowCtr==getRowCount())
+    			return -1;
+    		else
+    			return rowCtr;
+    	}
+    	else if(getColType(colIndex)==CompareOps.BOOLEAN) {
+    		for(rowCtr=0; rowCtr<getRowCount() && ((String) table.get(rowCtr).get(colIndex)).equals(o););
+    		if(rowCtr==getRowCount())
+    			return -1;
+    		else
+    			return rowCtr;
+    	}
+    	else
+    		return -1;
+    }
     void removeColumn(int index) {
         for(int i=0; i<table.size(); i++) {
             table.get(i).remove(index);
         }
         colNames.remove(index);
         colTypes.remove(index);
-        numCols--;
     }
-
-    void addColumn(int index) {
-        for(int i=0; i<table.size(); i++) {
-            table.get(i).add(index);
-        }
-        colNames.add(index, colNames.elementAt(index));
-        colTypes.add(index, colNames.elementAt(index));
-        numCols++;
+    public void addColumns(Table newCols) {
+    	for(int colCtr=0; colCtr<newCols.getColumnCount(); ++colCtr) {
+        	colTypes.add(newCols.getColType(colCtr));
+        	colNames.add(newCols.getColName(colCtr));
+           	int ctr=0;
+           	if(newCols.getRowCount()<=table.size()) {
+           		for(ctr=0; ctr<newCols.getRowCount(); ++ctr)
+           			table.get(ctr).add(new Vector<Object>(newCols.table.get(ctr)));
+           		for(; ctr<table.size(); ++ctr)
+           			table.get(ctr).add(null);
+           	}
+           	else {
+           		for(ctr=0; ctr<table.size(); ++ctr)
+           			table.get(ctr).add(new Vector<Object>(newCols.table.get(ctr)));
+           		for(ctr=0; ctr<newCols.getRowCount(); ++ctr) {
+           			Vector<Object> newRow=new Vector<Object>();
+           			for(int i=0; i<getColumnCount()-1; ++i)
+           				newRow.add(null);
+           			newRow.add(new Vector<Object>(newCols.table.get(ctr)));
+           			addRow(newRow);
+           		}
+           	}
+       	}
     }
-
-    void addColumn(String type, String name, Vector<Vector<Object>> newCol) {
-    	int ctr=0;
-    	colTypes.add(type);
-    	colNames.add(name);
-    	if(newCol.size() <= numCols) {
-    		for(ctr=0; ctr<newCol.size(); ++ctr)
-    			table.get(ctr).add(new Vector<Object>(newCol.get(ctr)));
-    		for(; ctr<numCols; ++ctr)
-    			table.get(ctr).add(null);
+    public Table getColumn(int index) {
+    	if(index>=getColumnCount()) {
+    		return new Table();
     	}
-    	else {
-    		for(ctr=0; ctr<numCols; ++ctr)
-    			table.get(ctr).add(new Vector<Object>(newCol.get(ctr)));
-    	}
+    	Vector<String> colType=new Vector<String>();
+    	Vector<String> colName=new Vector<String>();
+    	colType.add(getColType(index));
+    	colName.add(getColName(index));
+    	Table retTable=new Table(tableName, colType, colName);
+      	int ctr=0;
+  		for(ctr=0; ctr<getRowCount(); ++ctr)
+   			retTable.addRow(new Vector<Object>(table.get(ctr)));
+   		return retTable;
     }
-    void name(String newName) {
+    public void setName(String newName) {
         tableName = newName;
     }
 
-    String name() {
+    public String getName() {
         return tableName;
     }
 }
