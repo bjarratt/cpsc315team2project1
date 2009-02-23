@@ -14,7 +14,10 @@ public class Table {
 
     //Copy
     Table(Table oldTable) {
+        table = new Vector<Vector<Object>>();
+    	System.out.println((Double) oldTable.table.get(1).get(0));
     	for(int i=0; i<oldTable.table.size(); ++i) {
+    		System.out.println(i);
     		table.add(new Vector<Object>(oldTable.table.get(i)));
     	}
     	colTypes=new Vector<String>(oldTable.colTypes);
@@ -84,6 +87,8 @@ public class Table {
     }
 
     Object getValueAt(int row, int column) {
+    	getColumnCount();
+//    	System.out.println("ColC" + getColumnCount() + "RowC" + getRowCount() + "r" + row + "c" + column);
         return table.get(row).get(column);
     }
 
@@ -113,6 +118,7 @@ public class Table {
     }
 
     String getColName(int index) {
+    	System.out.println(getColumnCount() + " " + index);
         return colNames.get(index);
     }
 
