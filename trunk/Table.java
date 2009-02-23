@@ -60,24 +60,32 @@ public class Table {
     }
     Table(String name, int rows, int columns) {
         tableName = name;
-        colTypes = new Vector<String>(columns);
-        colNames = new Vector<String>(columns);
         table = new Vector<Vector<Object>>(rows);
         for(int i = 0; i< rows; i++) {
             table.get(i).setSize(columns);
+        }
+        colTypes=new Vector<String>();
+        colNames=new Vector<String>();
+        for(int i=0; i<columns; ++i) {
+        	colTypes.add("");
+        	colNames.add("");
         }
     }
 
     Table(int rows, int columns) {
         tableName = "Unnamed";
         table = new Vector<Vector<Object>>();
-        colTypes = new Vector<String>(columns);
-        colNames = new Vector<String>(columns);
         for(int i=0; i<rows; ++i) {
                 table.add(new Vector<Object>());
         }
         for(int i = 0; i< table.size(); ++i) {
             table.get(i).setSize(columns);
+        }
+        colTypes=new Vector<String>();
+        colNames=new Vector<String>();
+        for(int i=0; i<columns; ++i) {
+        	colTypes.add("");
+        	colNames.add("");
         }
     }
 
@@ -91,8 +99,7 @@ public class Table {
     }
 
     Object getValueAt(int row, int column) {
-    	getColumnCount();
-//    	System.out.println("ColC" + getColumnCount() + "RowC" + getRowCount() + "r" + row + "c" + column);
+    	System.out.println("ColC" + getColumnCount() + "RowC" + getRowCount() + "r" + row + "c" + column);
         return table.get(row).get(column);
     }
 
