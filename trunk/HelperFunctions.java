@@ -20,12 +20,12 @@ class HelperFunctions {
 			Vector<String> colName=new Vector<String>();
 			Vector<String> colType=new Vector<String>();
 			colName.add(variable);
-			colType.add(myTable.colType(curCol));
+			colType.add(myTable.getColType(curCol));
 			Vector<Object> addRow=new Vector<Object>();
 			addRow.setSize(1);
 			System.out.println("helperFuncs Parsing3: " + variable);
 			System.out.println("helperFuncs Converted to table");
-		    retTable=new Table(myTable.name() + " variable", colName, colType);
+		    retTable=new Table(myTable.getName() + " variable", colName, colType);
 			for(int curRow=0; curRow<myTable.getRowCount(); ++curRow) {
 				addRow.setElementAt(myTable.getValueAt(curRow,0), 0);
 				retTable.addRow(addRow);

@@ -85,7 +85,7 @@ class SubQueryOperators {
 				//everything will be false if == with two different variables
 				for(ctr=0; allVal==subQueryTable.getValueAt(ctr, 0) && ctr<subQueryTable.getRowCount(); ++ctr);
 				if(ctr==subQueryTable.getRowCount())
-					retTable=CompareOps.equals(myTable, HelperFunctions.createTable(subQueryTable.colType(0), myTable.getRowCount(), allVal));
+					retTable=CompareOps.equals(myTable, HelperFunctions.createTable(subQueryTable.getColType(0), myTable.getRowCount(), allVal));
 			}
 		}
 		return retTable;
