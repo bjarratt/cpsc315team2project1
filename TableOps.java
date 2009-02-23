@@ -2,32 +2,35 @@ import java.util.*;
 
 class TableOps {
 
-    static Vector<Table> db = new Vector<Table>();
+    static ArrayList<Table> db = new ArrayList<Table>();
     static Vector<String> columnNames;
     static Vector<String> columnTypes;
     String columnName;
     
     
-    public static ArrayList<Table> from(Vector<Table> database, String tableNames){
-    	
-    	String[] args = tableNames.split(" ");
-    	ArrayList<Table> tables = new ArrayList<Table>();
-        database = db;
-        
+    public static Table from(ArrayList<Table> database, String tableNames){
+    	String[] args = tableNames.split(",");
+    	Table retTable=new Table();
+        boolean addedTable=false;
         if(database.size() == 0){
                 System.out.println("Database contains nothing.");
         }
         else if(database.size() > 0){
-        	for(int i = 0; i < database.size(); i++){
-        		if(args.equals(database.get(i).name())){
-        			tables.add(database.get(i));
-        		}
-        		else{
-        			System.err.println("This table does not exist in the database.");
-        		}
-        	}
+    		for(int argCtr=0, dbCtr=0; argCtr<args.length; ++argCtr) {
+    			//Find the table in the database
+    			for(dbCtr = 0; dbCtr<database.size() && args[argCtr].equals(database.get(dbCtr).getName()); ++dbCtr);
+   				if(dbCtr!=db.size()){
+   					if(addedTable)
+   						retTable=new Table(retTable.getName()+" JOINED " + database.get(dbCtr).getName(), retTable, database.get(dbCtr));
+   					else
+   						retTable=new Table(database.get(dbCtr));
+   				}
+   				else{
+   					System.err.println("This table does not exist in the database.");
+   				}
+    		}
         }
-        return tables;
+        return retTable;
     }
 
     public static Table select(String query){
@@ -36,33 +39,18 @@ class TableOps {
         
     	String[] args = query.split("FROM", 2);
     	String[] conditions = args[1].split("WHERE", 2);
-    	
-        Table selectedTable = new Table("Results", columnNames, columnTypes);
-        ArrayList<Table> testTables = from(db, args[1]);
-        
-        //print out the list of tables
-        for(int i = 0; i < testTables.size(); i++){
-        	System.out.println("Table " + i + ":" + testTables.toString().charAt(i) + "\n");
-        }
-        
-        /*
-        //add specified columns first
-        if(args[0].contains("*")){
-        	//currently sets selectedTable equal to the first table returned by FROM
-            selectedTable = from(db, args[1]).get(0);
-        }
-        else{
-
-        }
-		*/
-        
-        //call WHERE
-        selectedTable = WhereClass.where(selectedTable, conditions[1]);    
-          
+        Table selectedTable;
+        Table testTable=from(db, conditions[0]);
+       	selectedTable = WhereClass.where(testTable, conditions[1]);
+       	args[0]+=',';
+       	for(int testTableCtr=testTable.getColumnCount(); testTableCtr>=0; --testTableCtr) {
+       		if(!args[0].contains(testTable.getColName(testTableCtr)+','))
+       			testTable.removeColumn(testTableCtr);
+       	}
         return selectedTable;
     }
     
-    public Table update(String column, String row){
+    public void update(String column, String row){
         //This function modifies columns in the selected table that
         //meet the conditions of where()
         Table selectedTable = select(column);
@@ -77,10 +65,9 @@ class TableOps {
          * }
         */
         
-        return selectedTable;
     }
     
-    public Table delete(String column, String row){
+    public void delete(String column, String row){
         
         //This function deletes columns in the selected table that
         //meet the conditions of where()
@@ -96,6 +83,5 @@ class TableOps {
          * }
         */
         
-        return selectedTable;
     }
 }
