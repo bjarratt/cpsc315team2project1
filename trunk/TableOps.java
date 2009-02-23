@@ -33,19 +33,17 @@ class TableOps {
         return retTable;
     }
 
+    //this function will return a new table containing the columns
+    //that meet the requirements of WHERE
     public static Table select(String query){
-        //this function will return a new table containing the columns
-        //that meet the requirements of WHERE
-        
     	String[] args = query.split("FROM", 2);
     	String[] conditions = args[1].split("WHERE", 2);
-        Table selectedTable;
         Table testTable=from(db, conditions[0]);
-       	selectedTable = WhereClass.where(testTable, conditions[1]);
+        Table selectedTable = WhereClass.where(new Table(testTable), conditions[1]);
        	args[0]+=',';
-       	for(int testTableCtr=testTable.getColumnCount(); testTableCtr>=0; --testTableCtr) {
-       		if(!args[0].contains(testTable.getColName(testTableCtr)+','))
-       			testTable.removeColumn(testTableCtr);
+       	for(int selectedTableCtr=selectedTable.getColumnCount(); selectedTableCtr>=0; --selectedTableCtr) {
+       		if(!args[0].contains(selectedTable.getColName(selectedTableCtr)+','))
+       			selectedTable.removeColumn(selectedTableCtr);
        	}
         return selectedTable;
     }
