@@ -55,7 +55,7 @@ public class Table {
     		}
     	}
     	else if(!nJoin) {
-//TODO: Implement cartesian join
+//TODO: Implement Cartesian join
     	}
     }
     Table(String name, int rows, int columns) {

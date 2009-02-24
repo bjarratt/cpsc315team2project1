@@ -3,9 +3,6 @@ import java.util.*;
 class TableOps {
 
     static ArrayList<Table> db = new ArrayList<Table>();
-    static Vector<String> columnNames;
-    static Vector<String> columnTypes;
-    String columnName;
     
     
     public static Table from(ArrayList<Table> database, String tableNames){
@@ -38,14 +35,33 @@ class TableOps {
     public static Table select(String query){
     	String[] args = query.split("FROM", 2);
     	String[] conditions = args[1].split("WHERE", 2);
-        Table testTable=from(db, conditions[0]);
-        Table selectedTable = WhereClass.where(new Table(testTable), conditions[1]);
+        Table testTable= new Table(from(db, conditions[0]));
+        if(args[0].contains("AS")) {
+        	selectAs(args[0],testTable);
+        }
+        Table selectedTable = WhereClass.where(testTable, conditions[1]);
        	args[0]=args[0].trim()+',';
        	for(int selectedTableCtr=selectedTable.getColumnCount()-1; selectedTableCtr>=0; --selectedTableCtr) {
        		if(!args[0].contains(selectedTable.getColName(selectedTableCtr)+','))
        			selectedTable.removeColumn(selectedTableCtr);
        	}
         return selectedTable;
+    }
+    
+    public static void selectAs(String query, Table table) {
+    	String[] args = query.split("AS",2);
+    	String[] oldNames = args[0].split(",");
+    	String[] newNames = args[1].split(",");
+    	
+    	// Rename columns
+    	for (int i=0; i<oldNames.length; i++) {
+    		for (int j=0; j<table.getColumnCount(); j++) {
+    			if (oldNames[i].equals(table.getColName(j))) {
+    				table.setColName(j, newNames[i]);
+    				break;
+    			}
+    		}
+    	}
     }
     
     public static Table update(String query){
@@ -85,5 +101,39 @@ class TableOps {
     	//loop through and delete all columns in the table
     	
     	return deletedTable;
+    }
+
+    public static Table insert(String query) {
+    	// Parse
+    	String[] args = query.split("VALUES",2);
+    	String tableName = args[0];
+    	String[] values = args[1].split(",");
+    	
+    	// Find appropriate table
+    	Table thisTable = new Table();
+    	for(int i=0; i<db.size(); i++) {
+    		if(db.get(i).getName().equals(tableName)) {
+    			thisTable = new Table(db.get(i));
+    			break;
+    		}
+    		if (i==db.size()-1) {
+    			System.err.println("Table doesn't exist!");
+    			return new Table();
+    		}
+    	}
+    	
+    	// Check types and add into row
+    	Vector<Object> newRow = new Vector<Object>();
+    	for(int i=0; i<values.length; i++) {
+    		if (thisTable.getColType(i).equals(CompareOps.STRING))
+    			newRow.add(new String(values[i]));
+    		else if (thisTable.getColType(i).equals(CompareOps.DOUBLE))
+    			newRow.add(new Double(values[i]));
+    		else if (thisTable.getColType(i).equals(CompareOps.INTEGER))
+    			newRow.add(new Integer(values[i]));
+    	}
+    	
+    	thisTable.addRow(newRow);
+    	return thisTable;
     }
 }

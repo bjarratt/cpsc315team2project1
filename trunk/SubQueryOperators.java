@@ -1,6 +1,6 @@
 //Gabriel Copley
 //Last Revised 2/18/09
-//Preforms operations that involve a subQuery
+//Performs operations that involve a subQuery
 //USES table, tableOps
 
 class SubQueryOperators {
