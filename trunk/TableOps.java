@@ -36,15 +36,23 @@ class TableOps {
     	String[] args = query.split("FROM", 2);
     	String[] conditions = args[1].split("WHERE", 2);
         Table testTable= new Table(from(db, conditions[0]));
-        if(args[0].contains("AS")) {
-        	args[0] = selectAs(args[0],testTable);
-        }
         Table selectedTable = WhereClass.where(testTable, conditions[1]);
        	args[0]=args[0].trim()+',';
+   		for(int minLoc=-1; (minLoc=args[0].indexOf("MIN(", minLoc+1))!=-1;)
+   			HelperFunctions.createTable(CompareOps.DOUBLE, selectedTable.getRowCount(), SingleValOps.min(selectedTable, args[0].substring(minLoc, query.indexOf(")", minLoc))));
+   		for(int minLoc=-1; (minLoc=args[0].indexOf("MAX(", minLoc+1))!=-1;)
+   			HelperFunctions.createTable(CompareOps.DOUBLE, selectedTable.getRowCount(), SingleValOps.max(selectedTable, args[0].substring(minLoc, query.indexOf(")", minLoc))));
+   		for(int minLoc=-1; (minLoc=args[0].indexOf("COUNT(", minLoc+1))!=-1;)
+   			HelperFunctions.createTable(CompareOps.INTEGER, selectedTable.getRowCount(), SingleValOps.count(selectedTable, args[0].substring(minLoc, query.indexOf(")", minLoc))));
+   		for(int minLoc=-1; (minLoc=args[0].indexOf("SUM(", minLoc+1))!=-1;)
+   			HelperFunctions.createTable(CompareOps.DOUBLE, selectedTable.getRowCount(), SingleValOps.sum(selectedTable, args[0].substring(minLoc, query.indexOf(")", minLoc))));
+        if(args[0].contains("AS"))
+        	args[0]=selectAs(args[0],testTable);
        	for(int selectedTableCtr=selectedTable.getColumnCount()-1; selectedTableCtr>=0; --selectedTableCtr) {
        		if(!args[0].contains(selectedTable.getColName(selectedTableCtr)+','))
        			selectedTable.removeColumn(selectedTableCtr);
        	}
+       	
         return selectedTable;
     }
     
@@ -105,6 +113,26 @@ class TableOps {
     	return deletedTable;
     }
 
+    public static void create(String query) {
+    	int oQuote=-1;
+    	int cQuote=-1;
+    	String tName;
+    	Vector<String> colNames=new Vector<String>();
+    	Vector<String> colTypes=new Vector<String>();
+    	if((oQuote=query.indexOf("\"", cQuote+1))!=-1) {
+    		cQuote=query.indexOf("\"", oQuote);
+    		tName=query.substring(oQuote, cQuote);
+    		while((oQuote=query.indexOf("\"", cQuote+1))!=-1) {
+    			cQuote=query.indexOf("\"", oQuote);
+    			query.substring(oQuote, cQuote);
+    			colNames.add(query.substring(oQuote, cQuote));
+    			oQuote=query.indexOf("\"", cQuote+1);
+    			cQuote=query.indexOf("\"", oQuote);
+    			colTypes.add(query.substring(oQuote, cQuote));
+    		}
+        	db.add(new Table(tName, colNames, colTypes));
+    	}
+   	}
     public static Table insert(String query) {
     	// Parse
     	String[] args = query.split("VALUES",2);
