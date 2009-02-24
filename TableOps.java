@@ -37,7 +37,7 @@ class TableOps {
     	String[] conditions = args[1].split("WHERE", 2);
         Table testTable= new Table(from(db, conditions[0]));
         if(args[0].contains("AS")) {
-        	selectAs(args[0],testTable);
+        	args[0] = selectAs(args[0],testTable);
         }
         Table selectedTable = WhereClass.where(testTable, conditions[1]);
        	args[0]=args[0].trim()+',';
@@ -48,7 +48,7 @@ class TableOps {
         return selectedTable;
     }
     
-    public static void selectAs(String query, Table table) {
+    public static String selectAs(String query, Table table) {
     	String[] args = query.split("AS",2);
     	String[] oldNames = args[0].split(",");
     	String[] newNames = args[1].split(",");
@@ -62,6 +62,8 @@ class TableOps {
     			}
     		}
     	}
+    	
+    	return args[0].trim();
     }
     
     public static Table update(String query){
