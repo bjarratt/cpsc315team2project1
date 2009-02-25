@@ -35,12 +35,12 @@ public class UserTables {
 
 	static void printEntireTable(Table table) {
 		for (int i=0; i<table.getColumnCount(); i++)
-			System.out.println(table.getColName(i) + "\t");
+			System.out.print(table.getColName(i) + "\t");
 		System.out.println();
 		
 		for (int i=0; i<table.getRowCount(); i++) {
 			for (int j=0; j<table.getColumnCount(); j++)
-				System.out.println(table.getValueAt(i, j) + "\t");
+				System.out.print(table.getValueAt(i, j) + "\t");
 			System.out.println();
 		}
 	}
