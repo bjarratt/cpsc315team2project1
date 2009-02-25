@@ -5,7 +5,7 @@
 
 class SubQueryOperators {
 	public static Table existsOp(Table myTable, String query) {
-		System.out.println("EXISTS");
+		//System.out.println("EXISTS");
 		Table subQueryTable=TableOps.select(query);
 		Table retTable=HelperFunctions.createTable("EXISTS("+query+")",CompareOps.BOOLEAN, myTable.getRowCount(), CompareOps.FALSE);
 		int tableColCtr=0;
@@ -28,7 +28,7 @@ class SubQueryOperators {
 		return retTable;
 	}
 	public static Table anyOp(Table myTable, String op, String query) {
-		//System.out.println("ANY");
+		////System.out.println("ANY");
 		Table subQueryTable=TableOps.select(query);
 		Table retTable;
 		double minMaxVal;

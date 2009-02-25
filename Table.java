@@ -17,7 +17,7 @@ public class Table {
    		table = new Vector<Vector<Object>>();
        	if(oldTable.table!=null) {
     		for(int i=0; i<oldTable.table.size(); ++i) {
-    			System.out.println(i);
+    			//System.out.println(i);
     			table.add(new Vector<Object>(oldTable.table.get(i)));
     		}
     		colTypes=new Vector<String>(oldTable.colTypes);
@@ -90,7 +90,7 @@ public class Table {
     }
 
     Object getValueAt(int row, int column) {
-    	System.out.println("ColC" + getColumnCount() + "RowC" + getRowCount() + "r" + row + "c" + column);
+    	//System.out.println("ColC" + getColumnCount() + "RowC" + getRowCount() + "r" + row + "c" + column);
         return table.get(row).get(column);
     }
 
@@ -120,7 +120,7 @@ public class Table {
     }
 
     String getColName(int index) {
-    	System.out.println(getColumnCount() + " " + index);
+    	//System.out.println(getColumnCount() + " " + index);
         return colNames.get(index);
     }
 

@@ -118,7 +118,7 @@ class TableOps {
     	String[] arg;
     	String[] args=query.split("\\(",2);
     	String tName=args[0].trim();
-    	System.out.println("\'" + tName + "\'");
+    	//System.out.println("\'" + tName + "\'");
     	args=args[1].split(",");
     	Vector<String> colNames=new Vector<String>();
     	Vector<String> colTypes=new Vector<String>();
@@ -131,10 +131,10 @@ class TableOps {
    				arg[1]=arg[1].substring(0, arg[1].indexOf(")"));
    			colTypes.add(arg[1].trim());
    		}
-   		for(int i=0; i<colNames.size(); ++i)
-   			System.out.println("COL " + colNames.get(i));
-   		for(int i=0; i<colNames.size(); ++i)
-   			System.out.println("TYPE " + colTypes.get(i));
+//   		for(int i=0; i<colNames.size(); ++i)
+   			//System.out.println("COL " + colNames.get(i));
+//   		for(int i=0; i<colNames.size(); ++i)
+   			//System.out.println("TYPE " + colTypes.get(i));
        	db.add(new Table(tName, colNames, colTypes));
    	}
     public static void insertInto(String query) {
@@ -142,7 +142,7 @@ class TableOps {
     	String[] args = query.split("VALUES",2);
     	String tableName = args[0].trim();
     	String[] values = args[1].split(",");
-    	System.out.println(values.length);
+    	//System.out.println(values.length);
     	// Find appropriate table
     	Table thisTable = from(db,tableName);
     	
