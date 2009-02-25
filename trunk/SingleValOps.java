@@ -6,7 +6,7 @@ class SingleValOps {
 		if(colNum!=-1) {
 			if(myTable.getRowCount()>0) {
 				if(myTable.getColType(colNum).equals(CompareOps.DOUBLE)) {
-					System.out.println("COLW###" + maxVal);
+					//System.out.println("COLW###" + maxVal);
 					maxVal=(Double) myTable.getValueAt(0,colNum);
 					for(int i=1; i<myTable.getRowCount(); ++i) {
 						if((Double) myTable.getValueAt(i,colNum)>maxVal)

@@ -24,10 +24,10 @@ class WhereClass {
 	public static Table where(Table argTable, String commands) {
 		if(argTable.getRowCount()==0)
 			return argTable;
-		for(int ctr=0; ctr<argTable.getRowCount(); ++ctr) {
-			System.out.println("argTable 14: " + argTable.getValueAt(ctr, 0));
-		}
-		System.out.println("Where Entry " + commands);
+//		for(int ctr=0; ctr<argTable.getRowCount(); ++ctr) {
+//			System.out.println("argTable 14: " + argTable.getValueAt(ctr, 0));
+//		}
+		//System.out.println("Where Entry " + commands);
 		WhereClass whereObj=new WhereClass(argTable);
 		int selectIndex;
 		int subQueryIndex;
@@ -75,21 +75,21 @@ class WhereClass {
 		Stack<Integer> openParens=new Stack<Integer>();
 		int oParen;
 		int cParen;
-		System.out.println("Where Entry2 " + commands);
+		//System.out.println("Where Entry2 " + commands);
 		if((oParen=commands.indexOf('('))!=-1) {
-			System.out.println("oParens" + commands);
+			//System.out.println("oParens" + commands);
 			openParens.push(oParen);
 			while(openParens.size()!=0 || commands.indexOf('(')!=-1) {
-				System.out.println("oParens2" + commands);
+				//System.out.println("oParens2" + commands);
 				if(commands.indexOf('(', oParen+1)!=-1 && (commands.indexOf('(', oParen+1) < commands.indexOf(')', oParen+1))) {
-					System.out.println("oParens3" + "Result: " + commands.indexOf('(', oParen+1) + commands);
+					//System.out.println("oParens3" + "Result: " + commands.indexOf('(', oParen+1) + commands);
 					oParen=commands.indexOf('(', oParen);
 					openParens.push(oParen);
 				}
 				else {
 					oParen=openParens.pop();
 					cParen=commands.indexOf(')', oParen+1);
-					System.out.println("oParens4" + commands.substring(oParen+1, cParen));
+					//System.out.println("oParens4" + commands.substring(oParen+1, cParen));
 					whereObj.subQueries.add(whereObj.runOperator(commands.substring(oParen+1, cParen)));
 					commands=commands.substring(0,oParen) +
 					  whereObj.ctrlString + whereObj.subQueries.size() +
@@ -97,15 +97,15 @@ class WhereClass {
 				}
 			}
 		}
-		System.out.println("Rest " + commands);
+		//System.out.println("Rest " + commands);
 		Table results=whereObj.runOperator(commands);
-		for(int ctr=0; ctr<results.getRowCount(); ++ctr) {
-			System.out.println("TRUE/FALSE " + results.getValueAt(ctr, 0));
-		}
+//		for(int ctr=0; ctr<results.getRowCount(); ++ctr) {
+//			System.out.println("TRUE/FALSE " + results.getValueAt(ctr, 0));
+//		}
 
 		for(int curRow=results.getRowCount()-1; curRow>=0; --curRow) {
 			if((String)results.getValueAt(curRow, 0)==CompareOps.FALSE) {
-				System.out.println("Removing Row");
+				//System.out.println("Removing Row");
 				whereObj.myTable.removeRow(curRow);
 			}
 		}
@@ -113,7 +113,7 @@ class WhereClass {
 	}
 	//Runs the given command
 	private Table runOperator(String command) {
-		System.out.println("Run " + command);
+		//System.out.println("Run " + command);
 		String[] args;
 		Table lArg;
 		Table rArg;
@@ -122,8 +122,8 @@ class WhereClass {
 			args[0]=args[0].trim();
 			args[1]=args[1].trim();
 			if(args[0].startsWith(ctrlString)) {
-				System.out.println(args[0].indexOf("ctrlString")+ctrlString.length()+1);
-				System.out.println(Integer.valueOf((args[0].substring(args[0].indexOf("ctrlString")+ctrlString.length()+1))));
+				//System.out.println(args[0].indexOf("ctrlString")+ctrlString.length()+1);
+				//System.out.println(Integer.valueOf((args[0].substring(args[0].indexOf("ctrlString")+ctrlString.length()+1))));
 				lArg=subQueries.elementAt(Integer.valueOf((args[0].substring(args[0].indexOf("ctrlString")+ctrlString.length()+1)))-1);
 			}
 			else
@@ -133,9 +133,9 @@ class WhereClass {
 			}
 			else
 				rArg=HelperFunctions.convertToTable(myTable, args[1]);
-			for(int ctr=0; ctr<lArg.getRowCount(); ++ctr) {
-				System.out.println("AND" + lArg.getValueAt(ctr, 0));
-			}
+//			for(int ctr=0; ctr<lArg.getRowCount(); ++ctr) {
+//				System.out.println("AND" + lArg.getValueAt(ctr, 0));
+//			}
 			return(CompareOps.and(lArg, rArg));
 		}
 		else if(command.contains("OR")) {
@@ -155,19 +155,19 @@ class WhereClass {
 			return CompareOps.or(lArg, rArg);
 		}
 		else if(command.contains("NOT")) {
-			System.out.println(command.contains(ctrlString));
+			//System.out.println(command.contains(ctrlString));
 			args=command.split("NOT");
 			args[1]=args[1].trim();
-			System.out.println("NOT " + args[1].indexOf(ctrlString) + "ctrl"+ctrlString.length()+1);
-			System.out.println(Integer.valueOf((args[1].substring(args[1].indexOf("ctrlString")+ctrlString.length()+1))));
+			//System.out.println("NOT " + args[1].indexOf(ctrlString) + "ctrl"+ctrlString.length()+1);
+			//System.out.println(Integer.valueOf((args[1].substring(args[1].indexOf("ctrlString")+ctrlString.length()+1))));
 			if(args[1].startsWith(ctrlString)) {
 				rArg=subQueries.elementAt(Integer.valueOf((args[1].substring(args[1].indexOf("ctrlString")+ctrlString.length()+1)))-1);
 			}
 			else
 				rArg=HelperFunctions.convertToTable(myTable, args[1]);
-			for(int ctr=0; ctr<rArg.getRowCount(); ++ctr) {
-				System.out.println("NOT 166, whereClass: " + rArg.getValueAt(ctr, 0));
-			}
+//			for(int ctr=0; ctr<rArg.getRowCount(); ++ctr) {
+//				System.out.println("NOT 166, whereClass: " + rArg.getValueAt(ctr, 0));
+//			}
 			return CompareOps.not(rArg);
 		}
 		else if(command.contains("!=")) {
@@ -227,19 +227,19 @@ class WhereClass {
 			}
 			else {
 				lArg=HelperFunctions.convertToTable(myTable, args[0]);
-				System.out.println("LARG CONVERT");
+				//System.out.println("LARG CONVERT");
 			}
 			if(args[1].startsWith(ctrlString)) {
 				rArg=subQueries.elementAt(Integer.valueOf((args[1].substring(args[1].indexOf("ctrlString")+ctrlString.length()+1)))-1);
 			}
 			else
 				rArg=HelperFunctions.convertToTable(myTable, args[1]);
-			for(int ctr=0; ctr<lArg.getRowCount(); ++ctr) {
-				System.out.println("whereClass > LArg: " + lArg.getValueAt(ctr, 0));
-			}
-			for(int ctr=0; ctr<rArg.getRowCount(); ++ctr) {
-				System.out.println("whereClass > RArg: " + rArg.getValueAt(ctr, 0));
-			}
+//			for(int ctr=0; ctr<lArg.getRowCount(); ++ctr) {
+				//System.out.println("whereClass > LArg: " + lArg.getValueAt(ctr, 0));
+//			}
+//			for(int ctr=0; ctr<rArg.getRowCount(); ++ctr) {
+//				System.out.println("whereClass > RArg: " + rArg.getValueAt(ctr, 0));
+//			}
 			return CompareOps.greaterThan(lArg, rArg);
 		}
 		else if(command.contains("<")) {

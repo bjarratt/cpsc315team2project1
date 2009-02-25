@@ -2,16 +2,17 @@ import java.util.Vector;
 
 //Gabriel Copley
 //Revised 2/20/09
+//Revised by Drew 2/24/09 fixed convertToTable column select
 //Converts variables into tables
 
 class HelperFunctions {
 	//Converts a given variable into a table
 	public static Table convertToTable(Table myTable, String variable) {
 		for(int ctr=0; ctr<myTable.getColumnCount(); ++ctr) {
-			System.out.println("MYTABLE: " + myTable.getValueAt(ctr, 0));
+			//System.out.println("MYTABLE: " + myTable.getValueAt(ctr, 0));
 		}
 		variable=variable.trim();
-		System.out.println("helperFuncs Parsing: " + variable);
+		//System.out.println("helperFuncs Parsing: " + variable);
 		Table retTable;
 		int curCol=myTable.colWithName(variable);
 		//Attempt lookup of column
@@ -22,20 +23,20 @@ class HelperFunctions {
 			colType.add(myTable.getColType(curCol));
 			Vector<Object> addRow=new Vector<Object>();
 			addRow.add(null);
-			System.out.println("helperFuncs Parsing3: " + variable);
-			System.out.println("helperFuncs Converted to table");
+			//System.out.println("helperFuncs Parsing3: " + variable);
+			//System.out.println("helperFuncs Converted to table");
 		    retTable=new Table(myTable.getName() + " variable", colName, colType);
 			for(int curRow=0; curRow<myTable.getRowCount(); ++curRow) {
 				addRow.setElementAt(myTable.getValueAt(curRow,curCol), 0);
 				retTable.addRow(addRow);
 			}
-			System.out.println("helperFuncs Converted to table success");
+			//System.out.println("helperFuncs Converted to table success");
 		}
 		else {
 			try {
 				String objectType;
 				Object typedObject;
-				System.out.println("helperFuncs Parsing4:\'" + variable + "\'");
+				//System.out.println("helperFuncs Parsing4:\'" + variable + "\'");
 				if(variable.contains("\"") || variable.contains("\'")) {
 					//Strip Quotes
 					if(variable.contains("\""))
@@ -47,7 +48,7 @@ class HelperFunctions {
 					typedObject=variable;
 				}
 				else if(variable.contains(".")) {
-					System.out.println("Double: " + variable);
+					//System.out.println("Double: " + variable);
 					typedObject=Double.parseDouble(variable);
 					objectType=CompareOps.DOUBLE;
 				}

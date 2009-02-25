@@ -25,9 +25,9 @@ class TestMain {
 		addRow.setElementAt(20, 1);
 		testObj.addRow(addRow);
 		TableOps.db.add(testObj);
-		for(int ctr=0; ctr<testObj.getRowCount(); ++ctr) {
-			System.out.println("TESTOBJ " + testObj.getValueAt(ctr, 0) +'\t'+ testObj.getValueAt(ctr, 1));
-		}
+//		for(int ctr=0; ctr<testObj.getRowCount(); ++ctr) {
+//			System.out.println("TESTOBJ " + testObj.getValueAt(ctr, 0) +'\t'+ testObj.getValueAt(ctr, 1));
+//		}
 //		Table retTable=WhereClass.where(testObj, "A > 1.1");
 		Table retTable=TableOps.select("D FROM Test Table WHERE I > 2");
 		out.println("\n\nThis is my final return table!\n");
