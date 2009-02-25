@@ -33,4 +33,9 @@ public class UserTables {
 		}		
 	}
 
+	void printEntireTable(Table table) {
+		for (int i=0; i<table.getRowCount(); i++)
+			for (int j=0; j<table.getColumnCount(); j++)
+				System.out.println(table.getValueAt(i, j) + "\t");
+	}
 }
