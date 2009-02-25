@@ -5,14 +5,15 @@ class SingleValOps {
 		//What to do if user gives an invalid colName? return 0 I guess.
 		if(colNum!=-1) {
 			if(myTable.getRowCount()>0) {
-				if(myTable.getColType(colNum)==CompareOps.DOUBLE) {
+				if(myTable.getColType(colNum).equals(CompareOps.DOUBLE)) {
+					System.out.println("COLW###" + maxVal);
 					maxVal=(Double) myTable.getValueAt(0,colNum);
 					for(int i=1; i<myTable.getRowCount(); ++i) {
 						if((Double) myTable.getValueAt(i,colNum)>maxVal)
 							maxVal=(Double) myTable.getValueAt(i,colNum);
 					}
 				}
-				else if(myTable.getColType(colNum)==CompareOps.INTEGER) {
+				else if(myTable.getColType(colNum).equals(CompareOps.INTEGER)) {
 					maxVal=(Integer) myTable.getValueAt(0,colNum);
 					for(int i=1; i<myTable.getRowCount(); ++i) {
 						if((Integer) myTable.getValueAt(i,colNum)>maxVal)
@@ -29,14 +30,14 @@ class SingleValOps {
 		//What to do if user gives an invalid colName? return 0 I guess.
 		if(colNum!=-1) {
 			if(myTable.getRowCount()>0) {
-				if(myTable.getColType(colNum)==CompareOps.DOUBLE) {
+				if(myTable.getColType(colNum).equals(CompareOps.DOUBLE)) {
 					minVal=(Double) myTable.getValueAt(0,colNum);
 					for(int i=1; i<myTable.getRowCount(); ++i) {
 						if((Double) myTable.getValueAt(i,colNum)<minVal)
 							minVal=(Double) myTable.getValueAt(i,colNum);
 					}
 				}
-				else if(myTable.getColType(colNum)==CompareOps.INTEGER) {
+				else if(myTable.getColType(colNum).equals(CompareOps.INTEGER)) {
 					minVal=(Integer) myTable.getValueAt(0,colNum);
 					for(int i=1; i<myTable.getRowCount(); ++i) {
 						if((Integer) myTable.getValueAt(i,colNum)<minVal)
@@ -57,13 +58,13 @@ class SingleValOps {
 		double sumVal=0;
 		int colNum=myTable.colWithName(colName);
 		if(colNum!=-1) {
-			if(myTable.getColType(colNum)==CompareOps.DOUBLE) {
+			if(myTable.getColType(colNum).equals(CompareOps.DOUBLE)) {
 				sumVal=(Double) myTable.getValueAt(0,colNum);
 				for(int i=1; i<myTable.getRowCount(); ++i) {
 					sumVal+=(Double) myTable.getValueAt(i,colNum);
 				}
 			}
-			else if(myTable.getColType(colNum)==CompareOps.INTEGER) {
+			else if(myTable.getColType(colNum).equals(CompareOps.INTEGER)) {
 				sumVal=(Integer) myTable.getValueAt(0,colNum);
 				for(int i=1; i<myTable.getRowCount(); ++i) {
 					sumVal+=(Integer) myTable.getValueAt(i,colNum);

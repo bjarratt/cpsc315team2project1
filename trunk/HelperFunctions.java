@@ -64,23 +64,23 @@ class HelperFunctions {
 					typedObject=Integer.parseInt(variable);
 					objectType=CompareOps.INTEGER;
 				}
-				retTable=createTable(objectType, myTable.getRowCount(),typedObject);
+				retTable=createTable(variable, objectType, myTable.getRowCount(),typedObject);
 			} catch(NumberFormatException e) {
 				System.err.println("ERROR, Unknown type?");
 				//Give up, hope a string works!
-				retTable=createTable(CompareOps.STRING, myTable.getRowCount(),variable);
+				retTable=createTable(variable, CompareOps.STRING, myTable.getRowCount(),variable);
 			}
 		}
 		return retTable;
 	}
 	//creates a table with initial value variable, cols=1, and the given number of rows
-	public static Table createTable(String type, int rows, Object variable) {
+	public static Table createTable(String name, String type, int rows, Object variable) {
 		Vector<String> colName=new Vector<String>();
 		Vector<String> colType=new Vector<String>();
 		Vector<Object> addRow=new Vector<Object>();
 		addRow.setSize(1);
 		colType.add(type);
-		colName.add(String.valueOf(variable));
+		colName.add(name);
 	    Table retTable=new Table(String.valueOf(variable), colName, colType);
 		for(int curRow=0; curRow<rows; ++curRow) {
 			addRow.setElementAt(variable, 0);
