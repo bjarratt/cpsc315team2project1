@@ -31,3 +31,5 @@ public static void *drop*(String _query_) - Removes *Table* objects from the dat
 public static void *create*(String _query_) - Creates a new *Table* with the values and types specified by _query_ and adds it to the database.
 
 public static Table *insert*(String _query_) - Finds the *Table* specified by _query_, checks the types of values to be inserted, and adds values into the rows specified by _query_.
+
+public static Table *in*(Table _table_, String _query_) - Works like the SQL IN operator.  Checks for items in *Table* that match the values specified in _query_ and returns a *Table* containing those items if the do exist.
