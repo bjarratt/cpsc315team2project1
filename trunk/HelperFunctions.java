@@ -16,6 +16,7 @@ class HelperFunctions {
 		int curCol=0;
 		//Attempt lookup of column
 		for(curCol=0; curCol<myTable.getColumnCount() && !myTable.getColName(curCol).equals(variable); ++curCol);
+		System.out.println("!!!!!" + myTable.getColName(curCol));
 		if(curCol!=myTable.getColumnCount()) {
 			Vector<String> colName=new Vector<String>();
 			Vector<String> colType=new Vector<String>();

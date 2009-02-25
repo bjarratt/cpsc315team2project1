@@ -90,7 +90,8 @@ public class Table {
     }
 
     Object getValueAt(int row, int column) {
-    	return table.get(row).get(column);
+    	System.out.println("ColC" + getColumnCount() + "RowC" + getRowCount() + "r" + row + "c" + column);
+        return table.get(row).get(column);
     }
 
     void setValueAt(Object value, int row, int column) {
@@ -119,6 +120,7 @@ public class Table {
     }
 
     String getColName(int index) {
+    	System.out.println(getColumnCount() + " " + index);
         return colNames.get(index);
     }
 
@@ -178,29 +180,19 @@ public class Table {
         colNames.remove(index);
         colTypes.remove(index);
     }
-    public void addColumns(Table newCols) {
+    void addColumns(Table newCols) {
+    	if(newCols.getRowCount()>getRowCount()) {
+    		Vector<Object> nullRow=new Vector<Object>();
+    		for(int i=0; i<getColumnCount(); ++i)
+    			nullRow.add(i);
+    		for(int i=getRowCount(); i<newCols.getRowCount(); ++i)
+    			addRow(nullRow);
+    	}
     	for(int colCtr=0; colCtr<newCols.getColumnCount(); ++colCtr) {
-        	colTypes.add(newCols.getColType(colCtr));
-        	colNames.add(newCols.getColName(colCtr));
-           	int ctr=0;
-           	if(newCols.getRowCount()<=table.size()) {
-           		for(ctr=0; ctr<newCols.getRowCount(); ++ctr)
-           			table.get(ctr).add(new Vector<Object>(newCols.table.get(ctr)));
-           		for(; ctr<table.size(); ++ctr)
-           			table.get(ctr).add(null);
-           	}
-           	else {
-           		for(ctr=0; ctr<table.size(); ++ctr)
-           			table.get(ctr).add(new Vector<Object>(newCols.table.get(ctr)));
-           		for(ctr=0; ctr<newCols.getRowCount(); ++ctr) {
-           			Vector<Object> newRow=new Vector<Object>();
-           			for(int i=0; i<getColumnCount()-1; ++i)
-           				newRow.add(null);
-           			newRow.add(new Vector<Object>(newCols.table.get(ctr)));
-           			addRow(newRow);
-           		}
-           	}
-       	}
+    		for(int rowCtr=0; rowCtr<getRowCount(); ++rowCtr) {
+    			table.get(rowCtr).add(newCols.getValueAt(rowCtr,colCtr));
+    		}
+    	}
     }
     public Table getColumn(int index) {
     	if(index>=getColumnCount()) {
