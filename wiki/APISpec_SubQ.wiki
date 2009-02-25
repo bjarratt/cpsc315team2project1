@@ -2,9 +2,6 @@
 
 = Overview =
 
-
-== Classes ==
-
 ==*class SubQueryOperators*==
 
 class *SubQueryOperators*
