@@ -36,7 +36,7 @@ class HelperFunctions {
 			try {
 				String objectType;
 				Object typedObject;
-				System.out.println("helperFuncs Parsing4: " + variable);
+				System.out.println("helperFuncs Parsing4:\'" + variable + "\'");
 				if(variable.contains("\"") || variable.contains("\'")) {
 					//Strip Quotes
 					if(variable.contains("\""))
@@ -52,11 +52,11 @@ class HelperFunctions {
 					typedObject=Double.parseDouble(variable);
 					objectType=CompareOps.DOUBLE;
 				}
-				else if(variable==String.valueOf(CompareOps.TRUE)) {
+				else if(variable.equals(String.valueOf(CompareOps.TRUE))) {
 					typedObject=CompareOps.TRUE;
 					objectType=CompareOps.BOOLEAN;
 				}
-				else if(variable==String.valueOf(CompareOps.FALSE)) {
+				else if(variable.equals(String.valueOf(CompareOps.FALSE))) {
 					typedObject=CompareOps.FALSE;
 					objectType=CompareOps.BOOLEAN;
 				}

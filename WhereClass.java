@@ -22,7 +22,9 @@ class WhereClass {
 	//  logic commands instead of retrieving data from the table,
 	//  parsing by row would be faster then by column.
 	public static Table where(Table argTable, String commands) {
-		for(int ctr=0; ctr<argTable.getColumnCount(); ++ctr) {
+		if(argTable.getRowCount()==0)
+			return argTable;
+		for(int ctr=0; ctr<argTable.getRowCount(); ++ctr) {
 			System.out.println("argTable 14: " + argTable.getValueAt(ctr, 0));
 		}
 		System.out.println("Where Entry " + commands);
@@ -44,8 +46,9 @@ class WhereClass {
 			else if((subQueryIndex=commands.substring(0, selectIndex).indexOf("IN"))!=-1) {
 				subQuery=whereObj.getSubQuery(commands.substring(subQueryIndex+2));
 				oParenIndex=commands.substring(0, subQueryIndex).lastIndexOf('(');
-//				whereObj.subQueries.add(in(helperFunctions.convertToTable(whereObj.table, commands.substring(oParenIndex+1, subQueryIndex-1)), subQuery));
-				commands=commands.substring(0,subQueryIndex) +
+				args=commands.substring(oParenIndex+1, subQueryIndex-1).split(" ");
+				whereObj.subQueries.add(TableOps.in(HelperFunctions.convertToTable(whereObj.myTable, args[0].trim()), subQuery));
+				commands=commands.substring(0,oParenIndex) +
 				whereObj.ctrlString + whereObj.subQueries.size() +
 				commands.substring(subQueryIndex+2+subQuery.length(), commands.length());
 			}
@@ -76,7 +79,7 @@ class WhereClass {
 		if((oParen=commands.indexOf('('))!=-1) {
 			System.out.println("oParens" + commands);
 			openParens.push(oParen);
-			while(openParens.size()!=0) {
+			while(openParens.size()!=0 || commands.indexOf('(')!=-1) {
 				System.out.println("oParens2" + commands);
 				if(commands.indexOf('(', oParen+1)!=-1 && (commands.indexOf('(', oParen+1) < commands.indexOf(')', oParen+1))) {
 					System.out.println("oParens3" + "Result: " + commands.indexOf('(', oParen+1) + commands);
@@ -89,8 +92,8 @@ class WhereClass {
 					System.out.println("oParens4" + commands.substring(oParen+1, cParen));
 					whereObj.subQueries.add(whereObj.runOperator(commands.substring(oParen+1, cParen)));
 					commands=commands.substring(0,oParen) +
-					whereObj.ctrlString + whereObj.subQueries.size() +
-					commands.substring(cParen+1, commands.length());
+					  whereObj.ctrlString + whereObj.subQueries.size() +
+					  commands.substring(cParen+1, commands.length());
 				}
 			}
 		}
@@ -115,107 +118,122 @@ class WhereClass {
 		Table lArg;
 		Table rArg;
 		if(command.contains("AND")) {
-			args=command.split(" AND ");
+			args=command.split("AND");
+			args[0]=args[0].trim();
+			args[1]=args[1].trim();
 			if(args[0].startsWith(ctrlString)) {
 				System.out.println(args[0].indexOf("ctrlString")+ctrlString.length()+1);
 				System.out.println(Integer.valueOf((args[0].substring(args[0].indexOf("ctrlString")+ctrlString.length()+1))));
 				lArg=subQueries.elementAt(Integer.valueOf((args[0].substring(args[0].indexOf("ctrlString")+ctrlString.length()+1)))-1);
 			}
 			else
-				lArg=HelperFunctions.convertToTable(myTable, args[0].trim());
+				lArg=HelperFunctions.convertToTable(myTable, args[0]);
 			if(args[1].startsWith(ctrlString)) {
-				rArg=subQueries.elementAt(Integer.valueOf((args[1].substring(args[1].indexOf("ctrlString")+ctrlString.length()+1))));
+				rArg=subQueries.elementAt(Integer.valueOf((args[1].substring(args[1].indexOf("ctrlString")+ctrlString.length()+1)))-1);
 			}
 			else
-				rArg=HelperFunctions.convertToTable(myTable, args[1].trim());
+				rArg=HelperFunctions.convertToTable(myTable, args[1]);
 			for(int ctr=0; ctr<lArg.getRowCount(); ++ctr) {
 				System.out.println("AND" + lArg.getValueAt(ctr, 0));
 			}
 			return(CompareOps.and(lArg, rArg));
 		}
 		else if(command.contains("OR")) {
-			args=command.split(" OR ");
+			args=command.split("OR");
+			args[0]=args[0].trim();
+			args[1]=args[1].trim();
 			if(args[0].startsWith(ctrlString)) {
 				lArg=subQueries.elementAt(Integer.valueOf((args[0].substring(args[0].indexOf("ctrlString")+ctrlString.length()+1)))-1);
 			}
 			else
-				lArg=HelperFunctions.convertToTable(myTable, args[0].trim());
+				lArg=HelperFunctions.convertToTable(myTable, args[0]);
 			if(args[1].startsWith(ctrlString)) {
-				rArg=subQueries.elementAt(Integer.valueOf((args[1].substring(args[1].indexOf("ctrlString")+ctrlString.length()+1))));
+				rArg=subQueries.elementAt(Integer.valueOf((args[1].substring(args[1].indexOf("ctrlString")+ctrlString.length()+1)))-1);
 			}
 			else
-				rArg=HelperFunctions.convertToTable(myTable, args[1].trim());
+				rArg=HelperFunctions.convertToTable(myTable, args[1]);
 			return CompareOps.or(lArg, rArg);
 		}
-		else if(command.startsWith("NOT")) {
-			args=command.split(" NOT ");
+		else if(command.contains("NOT")) {
+			System.out.println(command.contains(ctrlString));
+			args=command.split("NOT");
+			args[1]=args[1].trim();
+			System.out.println("NOT " + args[1].indexOf(ctrlString) + "ctrl"+ctrlString.length()+1);
+			System.out.println(Integer.valueOf((args[1].substring(args[1].indexOf("ctrlString")+ctrlString.length()+1))));
 			if(args[1].startsWith(ctrlString)) {
-				rArg=subQueries.elementAt(Integer.valueOf((args[1].substring(args[1].indexOf("ctrlString")+ctrlString.length()+1))));
+				rArg=subQueries.elementAt(Integer.valueOf((args[1].substring(args[1].indexOf("ctrlString")+ctrlString.length()+1)))-1);
 			}
 			else
-				rArg=HelperFunctions.convertToTable(myTable, args[1].trim());
+				rArg=HelperFunctions.convertToTable(myTable, args[1]);
+			for(int ctr=0; ctr<rArg.getRowCount(); ++ctr) {
+				System.out.println("NOT 166, whereClass: " + rArg.getValueAt(ctr, 0));
+			}
 			return CompareOps.not(rArg);
 		}
 		else if(command.contains("!=")) {
-			args=command.split(" != ");
+			args=command.split("!=");
+			args[0]=args[0].trim();
+			args[1]=args[1].trim();
 			if(args[0].startsWith(ctrlString)) {
 				lArg=subQueries.elementAt(Integer.valueOf((args[0].substring(args[0].indexOf("ctrlString")+ctrlString.length()+1)))-1);
 			}
 			else
-				lArg=HelperFunctions.convertToTable(myTable, args[0].trim());
+				lArg=HelperFunctions.convertToTable(myTable, args[0]);
 			if(args[1].startsWith(ctrlString)) {
-				rArg=subQueries.elementAt(Integer.valueOf((args[1].substring(args[1].indexOf("ctrlString")+ctrlString.length()+1))));
+				rArg=subQueries.elementAt(Integer.valueOf((args[1].substring(args[1].indexOf("ctrlString")+ctrlString.length()+1)))-1);
 			}
 			else
-				rArg=HelperFunctions.convertToTable(myTable, args[1].trim());
+				rArg=HelperFunctions.convertToTable(myTable, args[1]);
 			return CompareOps.notEqual(lArg, rArg);
 		}
 		else if(command.contains("<=")) {
-			args=command.split(" <= ");
+			args=command.split("<=");
+			args[0]=args[0].trim();
+			args[1]=args[1].trim();
 			if(args[0].startsWith(ctrlString)) {
 				lArg=subQueries.elementAt(Integer.valueOf((args[0].substring(args[0].indexOf("ctrlString")+ctrlString.length()+1)))-1);
 			}
 			else
-				lArg=HelperFunctions.convertToTable(myTable, args[0].trim());
+				lArg=HelperFunctions.convertToTable(myTable, args[0]);
 			if(args[1].startsWith(ctrlString)) {
-				rArg=subQueries.elementAt(Integer.valueOf((args[1].substring(args[1].indexOf("ctrlString")+ctrlString.length()+1))));
+				rArg=subQueries.elementAt(Integer.valueOf((args[1].substring(args[1].indexOf("ctrlString")+ctrlString.length()+1)))-1);
 			}
 			else
-				rArg=HelperFunctions.convertToTable(myTable, args[1].trim());
+				rArg=HelperFunctions.convertToTable(myTable, args[1]);
 			return CompareOps.lessEqual(lArg, rArg);
 		}
 		else if(command.contains(">=")) {
-			args=command.split(" >= ");
+			args=command.split(">=");
+			args[0]=args[0].trim();
+			args[1]=args[1].trim();
 			if(args[0].startsWith(ctrlString)) {
 				lArg=subQueries.elementAt(Integer.valueOf((args[0].substring(args[0].indexOf("ctrlString")+ctrlString.length()+1)))-1);
 			}
 			else
-				lArg=HelperFunctions.convertToTable(myTable, args[0].trim());
+				lArg=HelperFunctions.convertToTable(myTable, args[0]);
 			if(args[1].startsWith(ctrlString)) {
-				rArg=subQueries.elementAt(Integer.valueOf((args[1].substring(args[1].indexOf("ctrlString")+ctrlString.length()+1))));
+				rArg=subQueries.elementAt(Integer.valueOf((args[1].substring(args[1].indexOf("ctrlString")+ctrlString.length()+1)))-1);
 			}
 			else
-				rArg=HelperFunctions.convertToTable(myTable, args[1].trim());
+				rArg=HelperFunctions.convertToTable(myTable, args[1]);
 			return CompareOps.greaterEqual(lArg, rArg);
 		}
 		else if(command.contains(">")) {
-			System.out.println("Run2 " + command);
-			for(int ctr=0; ctr<myTable.getRowCount(); ++ctr) {
-				System.out.println(">myTable 191: " + myTable.getValueAt(ctr, 0));
-			}
-			args=command.split(" > ");
+			args=command.split(">");
+			args[0]=args[0].trim();
+			args[1]=args[1].trim();
 			if(args[0].startsWith(ctrlString)) {
 				lArg=subQueries.elementAt(Integer.valueOf((args[0].substring(args[0].indexOf("ctrlString")+ctrlString.length()+1)))-1);
 			}
 			else {
-				lArg=HelperFunctions.convertToTable(myTable, args[0].trim());
+				lArg=HelperFunctions.convertToTable(myTable, args[0]);
 				System.out.println("LARG CONVERT");
 			}
 			if(args[1].startsWith(ctrlString)) {
-				rArg=subQueries.elementAt(Integer.valueOf((args[1].substring(args[1].indexOf("ctrlString")+ctrlString.length()+1))));
+				rArg=subQueries.elementAt(Integer.valueOf((args[1].substring(args[1].indexOf("ctrlString")+ctrlString.length()+1)))-1);
 			}
 			else
-				rArg=HelperFunctions.convertToTable(myTable, args[1].trim());
+				rArg=HelperFunctions.convertToTable(myTable, args[1]);
 			for(int ctr=0; ctr<lArg.getRowCount(); ++ctr) {
 				System.out.println("whereClass > LArg: " + lArg.getValueAt(ctr, 0));
 			}
@@ -225,31 +243,35 @@ class WhereClass {
 			return CompareOps.greaterThan(lArg, rArg);
 		}
 		else if(command.contains("<")) {
-			args=command.split(" < ");
+			args=command.split("<");
+			args[0]=args[0].trim();
+			args[1]=args[1].trim();
 			if(args[0].startsWith(ctrlString)) {
 				lArg=subQueries.elementAt(Integer.valueOf((args[0].substring(args[0].indexOf("ctrlString")+ctrlString.length()+1)))-1);
 			}
 			else
-				lArg=HelperFunctions.convertToTable(myTable, args[0].trim());
+				lArg=HelperFunctions.convertToTable(myTable, args[0]);
 			if(args[1].startsWith(ctrlString)) {
 				rArg=subQueries.elementAt(Integer.valueOf((args[1].substring(args[1].indexOf("ctrlString")+ctrlString.length()+1)))-1);
 			}
 			else
-				rArg=HelperFunctions.convertToTable(myTable, args[1].trim());
+				rArg=HelperFunctions.convertToTable(myTable, args[1]);
 			return CompareOps.lessThan(lArg, rArg);
 		}
 		else if(command.contains("=")) {
-			args=command.split(" = ");
+			args=command.split("=");
+			args[0]=args[0].trim();
+			args[1]=args[1].trim();
 			if(args[0].startsWith(ctrlString)) {
 				lArg=subQueries.elementAt(Integer.valueOf((args[0].substring(args[0].indexOf("ctrlString")+ctrlString.length()+1)))-1);
 			}
 			else
-				lArg=HelperFunctions.convertToTable(myTable, args[0].trim());
+				lArg=HelperFunctions.convertToTable(myTable, args[0]);
 			if(args[1].startsWith(ctrlString)) {
 				rArg=subQueries.elementAt(Integer.valueOf((args[1].substring(args[1].indexOf("ctrlString")+ctrlString.length()+1)))-1);
 			}
 			else
-				rArg=HelperFunctions.convertToTable(myTable, args[1].trim());
+				rArg=HelperFunctions.convertToTable(myTable, args[1]);
 			return CompareOps.equals(lArg, rArg);
 		}
 		//Should be unreachable

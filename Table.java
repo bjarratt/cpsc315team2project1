@@ -7,15 +7,13 @@ public class Table {
     private Vector<String> colNames;
     private String tableName;
 
-    //Blank
+    //Blank... if used, we're doomed
     Table() {
-        table = new Vector<Vector<Object>>();
     }
 
     //Copy
     Table(Table oldTable) {
         table = new Vector<Vector<Object>>();
-    	System.out.println((Double) oldTable.table.get(1).get(0));
     	for(int i=0; i<oldTable.table.size(); ++i) {
     		System.out.println(i);
     		table.add(new Vector<Object>(oldTable.table.get(i)));
@@ -58,20 +56,6 @@ public class Table {
 //TODO: Implement Cartesian join
     	}
     }
-    Table(String name, int rows, int columns) {
-        tableName = name;
-        table = new Vector<Vector<Object>>(rows);
-        for(int i = 0; i< rows; i++) {
-            table.get(i).setSize(columns);
-        }
-        colTypes=new Vector<String>();
-        colNames=new Vector<String>();
-        for(int i=0; i<columns; ++i) {
-        	colTypes.add("");
-        	colNames.add("");
-        }
-    }
-
     Table(int rows, int columns) {
         tableName = "Unnamed";
         table = new Vector<Vector<Object>>();
