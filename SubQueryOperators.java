@@ -7,7 +7,7 @@ class SubQueryOperators {
 	public static Table existsOp(Table myTable, String query) {
 		System.out.println("EXISTS");
 		Table subQueryTable=TableOps.select(query);
-		Table retTable=HelperFunctions.createTable(CompareOps.BOOLEAN, myTable.getRowCount(), CompareOps.FALSE);
+		Table retTable=HelperFunctions.createTable("EXISTS("+query+")",CompareOps.BOOLEAN, myTable.getRowCount(), CompareOps.FALSE);
 		int tableColCtr=0;
 		int tableRowCtr=0;
 		int existsColCtr=0;
@@ -34,7 +34,7 @@ class SubQueryOperators {
 		double minMaxVal;
 		if(op.contains(">")) {
 			minMaxVal=SingleValOps.min(myTable, myTable.getColName(0));
-			subQueryTable=HelperFunctions.createTable(CompareOps.DOUBLE, myTable.getRowCount(), String.valueOf(minMaxVal));
+			subQueryTable=HelperFunctions.createTable("ANY("+query+")",CompareOps.DOUBLE, myTable.getRowCount(), String.valueOf(minMaxVal));
 			if(op.contains("="))
 				retTable=CompareOps.greaterEqual(myTable, subQueryTable);
 			else
@@ -42,16 +42,16 @@ class SubQueryOperators {
 		}
 		else if(op.contains("<")) {
 			minMaxVal=SingleValOps.max(myTable, myTable.getColName(0));
-			subQueryTable=HelperFunctions.createTable(CompareOps.DOUBLE, myTable.getRowCount(), String.valueOf(minMaxVal));
+			subQueryTable=HelperFunctions.createTable("ANY("+query+")",CompareOps.DOUBLE, myTable.getRowCount(), String.valueOf(minMaxVal));
 			if(op.contains("="))
 				retTable=CompareOps.lessEqual(myTable, subQueryTable);
 			else
 				retTable=CompareOps.lessThan(myTable, subQueryTable);
 		}
 		else {
-			retTable=HelperFunctions.createTable(CompareOps.BOOLEAN, myTable.getRowCount(), CompareOps.FALSE);
+			retTable=HelperFunctions.createTable("ANY("+query+")",CompareOps.BOOLEAN, myTable.getRowCount(), CompareOps.FALSE);
 			for(int ctr=0; ctr<subQueryTable.getRowCount(); ++ctr) {
-				retTable=CompareOps.or(retTable, CompareOps.equals(myTable, HelperFunctions.createTable(CompareOps.STRING, myTable.getRowCount(), (String) subQueryTable.getValueAt(ctr, 0))));
+				retTable=CompareOps.or(retTable, CompareOps.equals(myTable, HelperFunctions.createTable("ANY("+query+")",CompareOps.STRING, myTable.getRowCount(), (String) subQueryTable.getValueAt(ctr, 0))));
 			}
 		}
 		return retTable;
@@ -63,7 +63,7 @@ class SubQueryOperators {
 		double minMaxVal;
 		if(op.contains(">")) {
 			minMaxVal=SingleValOps.max(myTable, myTable.getColName(0));
-			subQueryTable=HelperFunctions.createTable(CompareOps.DOUBLE, myTable.getRowCount(), String.valueOf(minMaxVal));
+			subQueryTable=HelperFunctions.createTable("ALL("+query+")",CompareOps.DOUBLE, myTable.getRowCount(), String.valueOf(minMaxVal));
 			if(op.contains("="))
 				retTable=CompareOps.greaterEqual(myTable, subQueryTable);
 			else
@@ -71,21 +71,21 @@ class SubQueryOperators {
 		}
 		else if(op.contains("<")) {
 			minMaxVal=SingleValOps.min(myTable, myTable.getColName(0));
-			subQueryTable=HelperFunctions.createTable(CompareOps.DOUBLE, myTable.getRowCount(), String.valueOf(minMaxVal));
+			subQueryTable=HelperFunctions.createTable("ALL("+query+")",CompareOps.DOUBLE, myTable.getRowCount(), String.valueOf(minMaxVal));
 			if(op.contains("="))
 				retTable=CompareOps.lessEqual(myTable, subQueryTable);
 			else
 				retTable=CompareOps.lessThan(myTable, subQueryTable);
 		}
 		else {
-			retTable=HelperFunctions.createTable(CompareOps.BOOLEAN, myTable.getRowCount(), CompareOps.FALSE);
+			retTable=HelperFunctions.createTable("ALL("+query+")",CompareOps.BOOLEAN, myTable.getRowCount(), CompareOps.FALSE);
 			if(subQueryTable.getRowCount()!=0) {
 				int ctr;
 				Object allVal=subQueryTable.getValueAt(0, 0);
 				//everything will be false if == with two different variables
 				for(ctr=0; allVal==subQueryTable.getValueAt(ctr, 0) && ctr<subQueryTable.getRowCount(); ++ctr);
 				if(ctr==subQueryTable.getRowCount())
-					retTable=CompareOps.equals(myTable, HelperFunctions.createTable(subQueryTable.getColType(0), myTable.getRowCount(), allVal));
+					retTable=CompareOps.equals(myTable, HelperFunctions.createTable("ALL("+query+")",subQueryTable.getColType(0), myTable.getRowCount(), allVal));
 			}
 		}
 		return retTable;

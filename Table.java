@@ -13,14 +13,21 @@ public class Table {
 
     //Copy
     Table(Table oldTable) {
-        table = new Vector<Vector<Object>>();
-    	for(int i=0; i<oldTable.table.size(); ++i) {
-    		System.out.println(i);
-    		table.add(new Vector<Object>(oldTable.table.get(i)));
+   		tableName=oldTable.tableName;
+   		table = new Vector<Vector<Object>>();
+       	if(oldTable.table!=null) {
+    		for(int i=0; i<oldTable.table.size(); ++i) {
+    			System.out.println(i);
+    			table.add(new Vector<Object>(oldTable.table.get(i)));
+    		}
+    		colTypes=new Vector<String>(oldTable.colTypes);
+    		colNames=new Vector<String>(oldTable.colNames);
     	}
-    	colTypes=new Vector<String>(oldTable.colTypes);
-    	colNames=new Vector<String>(oldTable.colNames);
-    	tableName=oldTable.tableName;
+    	else {
+    		colTypes=new Vector<String>();
+    		colNames=new Vector<String>();
+    	}
+    		
     }
     //JOIN for two tables
     Table(String name, Table lTable, Table rTable) {

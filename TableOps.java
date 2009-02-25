@@ -20,7 +20,7 @@ class TableOps {
    					if(addedTable)
    						retTable=new Table(retTable.getName()+" JOINED " + database.get(dbCtr).getName(), retTable, database.get(dbCtr));
    					else
-   						retTable=new Table(database.get(dbCtr));
+   						retTable=database.get(dbCtr);
    				}
    				else{
    					System.err.println("This table does not exist in the database.");
@@ -35,25 +35,26 @@ class TableOps {
     public static Table select(String query){
     	String[] args = query.split("FROM", 2);
     	String[] conditions = args[1].split("WHERE", 2);
-        Table selectedTable= new Table(from(db, conditions[0]));
+        Table selectedTable= new Table(from(db, conditions[0].trim()));
         if(conditions.length>1)
         	selectedTable = WhereClass.where(selectedTable, conditions[1]);
-       	args[0]=args[0].trim()+',';
+       	args[0]=args[0].trim();
    		for(int minLoc=-1; (minLoc=args[0].indexOf("MIN(", minLoc+1))!=-1;)
-   			selectedTable.addColumns(HelperFunctions.createTable(CompareOps.DOUBLE, selectedTable.getRowCount(), SingleValOps.min(selectedTable, args[0].substring(minLoc, query.indexOf(")", minLoc)))));
+   			selectedTable.addColumns(HelperFunctions.createTable(args[0],CompareOps.DOUBLE, selectedTable.getRowCount(), SingleValOps.min(selectedTable, args[0].substring(minLoc+4, query.indexOf(")", minLoc)))));
    		for(int minLoc=-1; (minLoc=args[0].indexOf("MAX(", minLoc+1))!=-1;)
-   			selectedTable.addColumns(HelperFunctions.createTable(CompareOps.DOUBLE, selectedTable.getRowCount(), SingleValOps.max(selectedTable, args[0].substring(minLoc, query.indexOf(")", minLoc)))));
+   			selectedTable.addColumns(HelperFunctions.createTable(args[0],CompareOps.DOUBLE, selectedTable.getRowCount(), SingleValOps.max(selectedTable, args[0].substring(minLoc+4, query.indexOf(")", minLoc)))));
    		for(int minLoc=-1; (minLoc=args[0].indexOf("COUNT(", minLoc+1))!=-1;)
-   			selectedTable.addColumns(HelperFunctions.createTable(CompareOps.INTEGER, selectedTable.getRowCount(), SingleValOps.count(selectedTable, args[0].substring(minLoc, query.indexOf(")", minLoc)))));
+   			selectedTable.addColumns(HelperFunctions.createTable(args[0],CompareOps.INTEGER, selectedTable.getRowCount(), SingleValOps.count(selectedTable, args[0].substring(minLoc+6, query.indexOf(")", minLoc)))));
    		for(int minLoc=-1; (minLoc=args[0].indexOf("SUM(", minLoc+1))!=-1;)
-   			selectedTable.addColumns(HelperFunctions.createTable(CompareOps.DOUBLE, selectedTable.getRowCount(), SingleValOps.sum(selectedTable, args[0].substring(minLoc, query.indexOf(")", minLoc)))));
+   			selectedTable.addColumns(HelperFunctions.createTable(args[0],CompareOps.DOUBLE, selectedTable.getRowCount(), SingleValOps.sum(selectedTable, args[0].substring(minLoc+4, query.indexOf(")", minLoc)))));
         if(args[0].contains("AS"))
         	args[0]=selectAs(args[0],selectedTable);
-       	for(int selectedTableCtr=selectedTable.getColumnCount()-1; selectedTableCtr>=0; --selectedTableCtr) {
-       		if(!args[0].contains(selectedTable.getColName(selectedTableCtr)+','))
-       			selectedTable.removeColumn(selectedTableCtr);
-       	}
-       	
+        args[0]+=',';
+        if(!args[0].contains("*"))
+        	for(int selectedTableCtr=selectedTable.getColumnCount()-1; selectedTableCtr>=0; --selectedTableCtr) {
+        		if(!args[0].contains(selectedTable.getColName(selectedTableCtr)+','))
+        			selectedTable.removeColumn(selectedTableCtr);
+        	}
         return selectedTable;
     }
     
@@ -136,28 +137,22 @@ class TableOps {
    			System.out.println("TYPE " + colTypes.get(i));
        	db.add(new Table(tName, colNames, colTypes));
    	}
-    public static Table insertInto(String query) {
+    public static void insertInto(String query) {
     	// Parse
     	String[] args = query.split("VALUES",2);
-    	String tableName = args[0];
+    	String tableName = args[0].trim();
     	String[] values = args[1].split(",");
-    	
+    	System.out.println(values.length);
     	// Find appropriate table
-    	Table thisTable = new Table();
-    	for(int i=0; i<db.size(); i++) {
-    		if(db.get(i).getName().equals(tableName)) {
-    			thisTable = new Table(db.get(i));
-    			break;
-    		}
-    		if (i==db.size()-1) {
-    			System.err.println("Table doesn't exist!");
-    			return new Table();
-    		}
-    	}
+    	Table thisTable = from(db,tableName);
     	
     	// Check types and add into row
     	Vector<Object> newRow = new Vector<Object>();
+		if(values.length>0 && values[0].contains("("))
+			values[0]=values[0].substring(values[0].indexOf("(")+1);
     	for(int i=0; i<values.length; i++) {
+    		if(values[i].contains(")"))
+    			values[i]=values[i].substring(0, values[i].lastIndexOf(")"));
     		if (thisTable.getColType(i).equals(CompareOps.STRING))
     			newRow.add(new String(values[i]));
     		else if (thisTable.getColType(i).equals(CompareOps.DOUBLE))
@@ -165,9 +160,7 @@ class TableOps {
     		else if (thisTable.getColType(i).equals(CompareOps.INTEGER))
     			newRow.add(new Integer(values[i]));
     	}
-    	
     	thisTable.addRow(newRow);
-    	return thisTable;
     }
     
     public static Table in(Table table, String query ) {
