@@ -33,7 +33,7 @@ public class UserTables {
 		}		
 	}
 
-	void printEntireTable(Table table) {
+	static void printEntireTable(Table table) {
 		for (int i=0; i<table.getColumnCount(); i++)
 			System.out.println(table.getColName(i) + "\t");
 		System.out.println();
