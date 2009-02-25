@@ -13,22 +13,20 @@ class HelperFunctions {
 		variable=variable.trim();
 		System.out.println("helperFuncs Parsing: " + variable);
 		Table retTable;
-		int curCol=0;
+		int curCol=myTable.colWithName(variable);
 		//Attempt lookup of column
-		for(curCol=0; curCol<myTable.getColumnCount() && !myTable.getColName(curCol).equals(variable); ++curCol);
-		System.out.println("!!!!!" + myTable.getColName(curCol));
-		if(curCol!=myTable.getColumnCount()) {
+		if(curCol!=-1) {
 			Vector<String> colName=new Vector<String>();
 			Vector<String> colType=new Vector<String>();
 			colName.add(variable);
 			colType.add(myTable.getColType(curCol));
 			Vector<Object> addRow=new Vector<Object>();
-			addRow.setSize(1);
+			addRow.add(null);
 			System.out.println("helperFuncs Parsing3: " + variable);
 			System.out.println("helperFuncs Converted to table");
 		    retTable=new Table(myTable.getName() + " variable", colName, colType);
 			for(int curRow=0; curRow<myTable.getRowCount(); ++curRow) {
-				addRow.setElementAt(myTable.getValueAt(curRow,0), 0);
+				addRow.setElementAt(myTable.getValueAt(curRow,curCol), 0);
 				retTable.addRow(addRow);
 			}
 			System.out.println("helperFuncs Converted to table success");
