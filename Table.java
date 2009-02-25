@@ -90,8 +90,7 @@ public class Table {
     }
 
     Object getValueAt(int row, int column) {
-    	System.out.println("ColC" + getColumnCount() + "RowC" + getRowCount() + "r" + row + "c" + column);
-        return table.get(row).get(column);
+    	return table.get(row).get(column);
     }
 
     void setValueAt(Object value, int row, int column) {
@@ -120,7 +119,6 @@ public class Table {
     }
 
     String getColName(int index) {
-    	System.out.println(getColumnCount() + " " + index);
         return colNames.get(index);
     }
 
