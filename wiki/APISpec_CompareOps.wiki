@@ -8,9 +8,9 @@ The *CompareOps* class contains all of the functions that are used to perform co
 
 ===Data Members===
 
-static final String TRUE    = "TRUE";  - all of these data members are used to provide 
+static final String TRUE    = "TRUE";  - all of these data members are used to provide arguments needed for the comparison functions
 
-static final String FALSE   = "FALSE"; - arguments needed for the comparison functions
+static final String FALSE   = "FALSE";
 
 static final String STRING  = "STRING";
 
