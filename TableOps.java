@@ -163,4 +163,32 @@ class TableOps {
     	thisTable.addRow(newRow);
     	return thisTable;
     }
+
+    public static Table in(Table table, String query ) {
+    	String keywords = query.split("\\(")[1].split("\\)")[0].trim();
+    	String[] ids = keywords.split(",");
+    	
+    	Vector<String> colType = new Vector<String>();
+    	Vector<String> colName = new Vector<String>();
+    	colType.add(CompareOps.BOOLEAN);
+    	colName.add("INnames");
+    	Table retTable = new Table("IN table", colName, colType);
+    	
+    	// loop through table to see if the id's exist and assign TRUE or FALSE
+    	for (int i=0; i<table.getRowCount(); i++) {
+    		for (int j=0; j<ids.length; j++) {
+    			Vector<Object> bool = new Vector<Object>();
+    			if (table.getValueAt(i, 0).equals(ids[j])) {
+    				bool.add(CompareOps.TRUE);
+    				retTable.addRow(bool);
+    				break;
+    			}if (j==ids.length-1) {
+    				bool.add(CompareOps.FALSE);
+    				retTable.addRow(bool);
+    			}
+    		}
+    	}
+    	
+    	return retTable;
+    }
 }
