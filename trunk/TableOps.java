@@ -17,10 +17,8 @@ class TableOps {
     			//Find the table in the database
     			for(dbCtr = 0; dbCtr<database.size() && !args[argCtr].trim().equals(database.get(dbCtr).getName()); ++dbCtr);
     			if(dbCtr!=db.size()){
-   					if(addedTable) {
-   						System.out.println("Attempting njoin");
+   					if(addedTable)
    						retTable=new Table(retTable.getName()+" JOINED " + database.get(dbCtr).getName(), retTable, database.get(dbCtr));
-   					}
    					else {
    						addedTable=true;
    						retTable=database.get(dbCtr);
@@ -38,19 +36,22 @@ class TableOps {
     //that meet the requirements of WHERE
     public static Table select(String query){
     	String[] args = query.split("FROM", 2);
+    	//if no from, just return the table
+    	if(args.length<2)
+    		return HelperFunctions.convertToTable(new Table(1,1), args[0]);
     	String[] conditions = args[1].split("WHERE", 2);
         Table selectedTable= new Table(from(db, conditions[0].trim()));
         if(conditions.length>1)
         	selectedTable = WhereClass.where(selectedTable, conditions[1]);
        	args[0]=args[0].trim();
    		for(int minLoc=-1; (minLoc=args[0].indexOf("MIN(", minLoc+1))!=-1;)
-   			selectedTable.addColumns(HelperFunctions.createTable(args[0],CompareOps.DOUBLE, selectedTable.getRowCount(), SingleValOps.min(selectedTable, args[0].substring(minLoc+4, query.indexOf(")", minLoc)))));
+   			selectedTable.addColumns(HelperFunctions.createTable(args[0].substring(minLoc, query.indexOf(")", minLoc)),CompareOps.DOUBLE, selectedTable.getRowCount(), SingleValOps.min(selectedTable, args[0].substring(minLoc+4, query.indexOf(")", minLoc)))));
    		for(int minLoc=-1; (minLoc=args[0].indexOf("MAX(", minLoc+1))!=-1;)
-   			selectedTable.addColumns(HelperFunctions.createTable(args[0],CompareOps.DOUBLE, selectedTable.getRowCount(), SingleValOps.max(selectedTable, args[0].substring(minLoc+4, query.indexOf(")", minLoc)))));
+   			selectedTable.addColumns(HelperFunctions.createTable(args[0].substring(minLoc, query.indexOf(")", minLoc)),CompareOps.DOUBLE, selectedTable.getRowCount(), SingleValOps.max(selectedTable, args[0].substring(minLoc+4, query.indexOf(")", minLoc)))));
    		for(int minLoc=-1; (minLoc=args[0].indexOf("COUNT(", minLoc+1))!=-1;)
-   			selectedTable.addColumns(HelperFunctions.createTable(args[0],CompareOps.INTEGER, selectedTable.getRowCount(), SingleValOps.count(selectedTable, args[0].substring(minLoc+6, query.indexOf(")", minLoc)))));
+   			selectedTable.addColumns(HelperFunctions.createTable(args[0].substring(minLoc, query.indexOf(")", minLoc)),CompareOps.INTEGER, selectedTable.getRowCount(), SingleValOps.count(selectedTable, args[0].substring(minLoc+6, query.indexOf(")", minLoc)))));
    		for(int minLoc=-1; (minLoc=args[0].indexOf("SUM(", minLoc+1))!=-1;)
-   			selectedTable.addColumns(HelperFunctions.createTable(args[0],CompareOps.DOUBLE, selectedTable.getRowCount(), SingleValOps.sum(selectedTable, args[0].substring(minLoc+4, query.indexOf(")", minLoc)))));
+   			selectedTable.addColumns(HelperFunctions.createTable(args[0].substring(minLoc, query.indexOf(")", minLoc)),CompareOps.DOUBLE, selectedTable.getRowCount(), SingleValOps.sum(selectedTable, args[0].substring(minLoc+4, query.indexOf(")", minLoc)))));
         if(args[0].contains("AS"))
         	args[0]=selectAs(args[0],selectedTable);
         args[0]+=',';
@@ -130,8 +131,6 @@ class TableOps {
     }
 
     public static void createTable(String query) {
-    	int oQuote=-1;
-    	int cQuote=-1;
     	String[] arg;
     	String[] args=query.split("\\(",2);
     	String tName=args[0].trim();
@@ -140,18 +139,16 @@ class TableOps {
     	Vector<String> colNames=new Vector<String>();
     	Vector<String> colTypes=new Vector<String>();
    		for(int ctr=0; ctr<args.length; ++ctr) {
-   			arg=args[ctr].split(" ",2);
+   			arg=args[ctr].trim().split(" ",2);
    			colNames.add(arg[0].trim());
-   			oQuote=query.indexOf("\"", cQuote+1);
-   			cQuote=query.indexOf("\"", oQuote);
    			if(arg[1].contains(")"))
    				arg[1]=arg[1].substring(0, arg[1].indexOf(")"));
    			colTypes.add(arg[1].trim());
    		}
 //   		for(int i=0; i<colNames.size(); ++i)
-   			//System.out.println("COL " + colNames.get(i));
+//   			System.out.println("COL " + colNames.get(i));
 //   		for(int i=0; i<colNames.size(); ++i)
-   			//System.out.println("TYPE " + colTypes.get(i));
+//   			System.out.println("TYPE " + colTypes.get(i));
        	db.add(new Table(tName, colNames, colTypes));
    	}
     public static void insertInto(String query) {
@@ -167,13 +164,14 @@ class TableOps {
     	Vector<Object> newRow = new Vector<Object>();
 		if(values.length>0 && values[0].contains("("))
 			values[0]=values[0].substring(values[0].indexOf("(")+1);
-    	for(int i=0; i<values.length; i++) {
+    	for(int i=0; i<values.length; ++i) {
     		if(values[i].contains(")"))
     			values[i]=values[i].substring(0, values[i].lastIndexOf(")"));
     		if (thisTable.getColType(i).equals(CompareOps.STRING))
     			newRow.add(new String(values[i]));
-    		else if (thisTable.getColType(i).equals(CompareOps.DOUBLE))
+    		else if (thisTable.getColType(i).equals(CompareOps.DOUBLE)) {
     			newRow.add(new Double(values[i]));
+    		}
     		else if (thisTable.getColType(i).equals(CompareOps.INTEGER))
     			newRow.add(new Integer(values[i]));
     	}

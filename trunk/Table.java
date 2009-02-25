@@ -9,6 +9,9 @@ public class Table {
 
     //Blank... if used, we're doomed
     Table() {
+        table=new Vector<Vector<Object>>();
+        colTypes=new Vector<String>();
+        colNames=new Vector<String>();
     }
 
     //Copy
@@ -38,17 +41,17 @@ public class Table {
     	tableName=name;
     	int rTableCol;
     	int rTableRow;
-    	int lTableCtr;
+    	int lTableCol;
     	boolean nJoin=false;
-    	for(lTableCtr=0; lTableCtr<lTable.getColumnCount(); ++lTableCtr) {
-    		if((rTableCol=rTableCpy.colWithName(lTable.getColName(lTableCtr)))!=-1) {
+    	for(lTableCol=0; lTableCol<lTable.getColumnCount(); ++lTableCol) {
+    		if((rTableCol=rTableCpy.colWithName(lTable.getColName(lTableCol)))!=-1) {
     			nJoin=true;
-				Table tempTable=new Table();
-    			for(int rowCtr=getRowCount()-1; rowCtr>=0; --rowCtr) {
-    				if((rTableRow=getRowIndex(table.get(lTableCtr).get(rowCtr), rTableCol))!=-1)
+				Table tempTable=new Table(rTable.getName(), rTable.colTypes, rTable.colNames);
+    			for(int lTableRow=getRowCount()-1; lTableRow>=0; --lTableRow) {
+    				if((rTableRow=rTable.getRowIndex(getValueAt(lTableRow, lTableCol), rTableCol))!=-1)
     					tempTable.addRow(rTableCpy.table.get(rTableRow));
     				else
-    					removeRow(rowCtr);
+    					removeRow(lTableRow);
     			}
     			tempTable.removeColumn(rTableCol);
     			rTableCpy=new Table(tempTable);
@@ -107,7 +110,7 @@ public class Table {
     }
 
     int colWithName(String name) {
-    	for (int i=0; i< colNames.size(); i++) {
+    	for (int i=0; i< getColumnCount(); i++) {
     		if (colNames.get(i).equals(name))
     			return i;
     	}
@@ -142,29 +145,29 @@ public class Table {
 
     int getRowIndex(Object o, int colIndex) {
     	int rowCtr=0;
-    	if(getColType(colIndex)==CompareOps.STRING) {
-    		for(rowCtr=0; rowCtr<getRowCount() && ((String) table.get(rowCtr).get(colIndex)).equals(o););
+    	if(getColType(colIndex).equals(CompareOps.STRING)) {
+    		for(rowCtr=0; rowCtr<getRowCount() && ((String) table.get(rowCtr).get(colIndex)).equals(o);++rowCtr);
     		if(rowCtr==getRowCount())
     			return -1;
     		else
     			return rowCtr;
     	}
-    	else if(getColType(colIndex)==CompareOps.DOUBLE) {
-    		for(rowCtr=0; rowCtr<getRowCount() && ((Double) table.get(rowCtr).get(colIndex)).equals(o););
+    	else if(getColType(colIndex).equals(CompareOps.DOUBLE)) {
+    		for(rowCtr=0; rowCtr<getRowCount() && !((Double) table.get(rowCtr).get(colIndex)).equals(o);++rowCtr);
     		if(rowCtr==getRowCount())
     			return -1;
     		else
     			return rowCtr;
     	}
-    	else if(getColType(colIndex)==CompareOps.INTEGER) {
-    		for(rowCtr=0; rowCtr<getRowCount() && ((Integer) table.get(rowCtr).get(colIndex)).equals(o););
+    	else if(getColType(colIndex).equals(CompareOps.INTEGER)) {
+    		for(rowCtr=0; rowCtr<getRowCount() && ((Integer) table.get(rowCtr).get(colIndex)).equals(o);++rowCtr);
     		if(rowCtr==getRowCount())
     			return -1;
     		else
     			return rowCtr;
     	}
-    	else if(getColType(colIndex)==CompareOps.BOOLEAN) {
-    		for(rowCtr=0; rowCtr<getRowCount() && ((String) table.get(rowCtr).get(colIndex)).equals(o););
+    	else if(getColType(colIndex).equals(CompareOps.BOOLEAN)) {
+    		for(rowCtr=0; rowCtr<getRowCount() && ((String) table.get(rowCtr).get(colIndex)).equals(o);++rowCtr);
     		if(rowCtr==getRowCount())
     			return -1;
     		else
