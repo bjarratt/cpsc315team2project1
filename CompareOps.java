@@ -221,8 +221,8 @@ class CompareOps {
         for (int i = 0; i < numRows; i++) {
         	// Check type and assign
             if (lTable.getColType(0).equals(STRING)) {
-            	String lval = (String) lTable.getValueAt(i, 0);
-            	String rval = (String) rTable.getValueAt(i, 0);
+            	String lval = (String) lTable.getValueAt(i, 0).toString();
+            	String rval = (String) rTable.getValueAt(i, 0).toString();
                 // 1 means greater than
                 if (lval.compareTo(rval)==1)
                     retTable.setValueAt(TRUE, i, 0);
@@ -230,8 +230,8 @@ class CompareOps {
                     retTable.setValueAt(FALSE,i, 0);
             }
             else if (lTable.getColType(0).equals(DOUBLE)) {
-                Double lval = (Double) lTable.getValueAt(i, 0);
-            	Double rval = (Double) rTable.getValueAt(i, 0);
+                Double lval = new Double(lTable.getValueAt(i, 0).toString());
+            	Double rval = new Double(rTable.getValueAt(i, 0).toString());
                 // 1 means greater than
                 if (lval.compareTo(rval)==1)
                     retTable.setValueAt(TRUE, i, 0);
@@ -239,8 +239,8 @@ class CompareOps {
                     retTable.setValueAt(FALSE,i, 0);
             }
             else if (lTable.getColType(0).equals(INTEGER)) {
-            	Integer lval = (Integer) lTable.getValueAt(i, 0);
-            	Integer rval = (Integer) rTable.getValueAt(i, 0);
+            	Integer lval = new Integer(lTable.getValueAt(i, 0).toString());
+            	Integer rval = new Integer(rTable.getValueAt(i, 0).toString());
                 // 1 means greater than
                 if (lval.compareTo(rval)==1)
                     retTable.setValueAt(TRUE, i, 0);

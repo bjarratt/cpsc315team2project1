@@ -65,14 +65,14 @@ class TableOps {
     	// Rename columns
     	for (int i=0; i<oldNames.length; i++) {
     		for (int j=0; j<table.getColumnCount(); j++) {
-    			if (oldNames[i].equals(table.getColName(j))) {
-    				table.setColName(j, newNames[i]);
+    			if (oldNames[i].trim().equals(table.getColName(j).trim())) {
+    				table.setColName(j, newNames[i].trim());
     				break;
     			}
     		}
     	}
     	
-    	return args[0].trim();
+    	return args[1].trim();
     }
     
     public static void update(String query){
