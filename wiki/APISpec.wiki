@@ -2,9 +2,6 @@
 
 = Overview =
 
-
-== Classes ==
-
 ==*class Table*==
 
 public class *Table*
