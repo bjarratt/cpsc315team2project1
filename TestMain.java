@@ -6,9 +6,9 @@ class TestMain {
 		Vector<String> colNames=new Vector<String>();
 		Vector<String> colTypes=new Vector<String>();
 		Vector<Object> addRow=new Vector<Object>();
-		colNames.add("D"); colNames.add("I");
+		colNames.add("A"); colNames.add("I");
 		colTypes.add(CompareOps.DOUBLE); colTypes.add(CompareOps.INTEGER);
-		Table testObj=new Table("Test Table", colNames, colTypes);
+		Table testObj=new Table("B", colNames, colTypes);
 		addRow.add(0.0);				// D
 		addRow.add(10);					// I
 		testObj.addRow(addRow);
@@ -25,11 +25,19 @@ class TestMain {
 		addRow.setElementAt(20, 1);
 		testObj.addRow(addRow);
 		TableOps.db.add(testObj);
+		TableOps.createTable("A (A "+ CompareOps.DOUBLE + ")");
+		TableOps.insertInto("A VALUES 1.0");
+		TableOps.insertInto("A VALUES 2.0");
+		TableOps.insertInto("A VALUES 3.0");
+		TableOps.insertInto("A VALUES 1.0");
 //		for(int ctr=0; ctr<testObj.getRowCount(); ++ctr) {
 //			System.out.println("TESTOBJ " + testObj.getValueAt(ctr, 0) +'\t'+ testObj.getValueAt(ctr, 1));
 //		}
 //		Table retTable=WhereClass.where(testObj, "A > 1.1");
-		Table retTable=TableOps.select("D FROM Test Table WHERE I > 2");
+		Table retTable=TableOps.select("A,I FROM A,B WHERE I > 2");
+		out.println("\n\nThis is my final return table!\n");
+		UserTables.printEntireTable(retTable);
+		retTable=TableOps.select("A FROM A WHERE A > 2");
 		out.println("\n\nThis is my final return table!\n");
 		UserTables.printEntireTable(retTable);
 	}

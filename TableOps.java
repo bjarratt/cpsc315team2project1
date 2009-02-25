@@ -17,10 +17,14 @@ class TableOps {
     			//Find the table in the database
     			for(dbCtr = 0; dbCtr<database.size() && !args[argCtr].trim().equals(database.get(dbCtr).getName()); ++dbCtr);
     			if(dbCtr!=db.size()){
-   					if(addedTable)
+   					if(addedTable) {
+   						System.out.println("Attempting njoin");
    						retTable=new Table(retTable.getName()+" JOINED " + database.get(dbCtr).getName(), retTable, database.get(dbCtr));
-   					else
+   					}
+   					else {
+   						addedTable=true;
    						retTable=database.get(dbCtr);
+   					}
    				}
    				else{
    					System.err.println("This table does not exist in the database.");
@@ -50,11 +54,24 @@ class TableOps {
         if(args[0].contains("AS"))
         	args[0]=selectAs(args[0],selectedTable);
         args[0]+=',';
-        if(!args[0].contains("*"))
+        if(!args[0].contains("*")) {
         	for(int selectedTableCtr=selectedTable.getColumnCount()-1; selectedTableCtr>=0; --selectedTableCtr) {
         		if(!args[0].contains(selectedTable.getColName(selectedTableCtr)+','))
         			selectedTable.removeColumn(selectedTableCtr);
         	}
+    		String[] colNames=args[0].split("[ \t\n]*,[ \t\n]*");
+    		Vector<String> colName=new Vector<String>();
+    		Vector<String> colType=new Vector<String>();
+    		colName.add(null);
+    		colType.add(null);
+    		Table nullVal=new Table(null, colName, colType);
+        	for(int colNameCtr=0; colNameCtr<colNames.length; ++colNameCtr) {
+        		if(selectedTable.colWithName(colNames[colNameCtr])==-1) {
+        			nullVal.setColName(0,colNames[colNameCtr]);
+        			selectedTable.addColumns(nullVal);
+        		}
+        	}
+        }
         return selectedTable;
     }
     
