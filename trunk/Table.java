@@ -41,7 +41,7 @@ public class Table {
     	int lTableCtr;
     	boolean nJoin=false;
     	for(lTableCtr=0; lTableCtr<lTable.getColumnCount(); ++lTableCtr) {
-    		if((rTableCol=rTableCpy.colNames.indexOf(colNames.get(lTableCtr)))!=-1) {
+    		if((rTableCol=rTableCpy.colWithName(lTable.getColName(lTableCtr)))!=-1) {
     			nJoin=true;
 				Table tempTable=new Table();
     			for(int rowCtr=getRowCount()-1; rowCtr>=0; --rowCtr) {
@@ -189,9 +189,15 @@ public class Table {
     			addRow(nullRow);
     	}
     	for(int colCtr=0; colCtr<newCols.getColumnCount(); ++colCtr) {
-    		for(int rowCtr=0; rowCtr<getRowCount(); ++rowCtr) {
+        	int rowCtr;
+    		for(rowCtr=0; rowCtr<newCols.getRowCount(); ++rowCtr) {
     			table.get(rowCtr).add(newCols.getValueAt(rowCtr,colCtr));
     		}
+    		for(; rowCtr<getRowCount(); ++rowCtr) {
+    			table.get(rowCtr).add(null);
+    		}
+    		colNames.add(newCols.colNames.get(colCtr));
+    		colTypes.add(newCols.colTypes.get(colCtr));
     	}
     }
     public Table getColumn(int index) {
