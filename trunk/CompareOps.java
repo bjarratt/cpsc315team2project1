@@ -48,11 +48,10 @@ class CompareOps {
         for (int i = 0; i < numRows; i++) {
             String val = (String) Table.getValueAt(i, 0);
             if (val.equals(TRUE))
-                Table.setValueAt(FALSE, i, 0);
+                retTable.setValueAt(FALSE, i, 0);
             else
-                Table.setValueAt(TRUE, i, 0);
+                retTable.setValueAt(TRUE, i, 0);
         }
-
         return retTable;
     }
 
