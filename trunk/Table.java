@@ -106,7 +106,6 @@ public class Table {
     }
 
     Object getValueAt(int row, int column) {
-    	//System.out.println("ColC" + getColumnCount() + "RowC" + getRowCount() + "r" + row + "c" + column);
         return table.get(row).get(column);
     }
 

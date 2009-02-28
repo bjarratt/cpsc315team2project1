@@ -159,7 +159,6 @@ class TableOps {
     	String[] args = query.split("VALUES",2);
     	String tableName = args[0].trim();
     	String[] values = args[1].split(",");
-    	//System.out.println(values.length);
     	// Find appropriate table
     	Table thisTable = from(db,tableName);
     	
