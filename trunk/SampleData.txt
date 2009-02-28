@@ -1,0 +1,35 @@
+FlightInfo (flight# INTEGER, plane# INTEGER, passenger# INTEGER, startCity STRING, stopCity STRING, mealInclude BOOLEAN, departure STRING)
+1,1,10,Alban,Amarillo,TRUE,2/19/09 19:30
+2,1,10,Antioco,Alban,TRUE,2/20/09 17:30
+3,1,10,Ashur,Amarillo,FALSE,2/21/09 15:30
+4,1,10,Barry,Alban,TRUE,2/22/09 14:30
+5,1,10,Bergen,Barry,TRUE,2/20/09 18:30
+6,1,10,Alban,Bergen,FALSE,2/19/09 15:30
+7,1,10,Alban,Antioco,FALSE,2/20/09 5:30
+8,1,10,Alban,Ashur,TRUE,2/22/09 8:30
+9,1,10,Alban,New York,FALSE,2/23/09 9:30
+
+PassengerInfo (name STRING, addr STRING, passenger# INTEGER, age INTEGER)
+NATHAN,123 random,1,23
+ANDREW,234 random,2,25
+MATTHEW,521 dom,3,27
+JAYDEN,125 dom,4,16
+JOSHUA,215 rany,5,5
+CHASE,225 rain,6,10
+AARON,259 tree,7,39
+COLE,257 lane,8,50
+JAMES,522 road,9,60
+NICHOLAS,541 street,10,55
+ZACHARY,123 life,11,88
+COLIN,125 death,12,92
+
+TicketInfo (flight# INTEGER, passenger# INTEGER, class STRING, seat STRING, price DOUBLE)
+1,1,3rd,1A,10
+2,2,3rd,2B,10
+3,3,3rd,R,10
+4,4,2nd,NO,20
+5,5,3rd,T,10
+6,6,2nd,2B,20
+7,7,1st,7C,30
+8,8,1st,4A,40
+9,9,3rd,5J,10
