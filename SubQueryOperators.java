@@ -48,7 +48,7 @@ class SubQueryOperators {
 		double minMaxVal;
 		if(op.contains(">")) {
 			minMaxVal=SingleValOps.max(subQueryTable, subQueryTable.getColName(0));
-			subQueryTable=HelperFunctions.createTable("ANY("+query+")",CompareOps.DOUBLE, myTable.getRowCount(), String.valueOf(minMaxVal));
+			subQueryTable=HelperFunctions.createTable("ALL("+query+")",CompareOps.DOUBLE, myTable.getRowCount(), String.valueOf(minMaxVal));
 			if(op.contains("="))
 				retTable=CompareOps.greaterEqual(myTable, subQueryTable);
 			else
@@ -56,7 +56,7 @@ class SubQueryOperators {
 		}
 		else if(op.contains("<")) {
 			minMaxVal=SingleValOps.min(subQueryTable, subQueryTable.getColName(0));
-			subQueryTable=HelperFunctions.createTable("ANY("+query+")",CompareOps.DOUBLE, myTable.getRowCount(), String.valueOf(minMaxVal));
+			subQueryTable=HelperFunctions.createTable("ALL("+query+")",CompareOps.DOUBLE, myTable.getRowCount(), String.valueOf(minMaxVal));
 			if(op.contains("="))
 				retTable=CompareOps.lessEqual(myTable, subQueryTable);
 			else
@@ -68,7 +68,14 @@ class SubQueryOperators {
 				int ctr;
 				Object allVal=subQueryTable.getValueAt(0, 0);
 				//everything will be false if == with two different variables
-				for(ctr=0; allVal==subQueryTable.getValueAt(ctr, 0) && ctr<subQueryTable.getRowCount(); ++ctr);
+				if(subQueryTable.getColType(0).equals(CompareOps.DOUBLE))
+					for(ctr=0; ctr<subQueryTable.getRowCount() && ((Double) allVal).equals(subQueryTable.getValueAt(ctr, 0)); ++ctr);
+				else if(subQueryTable.getColType(0).equals(CompareOps.INTEGER))
+					for(ctr=0; ((Integer) allVal).equals(subQueryTable.getValueAt(ctr, 0)) && ctr<subQueryTable.getRowCount(); ++ctr);
+				else if(subQueryTable.getColType(0).equals(CompareOps.BOOLEAN))
+					for(ctr=0; ((String) allVal).equals(subQueryTable.getValueAt(ctr, 0)) && ctr<subQueryTable.getRowCount(); ++ctr);
+				else
+					for(ctr=0; ((String) allVal).equals(subQueryTable.getValueAt(ctr, 0)) && ctr<subQueryTable.getRowCount(); ++ctr);
 				if(ctr==subQueryTable.getRowCount())
 					retTable=CompareOps.equals(myTable, HelperFunctions.createTable("ALL("+query+")",subQueryTable.getColType(0), myTable.getRowCount(), allVal));
 			}
