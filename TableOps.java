@@ -24,8 +24,15 @@ class TableOps {
    						retTable=database.get(dbCtr);
    					}
    				}
+    			//Generate a blank table
    				else{
-   					System.err.println("This table does not exist in the database.");
+   					if(addedTable)
+   						retTable=new Table(retTable.getName()+" JOINED " + args[argCtr], retTable, new Table(args[argCtr], new Vector<String>(), new Vector<String>()));
+   					else {
+   						addedTable=true;
+   						retTable=new Table(args[argCtr], new Vector<String>(), new Vector<String>());
+   					}
+   			        retTable=HelperFunctions.convertToTable(new Table(), "1.0");
    				}
     		}
         }
@@ -145,10 +152,6 @@ class TableOps {
    				arg[1]=arg[1].substring(0, arg[1].indexOf(")"));
    			colTypes.add(arg[1].trim());
    		}
-//   		for(int i=0; i<colNames.size(); ++i)
-//   			System.out.println("COL " + colNames.get(i));
-//   		for(int i=0; i<colNames.size(); ++i)
-//   			System.out.println("TYPE " + colTypes.get(i));
        	db.add(new Table(tName, colNames, colTypes));
    	}
     public static void insertInto(String query) {
@@ -169,11 +172,12 @@ class TableOps {
     			values[i]=values[i].substring(0, values[i].lastIndexOf(")"));
     		if (thisTable.getColType(i).equals(CompareOps.STRING))
     			newRow.add(new String(values[i]));
-    		else if (thisTable.getColType(i).equals(CompareOps.DOUBLE)) {
+    		else if (thisTable.getColType(i).equals(CompareOps.DOUBLE))
     			newRow.add(new Double(values[i]));
-    		}
     		else if (thisTable.getColType(i).equals(CompareOps.INTEGER))
     			newRow.add(new Integer(values[i]));
+    		else if (thisTable.getColType(i).equals(CompareOps.BOOLEAN))
+    			newRow.add(new String(values[i]));
     	}
     	thisTable.addRow(newRow);
     }
