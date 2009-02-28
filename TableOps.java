@@ -12,7 +12,7 @@ class TableOps {
         if(database.size() == 0){
                 System.err.println("Database contains nothing.");
         }
-        else if(database.size() > 0){
+        else {
     		for(int argCtr=0, dbCtr=0; argCtr<args.length; ++argCtr) {
     			//Find the table in the database
     			for(dbCtr = 0; dbCtr<database.size() && !args[argCtr].trim().equals(database.get(dbCtr).getName()); ++dbCtr);
@@ -32,7 +32,6 @@ class TableOps {
    						addedTable=true;
    						retTable=new Table(args[argCtr], new Vector<String>(), new Vector<String>());
    					}
-   			        retTable=HelperFunctions.convertToTable(new Table(), "1.0");
    				}
     		}
         }
@@ -48,6 +47,7 @@ class TableOps {
     		return HelperFunctions.convertToTable(new Table(1,1), args[0]);
     	String[] conditions = args[1].split("WHERE", 2);
         Table selectedTable= new Table(from(db, conditions[0].trim()));
+        //if no where, skip calling the where function
         if(conditions.length>1)
         	selectedTable = WhereClass.where(selectedTable, conditions[1]);
        	args[0]=args[0].trim();
@@ -196,7 +196,7 @@ class TableOps {
     	for (int i=0; i<table.getRowCount(); i++) {
     		for (int j=0; j<ids.length; j++) {
     			Vector<Object> bool = new Vector<Object>();
-    			if (table.getValueAt(i, 0).equals(ids[j])) {
+    			if (table.getValueAt(i, 0).toString().equals(ids[j])) {
     				bool.add(CompareOps.TRUE);
     				retTable.addRow(bool);
     				break;
