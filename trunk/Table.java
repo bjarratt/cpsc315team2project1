@@ -7,11 +7,8 @@ public class Table {
     private Vector<String> colNames;
     private String tableName;
 
-    //Blank... if used, we're doomed
+    //Blank should be used ONLY to evade table not initialized error
     Table() {
-        table=new Vector<Vector<Object>>();
-        colTypes=new Vector<String>();
-        colNames=new Vector<String>();
     }
 
     //Copy
@@ -43,8 +40,8 @@ public class Table {
     	int rTableRow=-1;
     	int lTableCol;
     	boolean nJoin=false;
+    	//Attempt a natural Join
     	for(lTableCol=0; lTableCol<lTable.getColumnCount(); ++lTableCol) {
-    		//Loop through all matching rTableColumns
     		if((rTableCol=rTableCpy.colWithName(lTable.getColName(lTableCol)))!=-1) {
     			if(!nJoin) {
     				nJoin=true;

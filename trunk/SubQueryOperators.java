@@ -5,43 +5,28 @@
 
 class SubQueryOperators {
 	public static Table existsOp(Table myTable, String query) {
-		//System.out.println("EXISTS");
-		Table subQueryTable=TableOps.select(query);
-		Table retTable=HelperFunctions.createTable("EXISTS("+query+")",CompareOps.BOOLEAN, myTable.getRowCount(), CompareOps.FALSE);
-		int tableColCtr=0;
-		int tableRowCtr=0;
-		int existsColCtr=0;
-		int existsRowCtr=0;
-		for(existsColCtr=0; existsColCtr<subQueryTable.getColumnCount(); ++existsColCtr) {
-			for(tableColCtr=0; tableColCtr<myTable.getColumnCount(); ++tableColCtr) {
-				if(myTable.getColName(tableColCtr)==subQueryTable.getColName(existsColCtr)) {
-					for(existsRowCtr=0; existsRowCtr<subQueryTable.getRowCount(); ++existsRowCtr) {
-						for(tableRowCtr=0; tableRowCtr<retTable.getRowCount(); ++tableRowCtr) {
-							if((String) myTable.getValueAt(tableRowCtr, tableColCtr)==(String) subQueryTable.getValueAt(existsRowCtr, existsColCtr)) {
-								retTable.setValueAt(CompareOps.TRUE, tableRowCtr, 0);
-							}
-						}
-					}
-				}
-			}
-		}
+		Table subQueryTable=TableOps.select(query.substring(query.indexOf("SELECT")+6, query.lastIndexOf(')')));
+		Table retTable;
+		if(subQueryTable.getRowCount()>0)
+			retTable=HelperFunctions.createTable("EXISTS"+query,CompareOps.BOOLEAN, myTable.getRowCount(), CompareOps.TRUE);
+		else
+			retTable=HelperFunctions.createTable("EXISTS"+query,CompareOps.BOOLEAN, myTable.getRowCount(), CompareOps.FALSE);
 		return retTable;
 	}
 	public static Table anyOp(Table myTable, String op, String query) {
-		////System.out.println("ANY");
-		Table subQueryTable=TableOps.select(query);
+		Table subQueryTable=TableOps.select(query.substring(query.indexOf('(')+1, query.lastIndexOf(')')));
 		Table retTable;
 		double minMaxVal;
 		if(op.contains(">")) {
-			minMaxVal=SingleValOps.min(myTable, myTable.getColName(0));
+			minMaxVal=SingleValOps.min(subQueryTable, subQueryTable.getColName(0));
 			subQueryTable=HelperFunctions.createTable("ANY("+query+")",CompareOps.DOUBLE, myTable.getRowCount(), String.valueOf(minMaxVal));
 			if(op.contains("="))
 				retTable=CompareOps.greaterEqual(myTable, subQueryTable);
 			else
-				retTable=CompareOps.equals(myTable, subQueryTable);
+				retTable=CompareOps.greaterThan(myTable, subQueryTable);
 		}
 		else if(op.contains("<")) {
-			minMaxVal=SingleValOps.max(myTable, myTable.getColName(0));
+			minMaxVal=SingleValOps.max(subQueryTable, subQueryTable.getColName(0));
 			subQueryTable=HelperFunctions.createTable("ANY("+query+")",CompareOps.DOUBLE, myTable.getRowCount(), String.valueOf(minMaxVal));
 			if(op.contains("="))
 				retTable=CompareOps.lessEqual(myTable, subQueryTable);
@@ -51,27 +36,27 @@ class SubQueryOperators {
 		else {
 			retTable=HelperFunctions.createTable("ANY("+query+")",CompareOps.BOOLEAN, myTable.getRowCount(), CompareOps.FALSE);
 			for(int ctr=0; ctr<subQueryTable.getRowCount(); ++ctr) {
-				retTable=CompareOps.or(retTable, CompareOps.equals(myTable, HelperFunctions.createTable("ANY("+query+")",CompareOps.STRING, myTable.getRowCount(), (String) subQueryTable.getValueAt(ctr, 0))));
+				HelperFunctions.createTable("ANY("+query+")",CompareOps.STRING, myTable.getRowCount(), subQueryTable.getValueAt(ctr, 0).toString());
+				retTable=CompareOps.or(retTable, CompareOps.equals(myTable, HelperFunctions.createTable("ANY("+query+")",CompareOps.STRING, myTable.getRowCount(), subQueryTable.getValueAt(ctr, 0).toString())));
 			}
 		}
 		return retTable;
 	}
 	public static Table allOp(Table myTable, String op, String query) {
-		//System.out.println("ALL");
-		Table subQueryTable=TableOps.select(query);
+		Table subQueryTable=TableOps.select(query.substring(query.indexOf('(')+1, query.lastIndexOf(')')));
 		Table retTable;
 		double minMaxVal;
 		if(op.contains(">")) {
-			minMaxVal=SingleValOps.max(myTable, myTable.getColName(0));
-			subQueryTable=HelperFunctions.createTable("ALL("+query+")",CompareOps.DOUBLE, myTable.getRowCount(), String.valueOf(minMaxVal));
+			minMaxVal=SingleValOps.max(subQueryTable, subQueryTable.getColName(0));
+			subQueryTable=HelperFunctions.createTable("ANY("+query+")",CompareOps.DOUBLE, myTable.getRowCount(), String.valueOf(minMaxVal));
 			if(op.contains("="))
 				retTable=CompareOps.greaterEqual(myTable, subQueryTable);
 			else
-				retTable=CompareOps.equals(myTable, subQueryTable);
+				retTable=CompareOps.greaterThan(myTable, subQueryTable);
 		}
 		else if(op.contains("<")) {
-			minMaxVal=SingleValOps.min(myTable, myTable.getColName(0));
-			subQueryTable=HelperFunctions.createTable("ALL("+query+")",CompareOps.DOUBLE, myTable.getRowCount(), String.valueOf(minMaxVal));
+			minMaxVal=SingleValOps.min(subQueryTable, subQueryTable.getColName(0));
+			subQueryTable=HelperFunctions.createTable("ANY("+query+")",CompareOps.DOUBLE, myTable.getRowCount(), String.valueOf(minMaxVal));
 			if(op.contains("="))
 				retTable=CompareOps.lessEqual(myTable, subQueryTable);
 			else
