@@ -1,17 +1,18 @@
 public class UserTables {
 	
-	void viewAllTables() {
+	static void viewAllTables() {
 		// Loop through the database to print all of the tables
 		for (int i=0; i<TableOps.db.size(); ++i){
 			Table curTable = TableOps.db.get(i);
 			// Show all columns on one row
+			System.out.print(curTable.getName() + ":\t");
 			for (int j=0; j<curTable.getColumnCount(); j++)
 				System.out.print(curTable.getColName(j) + '\t');
 			System.out.println();
 		}			
 	}
 	
-	void viewTableAtIndex(int index) {
+	static void viewTableAtIndex(int index) {
 		Table curTable = TableOps.db.get(index);
 		// Show all columns on one row
 		for (int j=0; j<curTable.getColumnCount(); j++)
@@ -19,7 +20,7 @@ public class UserTables {
 		System.out.println();
 	}
 	
-	void viewTableWithName(String name) {
+	static void viewTableWithName(String name) {
 		// Loop through the database to print all of the tables
 		for (int i=0; i<TableOps.db.size(); ++i) {
 			Table curTable = TableOps.db.get(i);

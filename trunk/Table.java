@@ -40,29 +40,45 @@ public class Table {
     	
     	tableName=name;
     	int rTableCol;
-    	int rTableRow;
+    	int rTableRow=-1;
     	int lTableCol;
     	boolean nJoin=false;
     	for(lTableCol=0; lTableCol<lTable.getColumnCount(); ++lTableCol) {
+    		//Loop through all matching rTableColumns
     		if((rTableCol=rTableCpy.colWithName(lTable.getColName(lTableCol)))!=-1) {
-    			nJoin=true;
-				Table tempTable=new Table(rTable.getName(), rTable.colTypes, rTable.colNames);
-    			for(int lTableRow=getRowCount()-1; lTableRow>=0; --lTableRow) {
-    				if((rTableRow=rTable.getRowIndex(getValueAt(lTableRow, lTableCol), rTableCol))!=-1)
-    					tempTable.addRow(rTableCpy.table.get(rTableRow));
-    				else
+    			if(!nJoin) {
+    				nJoin=true;
+    				//Add columns, we are joining on lTable.getColName(lTableCol)
+    				for(int i=0; i<rTable.getColumnCount(); ++i) {
+						if(!rTable.getColName(i).equals(lTable.getColName(lTableCol))) {
+							colTypes.add(rTable.colTypes.get(i));
+							colNames.add(rTable.colNames.get(i));
+						}
+    				}
+    				for(int lTableRow=getRowCount()-1; lTableRow>=0; --lTableRow) {
+    					Vector<Object> modifyRow=table.get(lTableRow);
+    					//Loop through all matching rows
+    					while((rTableRow=rTable.getRowIndex(getValueAt(lTableRow, lTableCol), rTableCol, rTableRow+1))!=-1) {
+    						addRow(modifyRow);
+    						//Append columns to matching row
+    						for(int i=0; i<rTable.getColumnCount(); ++i) {
+    							if(!rTable.getColName(i).equals(lTable.getColName(lTableCol)))
+    								table.get(getRowCount()-1).add(rTable.getValueAt(rTableRow, i));
+    						}
+    					}
+    					//remove the row, all matching values in rTable have been appended
     					removeRow(lTableRow);
+    				}
     			}
-    			tempTable.removeColumn(rTableCol);
-    			rTableCpy=new Table(tempTable);
+    			else
+    				//remove any rows that do not match, we are joining on multiple columns
+    				for(int lTableRow=getRowCount()-1; lTableRow>=0; --lTableRow)
+    					if((rTableRow=rTable.getRowIndex(getValueAt(lTableRow, lTableCol), rTableCol, rTableRow+1))==-1)
+        					removeRow(lTableRow);
+    				
     		}
     	}
-    	if(nJoin) {
-    		for(int ctr=0; ctr<rTableCpy.getColumnCount(); ++ctr) {
-    			addColumns(rTableCpy.getColumn(ctr));
-    		}
-    	}
-    	else if(!nJoin) {
+    	if(!nJoin) {
 //TODO: Implement Cartesian join
     	}
     }
@@ -143,31 +159,32 @@ public class Table {
         table.remove(index);
     }
 
-    int getRowIndex(Object o, int colIndex) {
-    	int rowCtr=0;
+    int getRowIndex(Object o, int colIndex, int rowCtr) {
+    	if(rowCtr<0)
+    		rowCtr=0;
     	if(getColType(colIndex).equals(CompareOps.STRING)) {
-    		for(rowCtr=0; rowCtr<getRowCount() && ((String) table.get(rowCtr).get(colIndex)).equals(o);++rowCtr);
+    		for(;rowCtr<getRowCount() && !((String) table.get(rowCtr).get(colIndex)).equals(o);++rowCtr);
     		if(rowCtr==getRowCount())
     			return -1;
     		else
     			return rowCtr;
     	}
     	else if(getColType(colIndex).equals(CompareOps.DOUBLE)) {
-    		for(rowCtr=0; rowCtr<getRowCount() && !((Double) table.get(rowCtr).get(colIndex)).equals(o);++rowCtr);
+    		for(; rowCtr<getRowCount() && !((Double) table.get(rowCtr).get(colIndex)).equals(o);++rowCtr);
     		if(rowCtr==getRowCount())
     			return -1;
     		else
     			return rowCtr;
     	}
     	else if(getColType(colIndex).equals(CompareOps.INTEGER)) {
-    		for(rowCtr=0; rowCtr<getRowCount() && ((Integer) table.get(rowCtr).get(colIndex)).equals(o);++rowCtr);
+    		for(; rowCtr<getRowCount() && !((Integer) table.get(rowCtr).get(colIndex)).equals(o);++rowCtr);
     		if(rowCtr==getRowCount())
     			return -1;
     		else
     			return rowCtr;
     	}
     	else if(getColType(colIndex).equals(CompareOps.BOOLEAN)) {
-    		for(rowCtr=0; rowCtr<getRowCount() && ((String) table.get(rowCtr).get(colIndex)).equals(o);++rowCtr);
+    		for(; rowCtr<getRowCount() && !((String) table.get(rowCtr).get(colIndex)).equals(o);++rowCtr);
     		if(rowCtr==getRowCount())
     			return -1;
     		else
