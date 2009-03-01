@@ -1,5 +1,6 @@
 import java.awt.*;
 import java.awt.event.*;
+import java.util.Vector;
 import javax.swing.*;
 
 
@@ -12,21 +13,30 @@ public class AddTicket extends JFrame implements ActionListener {
 	// Text labels	
 	final JLabel flightNumLabel	= new JLabel("Flight                      #");
 	final JLabel passengerLabel	= new JLabel("Passenger Flyer #");
+    final JLabel passengerText	= new JLabel("");
+    final JLabel nameLabel      = new JLabel("Name");
+    final JLabel classLabel     = new JLabel("Class");
+    final JLabel seatLabel      = new JLabel("Seat");
 	final JLabel costLabel		= new JLabel("Cost                       $");
 		
-	// Text fields	
-	JTextField flightNumField 	= new JTextField(20);
-	JTextField passengerField	= new JTextField(20);
-	JTextField costField		= new JTextField(20);
+	// Text fields
+    JTextField classField   = new JTextField(20);
+    JTextField seatField    = new JTextField(20);
+	JTextField costField    = new JTextField(20);
+
+    // Combo boxes
+    JComboBox flightNumBox  = new JComboBox();
+    JComboBox nameBox  = new JComboBox();
 		
 	// Buttons
 	JButton addButton	= new JButton("Submit");
-	JButton closeButton	= new JButton("Close");
+	JButton backButton	= new JButton("< Back");
 	
 	// Panel for visual organization
 	JPanel panel = new JPanel(new SpringLayout());
-	
-	final int height = 150;
+
+    boolean populated = false;
+	final int height = 260;
 	final int width  = 300;
 	Dimension dim;
 	
@@ -38,28 +48,36 @@ public class AddTicket extends JFrame implements ActionListener {
 	AddTicket(Interface win) {
 		caller = win;
 		
-		setTitle("Add Flight");		
+		setTitle("Add Ticket");
 		dim = Toolkit.getDefaultToolkit().getScreenSize();
 		
 		panel.add(flightNumLabel);
-		panel.add(flightNumField);
-		panel.add(passengerLabel);
-		panel.add(passengerField);
+		panel.add(flightNumBox);
+        panel.add(nameLabel);
+		panel.add(nameBox);
+        panel.add(passengerLabel);
+        panel.add(passengerText);
+        panel.add(classLabel);
+        panel.add(classField);
+        panel.add(seatLabel);
+        panel.add(seatField);
 		panel.add(costLabel);
 		panel.add(costField);
 		panel.add(addButton);
-		panel.add(closeButton);
+		panel.add(backButton);
 		
 		SpringUtilities.makeCompactGrid(panel,
-                4, 2,	//rows, cols
+                7, 2,	//rows, cols
                 6, 6,	//initX, initY
                 6, 6);	//xPad, yPad
 
 		panel.setOpaque(true);
 		setContentPane(panel);
+        passengerText.setHorizontalAlignment((int) CENTER_ALIGNMENT);
 		
 		addButton.addActionListener(this);
-		closeButton.addActionListener(this);
+		backButton.addActionListener(this);
+        nameBox.addActionListener(this);
 		
 		setSize(width,height);
 		setLocation((dim.width-width)/2,(dim.height-height)/2);
@@ -71,18 +89,56 @@ public class AddTicket extends JFrame implements ActionListener {
 		caller = window;
 	}
 
+    void populateBoxes() {
+        nameBox.removeAllItems();
+        flightNumBox.removeAllItems();
+
+        Table passTable = TableOps.select("name FROM PassengerInfo");
+        for(int i=0; i<passTable.getRowCount(); i++)
+            nameBox.addItem(passTable.getValueAt(i,0));
+
+        Table flyerIDs = TableOps.select("passenger# FROM PassengerInfo");
+        if(flyerIDs.getRowCount()>0)
+            passengerText.setText(flyerIDs.getValueAt(0,0).toString());
+
+        Table flightTable = TableOps.select("flight# FROM FlightInfo");
+        for(int i=0; i<flightTable.getRowCount(); i++)
+            flightNumBox.addItem(flightTable.getValueAt(i,0));
+
+        Table newID = TableOps.select("passenger# FROM PassengerInfo WHERE name=" + nameBox.getSelectedItem().toString());
+        passengerText.setText(newID.getValueAt(0, 0).toString());
+
+        populated = true;
+    }
+
 	public void actionPerformed(ActionEvent e) {
-		if(e.getSource().equals(closeButton)) {
-			flightNumField.setText("");
-			passengerField.setText("");
+		if(e.getSource().equals(backButton)) {
+            passengerText.setText("");
+            classField.setText("");
+            seatField.setText("");
 			costField.setText("");
 			caller.setVisible(true);
+            populated = false;
 			dispose();
 		}
 		else if (e.getSource().equals(addButton)) {
-			flightNumField.setText("");
-			passengerField.setText("");
-			costField.setText("");
+            if (classField.getText().equals("") || seatField.getText().equals("") || costField.getText().equals(""))
+                return;
+            else {
+                TableOps.insertInto("TicketInfo VALUES (" + flightNumBox.getSelectedItem() + "," + passengerText.getText()
+                        + "," + classField.getText() + "," + seatField.getText() + "," + costField.getText() + ")");
+                classField.setText("");
+                seatField.setText("");
+                costField.setText("");
+                
+                Table tickets = TableOps.select("* FROM TicketInfo");
+                UserTables.printEntireTable(tickets);
+            }
 		}
+        else if (e.getSource().equals(nameBox) && populated) {
+            String name = nameBox.getSelectedItem().toString();
+            Table newID = TableOps.select("passenger# FROM PassengerInfo WHERE name=" + name);
+            passengerText.setText(newID.getValueAt(0, 0).toString());
+        }
 	}
 }

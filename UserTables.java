@@ -1,6 +1,6 @@
 public class UserTables {
 	
-	static void viewAllTables() {
+	static void viewAllTableRelations() {
 		// Loop through the database to print all of the tables
 		for (int i=0; i<TableOps.db.size(); ++i){
 			Table curTable = TableOps.db.get(i);
@@ -12,7 +12,7 @@ public class UserTables {
 		}			
 	}
 	
-	static void viewTableAtIndex(int index) {
+	static void viewTableRelationsAtIndex(int index) {
 		Table curTable = TableOps.db.get(index);
 		// Show all columns on one row
 		for (int j=0; j<curTable.getColumnCount(); j++)
@@ -20,7 +20,7 @@ public class UserTables {
 		System.out.println();
 	}
 	
-	static void viewTableWithName(String name) {
+	static void viewTableRelationsWithName(String name) {
 		// Loop through the database to print all of the tables
 		for (int i=0; i<TableOps.db.size(); ++i) {
 			Table curTable = TableOps.db.get(i);
@@ -34,6 +34,11 @@ public class UserTables {
 		}		
 	}
 
+    /**
+     * Analagous to the Table's own toString method except
+     * this prints to the console instead of a String
+     * @param table
+     */
 	static void printEntireTable(Table table) {
 		for (int i=0; i<table.getColumnCount(); i++)
 			System.out.print(table.getColName(i) + "\t");
@@ -45,4 +50,11 @@ public class UserTables {
 			System.out.println();
 		}
 	}
+
+    static void printAllTables() {
+        for (int i=0; i<TableOps.db.size(); i++) {
+            printEntireTable(TableOps.db.get(i));
+            System.out.println();
+        }
+    }
 }

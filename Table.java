@@ -237,4 +237,20 @@ public class Table {
     public String getName() {
         return tableName;
     }
+
+    @Override
+    public String toString() {
+        String toReturn="";
+        for (int i=0; i<getColumnCount(); i++)
+			toReturn += getColName(i) + "\t";
+		toReturn += "\n";
+
+		for (int i=0; i<getRowCount(); i++) {
+			for (int j=0; j<getColumnCount(); j++)
+				toReturn += getValueAt(i, j) + "\t";
+			toReturn += "\n";
+		}
+
+        return toReturn;
+    }
 }

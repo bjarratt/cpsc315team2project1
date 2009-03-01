@@ -63,9 +63,9 @@ class TableOps {
         	args[0]=selectAs(args[0],selectedTable);
         args[0]+=',';
         if(!args[0].contains("*")) {
-        	for(int selectedTableCtr=selectedTable.getColumnCount()-1; selectedTableCtr>=0; --selectedTableCtr) {
-        		if(!args[0].contains(selectedTable.getColName(selectedTableCtr)+','))
-        			selectedTable.removeColumn(selectedTableCtr);
+        	for(int i=selectedTable.getColumnCount()-1; i>=0; --i) {
+        		if(!args[0].contains(selectedTable.getColName(i)+','))
+        			selectedTable.removeColumn(i);
         	}
     		String[] colNames=args[0].split("[ \t\n]*,[ \t\n]*");
     		Vector<String> colName=new Vector<String>();
@@ -132,8 +132,8 @@ class TableOps {
     	String[] args = query.split("FROM", 2);
     	//loop through and delete all columns in the table
     	for(int i=0; i<db.size(); ++i)
-    		if(db.get(i).getName()==args[1]) 
-    		 db.remove(i);
+    		if(db.get(i).getName().equals(args[1]))
+                db.remove(i);
     	return;
     }
 
@@ -199,7 +199,8 @@ class TableOps {
     				bool.add(CompareOps.TRUE);
     				retTable.addRow(bool);
     				break;
-    			}if (j==ids.length-1) {
+    			}
+                if (j==ids.length-1) {
     				bool.add(CompareOps.FALSE);
     				retTable.addRow(bool);
     			}

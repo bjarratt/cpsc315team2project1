@@ -66,7 +66,7 @@ class HelperFunctions {
 				}
 				retTable=createTable(variable, objectType, myTable.getRowCount(),typedObject);
 			} catch(NumberFormatException e) {
-				System.err.println("ERROR, Unknown type?");
+				//System.err.println("ERROR, Unknown type?");
 				//Give up, hope a string works!
 				retTable=createTable(variable, CompareOps.STRING, myTable.getRowCount(),variable);
 			}

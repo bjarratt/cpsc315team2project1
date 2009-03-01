@@ -11,13 +11,17 @@ public class AddFlight extends JFrame implements ActionListener {
 		
 	// Text labels	
 	final JLabel flightNumLabel	= new JLabel("Flight                 #");
+    final JLabel planeNumLabel	= new JLabel("Plane                #");
 	final JLabel numPassLabel	= new JLabel("# Passengers");
-	final JLabel depCityLabel	= new JLabel("Departure City");
+    final JLabel depCityLabel	= new JLabel("Departure City");
 	final JLabel arrCityLabel	= new JLabel("Arrival City");
+    final JLabel mealLabel  	= new JLabel("Meal? (yes/no)");
 	final JLabel timeLabel		= new JLabel("Departure Time");
 	
 	// Text fields	
 	JTextField flightNumField 	= new JTextField(20);
+    JTextField planeNumField 	= new JTextField(20);
+    JTextField mealField        = new JTextField(20);
 	JTextField numPassField		= new JTextField(20);
 	JTextField depCityField		= new JTextField(20);
 	JTextField arrCityField		= new JTextField(20);
@@ -25,12 +29,12 @@ public class AddFlight extends JFrame implements ActionListener {
 	
 	// Buttons
 	JButton addButton	= new JButton("Submit");
-	JButton closeButton	= new JButton("Close");
+	JButton backButton	= new JButton("< Back");
 	
 	// Panel for visual organization
 	JPanel panel = new JPanel(new SpringLayout());
 	
-	final int height = 200;
+	final int height = 275;
 	final int width  = 300;
 	Dimension dim;
 	
@@ -47,19 +51,23 @@ public class AddFlight extends JFrame implements ActionListener {
 		
 		panel.add(flightNumLabel);
 		panel.add(flightNumField);
+        panel.add(planeNumLabel);
+		panel.add(planeNumField);
 		panel.add(numPassLabel);
 		panel.add(numPassField);
 		panel.add(depCityLabel);
 		panel.add(depCityField);
 		panel.add(arrCityLabel);
 		panel.add(arrCityField);
+        panel.add(mealLabel);
+        panel.add(mealField);
 		panel.add(timeLabel);
 		panel.add(timeField);
 		panel.add(addButton);
-		panel.add(closeButton);
+		panel.add(backButton);
 		
 		SpringUtilities.makeCompactGrid(panel,
-                6, 2,	//rows, cols
+                8, 2,	//rows, cols
                 6, 6,	//initX, initY
                 6, 6);	//xPad, yPad
 
@@ -67,7 +75,7 @@ public class AddFlight extends JFrame implements ActionListener {
 		setContentPane(panel);
 		
 		addButton.addActionListener(this);
-		closeButton.addActionListener(this);
+		backButton.addActionListener(this);
 		
 		setSize(width,height);
 		setLocation((dim.width-width)/2,(dim.height-height)/2);
@@ -80,7 +88,7 @@ public class AddFlight extends JFrame implements ActionListener {
 	}
 
 	public void actionPerformed(ActionEvent e) {
-		if(e.getSource().equals(closeButton)) {
+		if(e.getSource().equals(backButton)) {
 			flightNumField.setText("");
 			numPassField.setText("");
 			depCityField.setText("");
@@ -90,11 +98,22 @@ public class AddFlight extends JFrame implements ActionListener {
 			dispose();
 		}
 		else if (e.getSource().equals(addButton)) {
-			flightNumField.setText("");
-			numPassField.setText("");
-			depCityField.setText("");
-			arrCityField.setText("");
-			timeField.setText("");
+            if (flightNumField.getText().equals("") || numPassField.getText().equals("") || depCityField.getText().equals("")
+                    || arrCityField.getText().equals("") || timeField.getText().equals(""))
+                return;
+            else {
+                TableOps.insertInto("FlightInfo VALUES (" + flightNumField.getText() + "," + planeNumField.getText()
+                        + "," + numPassField.getText() + ","  +  depCityField.getText() + "," + arrCityField.getText()
+                        + "," + mealField.getText() + "," + timeField.getText() + ")");
+
+                flightNumField.setText("");
+                planeNumField.setText("");
+                mealField.setText("");
+                numPassField.setText("");
+                depCityField.setText("");
+                arrCityField.setText("");
+                timeField.setText("");
+            }
 		}
 	}
 }

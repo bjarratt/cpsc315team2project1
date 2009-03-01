@@ -2,14 +2,7 @@ import java.util.Vector;
 import static java.lang.System.*;
 
 class TestMain {
-	static void setTrue(Boolean b) {
-		b = true;
-	}
-	
 	public static void main(String args[]) {
-		Boolean b = false;
-		setTrue(b);
-		System.out.println(b);
 		
 		/* Pass in nulls for now, may be useful to pass in an instantiated class
 		 * later on.
@@ -24,7 +17,12 @@ class TestMain {
 		
 		Interface window = new Interface(ap,af,at,gi);
 		window.setVisible(true);
-		
+
+        loadDb.load("SampleData.txt");
+
+        Table tickets = TableOps.select("* FROM TicketInfo");
+        UserTables.printEntireTable(tickets);
+
 		/*
 		 * window.setVisible(true);
 		 * 

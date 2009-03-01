@@ -1,13 +1,13 @@
-FlightInfo (flight# INTEGER, plane# INTEGER, passenger# INTEGER, startCity STRING, stopCity STRING, mealInclude BOOLEAN, departure STRING)
-1,1,10,Alban,Amarillo,TRUE,2/19/09 19:30
-2,1,10,Antioco,Alban,TRUE,2/20/09 17:30
-3,1,10,Ashur,Amarillo,FALSE,2/21/09 15:30
-4,1,10,Barry,Alban,TRUE,2/22/09 14:30
-5,1,10,Bergen,Barry,TRUE,2/20/09 18:30
-6,1,10,Alban,Bergen,FALSE,2/19/09 15:30
-7,1,10,Alban,Antioco,FALSE,2/20/09 5:30
-8,1,10,Alban,Ashur,TRUE,2/22/09 8:30
-9,1,10,Alban,New York,FALSE,2/23/09 9:30
+FlightInfo (flight# INTEGER, plane# INTEGER, passenger# INTEGER, startCity STRING, stopCity STRING, mealInclude STRING, departure STRING)
+1,1,10,Alban,Amarillo,yes,2/19/09 19:30
+2,1,10,Antioco,Alban,yes,2/20/09 17:30
+3,1,10,Ashur,Amarillo,no,2/21/09 15:30
+4,1,10,Barry,Alban,yes,2/22/09 14:30
+5,1,10,Bergen,Barry,yes,2/20/09 18:30
+6,1,10,Alban,Bergen,no,2/19/09 15:30
+7,1,10,Alban,Antioco,no,2/20/09 5:30
+8,1,10,Alban,Ashur,yes,2/22/09 8:30
+9,1,10,Alban,New York,no,2/23/09 9:30
 
 PassengerInfo (name STRING, addr STRING, passenger# INTEGER, age INTEGER)
 NATHAN,123 random,1,23
