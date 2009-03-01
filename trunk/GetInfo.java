@@ -8,9 +8,9 @@ public class GetInfo extends JFrame implements ActionListener, KeyListener {
 	Interface caller;
 	
     // Buttons
-    JButton queryFlightsButton = new JButton("Query Flights");
-    JButton queryPassengersButton = new JButton("Query Passengers");
-    JButton closeButton	= new JButton("Close");
+    JButton flightButton = new JButton("Query Flights");
+    JButton passButton = new JButton("Query Passengers");
+    JButton backButton	= new JButton("< Back");
     
     // Text boxes
     JTextArea textArea = new JTextArea("Enter query here");
@@ -42,9 +42,9 @@ public class GetInfo extends JFrame implements ActionListener, KeyListener {
         topPanel.add(textField);
         
         topMiddlePanel.setLayout(new FlowLayout());
-        topMiddlePanel.add(queryFlightsButton);
-        topMiddlePanel.add(queryPassengersButton);
-        topMiddlePanel.add(closeButton);
+        topMiddlePanel.add(backButton);
+        topMiddlePanel.add(flightButton);
+        topMiddlePanel.add(passButton);
         
         northPanel.setLayout(new BorderLayout());
         northPanel.add(topPanel, BorderLayout.NORTH);
@@ -56,8 +56,8 @@ public class GetInfo extends JFrame implements ActionListener, KeyListener {
 
         getContentPane().add(fullPanel, BorderLayout.CENTER);
 
-        queryFlightsButton.addActionListener(this);
-        closeButton.addActionListener(this);
+        flightButton.addActionListener(this);
+        backButton.addActionListener(this);
         textField.addKeyListener(this);
 
         dim = Toolkit.getDefaultToolkit().getScreenSize();
@@ -72,18 +72,30 @@ public class GetInfo extends JFrame implements ActionListener, KeyListener {
 	}
 
 	public void actionPerformed(ActionEvent e) {
-		if (e.getSource().equals(closeButton)) {
+		if (e.getSource().equals(backButton)) {
 			textArea.setText("Enter in any one piece of information that\n" +
     			"may exist about a flight or passenger.");
 			caller.setVisible(true);
 			dispose();
 		}
+        else if (e.getSource().equals(flightButton)) {
+            /* TODO implement a flight-related query.
+             * Table.toString will be useful for setting the
+             * text area. Multiple tables will be returned?
+             * */
+        }
+        else if (e.getSource().equals(passButton)) {
+            /* TODO implement a passenger-related query.
+             * Table.toString will be useful for setting the
+             * text area. Multiple tables will be returned?
+             * */
+        }
 	}
 
 	public void keyPressed(KeyEvent e) {
 		// Make it nice and easy for the user to press enter
         if (e.getKeyCode() == KeyEvent.VK_ENTER) {
-            queryFlightsButton.doClick();
+            flightButton.doClick();
         }
 	}
 

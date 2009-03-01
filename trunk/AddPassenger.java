@@ -23,7 +23,7 @@ public class AddPassenger extends JFrame implements ActionListener {
 	
 	// Buttons
 	JButton addButton	= new JButton("Submit");
-	JButton closeButton	= new JButton("Close");
+	JButton backButton	= new JButton("< Back");
 	
 	// Panel for visual organization
 	JPanel panel = new JPanel(new SpringLayout());
@@ -53,7 +53,7 @@ public class AddPassenger extends JFrame implements ActionListener {
 		panel.add(ageLabel);
 		panel.add(ageField);
 		panel.add(addButton);
-		panel.add(closeButton);
+		panel.add(backButton);
 		
 		SpringUtilities.makeCompactGrid(panel,
                 5, 2,	//rows, cols
@@ -64,7 +64,7 @@ public class AddPassenger extends JFrame implements ActionListener {
 		setContentPane(panel);
 		
 		addButton.addActionListener(this);
-		closeButton.addActionListener(this);
+		backButton.addActionListener(this);
 		
 		setSize(width,height);
 		setLocation((dim.width-width)/2,(dim.height-height)/2);
@@ -78,7 +78,7 @@ public class AddPassenger extends JFrame implements ActionListener {
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		if(e.getSource().equals(closeButton)) {
+		if(e.getSource().equals(backButton)) {
 			nameField.setText("");
 			addressField.setText("");
 			flyerField.setText("");
@@ -87,10 +87,18 @@ public class AddPassenger extends JFrame implements ActionListener {
 			dispose();
 		}
 		else if (e.getSource().equals(addButton)) {
-			nameField.setText("");
-			addressField.setText("");
-			flyerField.setText("");
-			ageField.setText("");
+            if (nameField.getText().equals("") || addressField.getText().equals("") || flyerField.getText().equals("")
+                    || ageField.getText().equals(""))
+                return;
+            else {
+                TableOps.insertInto("PassengerInfo VALUES (" + nameField.getText() + "," + addressField.getText() +
+                        "," + flyerField.getText() + "," + ageField.getText() + ")");
+
+                nameField.setText("");
+                addressField.setText("");
+                flyerField.setText("");
+                ageField.setText("");
+            }
 		}
 	}
 }

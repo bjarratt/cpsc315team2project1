@@ -127,7 +127,7 @@ class WhereClass {
 		String[] args;
 		Table lArg;
 		Table rArg;
-		if(command.contains("AND")) {
+		if(command.contains(" AND ")) {
 			args=command.split("AND");
 			args[0]=args[0].trim();
 			args[1]=args[1].trim();
@@ -141,7 +141,7 @@ class WhereClass {
 				rArg=HelperFunctions.convertToTable(myTable, args[1]);
 			return(CompareOps.and(lArg, rArg));
 		}
-		else if(command.contains("OR")) {
+		else if(command.contains(" OR ")) {
 			args=command.split("OR");
 			args[0]=args[0].trim();
 			args[1]=args[1].trim();
@@ -155,8 +155,8 @@ class WhereClass {
 				rArg=HelperFunctions.convertToTable(myTable, args[1]);
 			return CompareOps.or(lArg, rArg);
 		}
-		else if(command.contains("NOT")) {
-			args=command.split("NOT");
+		else if(command.contains(" NOT ")) {
+			args=command.split(" NOT ");
 			args[1]=args[1].trim();
 			if(args[1].startsWith(ctrlString))
 				rArg=subQueries.elementAt(Integer.valueOf(args[1].substring(args[1].indexOf("ctrlString")+ctrlString.length()+1)));

@@ -76,6 +76,7 @@ public class Interface extends JFrame implements ActionListener {
 			flightWindow.setVisible(true);
 		}
 		else if(e.getSource().equals(addTicketButton)) {
+            ticketWindow.populateBoxes();
 			this.dispose();
 			ticketWindow.setVisible(true);
 		}
