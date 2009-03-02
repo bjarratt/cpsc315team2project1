@@ -27,11 +27,11 @@ public class Interface extends JFrame implements ActionListener {
 	
 	JPanel panel = new JPanel();
 	
-	public Interface(AddPassenger ap, AddFlight af, AddTicket at, GetInfo gi) {
-		passWindow	 = ap;
-		flightWindow = af;
-		ticketWindow = at;
-		infoWindow	 = gi;
+	public Interface() {
+		passWindow	 = new AddPassenger(this);
+		flightWindow = new AddFlight(this);
+		ticketWindow = new AddTicket(this);
+		infoWindow	 = new GetInfo(this);
 		
 		passWindow.setCaller(this);
 		passWindow.dispose();
