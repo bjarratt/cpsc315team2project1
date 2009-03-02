@@ -1,9 +1,10 @@
 import java.awt.*;
 import java.awt.event.*;
+
 import javax.swing.*;
 
 
-public class AddPassenger extends JFrame implements ActionListener {
+public class AddPassenger extends JFrame implements ActionListener, WindowListener {
 	
 	private static final long serialVersionUID = 2L;
 	
@@ -66,6 +67,7 @@ public class AddPassenger extends JFrame implements ActionListener {
 		addButton.addActionListener(this);
 		backButton.addActionListener(this);
 		
+		addWindowListener(this);
 		setSize(width,height);
 		setLocation((dim.width-width)/2,(dim.height-height)/2);
 		setDefaultCloseOperation(DISPOSE_ON_CLOSE);
@@ -98,9 +100,41 @@ public class AddPassenger extends JFrame implements ActionListener {
                 addressField.setText("");
                 flyerField.setText("");
                 ageField.setText("");
-                
-                JOptionPane.showMessageDialog(null, "Passenger added successfully.");
             }
 		}
+	}
+
+	@Override
+	public void windowActivated(WindowEvent e) {
+		
+	}
+
+	@Override
+	public void windowClosed(WindowEvent e) {
+		caller.setVisible(true);		
+	}
+
+	@Override
+	public void windowClosing(WindowEvent e) {
+	}
+
+	@Override
+	public void windowDeactivated(WindowEvent e) {
+		
+	}
+
+	@Override
+	public void windowDeiconified(WindowEvent e) {
+		
+	}
+
+	@Override
+	public void windowIconified(WindowEvent e) {
+		
+	}
+
+	@Override
+	public void windowOpened(WindowEvent e) {
+		
 	}
 }
