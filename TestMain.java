@@ -1,6 +1,3 @@
-import java.util.Vector;
-import static java.lang.System.*;
-
 class TestMain {
 	public static void main(String args[]) {
 		
@@ -13,7 +10,6 @@ class TestMain {
 		AddFlight af 	= new AddFlight(null);
 		AddTicket at	= new AddTicket(null);
 		GetInfo gi		= new GetInfo(null);
-		Boolean running = true;
 		
 		Interface window = new Interface(ap,af,at,gi);
 		window.setVisible(true);
