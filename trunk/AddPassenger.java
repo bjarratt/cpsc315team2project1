@@ -100,6 +100,8 @@ public class AddPassenger extends JFrame implements ActionListener, WindowListen
                 addressField.setText("");
                 flyerField.setText("");
                 ageField.setText("");
+                
+                JOptionPane.showMessageDialog(null, "Passenger added.");
             }
 		}
 	}
