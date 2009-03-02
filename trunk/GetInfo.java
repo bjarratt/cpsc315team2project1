@@ -28,7 +28,7 @@ public class GetInfo extends JFrame implements ActionListener, WindowListener {
     JPanel northPanel		= new JPanel();
     JPanel fullPanel  		= new JPanel();
 
-    final int width  = 500;
+    final int width  = 600;
     final int height = 400;
     Dimension dim;
 
@@ -45,7 +45,7 @@ public class GetInfo extends JFrame implements ActionListener, WindowListener {
         textArea.setText("Enter in any one piece of information that may exist about a flight or passenger.");
         
         
-        topPanel.add(scrollPane);
+        topPanel.add(textField);
         
         topMiddlePanel.setLayout(new SpringLayout());
         topMiddlePanel.add(passengersOnFlight);
@@ -69,7 +69,7 @@ public class GetInfo extends JFrame implements ActionListener, WindowListener {
 
         fullPanel.setLayout(new BorderLayout());
         fullPanel.add(northPanel, BorderLayout.NORTH);
-        fullPanel.add(textArea, BorderLayout.CENTER);
+        fullPanel.add(scrollPane, BorderLayout.CENTER);
 
         getContentPane().add(fullPanel, BorderLayout.CENTER);
 
