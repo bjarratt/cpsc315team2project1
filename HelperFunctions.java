@@ -36,7 +36,6 @@ class HelperFunctions {
 			try {
 				String objectType;
 				Object typedObject;
-				//System.out.println("helperFuncs Parsing4:\'" + variable + "\'");
 				if(variable.contains("\"") || variable.contains("\'")) {
 					//Strip Quotes
 					if(variable.contains("\""))
@@ -66,9 +65,8 @@ class HelperFunctions {
 				}
 				retTable=createTable(variable, objectType, myTable.getRowCount(),typedObject);
 			} catch(NumberFormatException e) {
-				//System.err.println("ERROR, Unknown type?");
 				//Give up, hope a string works!
-				retTable=createTable(variable, CompareOps.STRING, myTable.getRowCount(),variable);
+				retTable=createTable(variable, CompareOps.STRING, myTable.getRowCount(),(String) variable);
 			}
 		}
 		return retTable;

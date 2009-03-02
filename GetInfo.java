@@ -19,6 +19,7 @@ public class GetInfo extends JFrame implements ActionListener, KeyListener {
     // Text boxes
     JTextArea textArea = new JTextArea("Enter query here");
     JTextField textField = new JTextField();
+    JScrollPane scrollPane = new JScrollPane(textArea);
     
     // Organization panels
     JPanel topPanel			= new JPanel();
@@ -41,9 +42,9 @@ public class GetInfo extends JFrame implements ActionListener, KeyListener {
 
         textField.setColumns(40);
         textArea.setText("Enter in any one piece of information that may exist about a flight or passenger.");
-
         
-        topPanel.add(textField);
+        
+        topPanel.add(scrollPane);
         
         topMiddlePanel.setLayout(new SpringLayout());
         topMiddlePanel.add(passengersOnFlight);
@@ -72,12 +73,12 @@ public class GetInfo extends JFrame implements ActionListener, KeyListener {
         getContentPane().add(fullPanel, BorderLayout.CENTER);
 
         passengersOnFlight.addActionListener(this);
-        backButton.addActionListener(this);
-        passengerInfo.addActionListener(this);
         flightsForPassenger.addActionListener(this);
-        passengerLimit.addActionListener(this);
         mealFlights.addActionListener(this);
         getPlaneItinerary.addActionListener(this);
+        passengerInfo.addActionListener(this);
+        passengerLimit.addActionListener(this);
+        backButton.addActionListener(this);
         textField.addKeyListener(this);
 
         dim = Toolkit.getDefaultToolkit().getScreenSize();
@@ -91,43 +92,73 @@ public class GetInfo extends JFrame implements ActionListener, KeyListener {
 		caller = window;
 	}
 
-	public void actionPerformed(ActionEvent e) {
+	public void actionPerformed(ActionEvent action) {
     	Table displayTable;
-		if (e.getSource().equals(backButton)) {
+		if (action.getSource().equals(backButton)) {
 			textArea.setText("Enter in any one piece of information that\n" +
     			"may exist about a flight or passenger.");
 			caller.setVisible(true);
 			dispose();
 			displayTable=new Table();
 		}
-        else if (e.getSource().equals(passengersOnFlight)) {
+        else if (action.getSource().equals(passengersOnFlight)) {
         	if(textField.getText().equals(""))
             	displayTable=TableOps.select("flight#,name,addr,passenger#,age" +
             						   "FROM TicketInfo,PassengerInfo");
-        	else
-        		displayTable=TableOps.select("name,addr,passenger#,age" +
-        							   "FROM TicketInfo,PassengerInfo" +
-        							  "WHERE flight#=" + textField.getText());
+        	else {
+        		try {
+        			int number=Integer.valueOf(textField.getText());
+        			displayTable=TableOps.select("name,addr,passenger#,age" +
+						   	   "FROM TicketInfo,PassengerInfo" +
+						      "WHERE flight#=" + number);
+        		}
+        		catch(NumberFormatException e) {
+        			displayTable=new Table();
+        			System.err.println("INVALID QUERY");
+        		}
+        	}
         }
-        else if (e.getSource().equals(passengerInfo)) {
+        else if (action.getSource().equals(passengerInfo)) {
         	if(textField.getText().equals(""))
             	displayTable=TableOps.select("*" +
  				   "FROM PassengerInfo");
-           	else
-            	displayTable=TableOps.select("*" +
-						   "FROM PassengerInfo" +
-						  "WHERE passenger#=" + textField.getText());
+        	else {
+        		try {
+        			int number=Integer.valueOf(textField.getText());
+                	displayTable=TableOps.select("*" +
+ 						   "FROM PassengerInfo" +
+ 						  "WHERE passenger#=" + number);
+        		}
+        		catch(NumberFormatException e) {
+        			String name=textField.getText();
+					name="\"" + name.toUpperCase() + "\"";
+                	displayTable=TableOps.select("*" +
+  						   "FROM PassengerInfo" +
+  						  "WHERE name=" + name);
+        		}
+        	}
         }
-        else if (e.getSource().equals(flightsForPassenger)) {
+        else if (action.getSource().equals(flightsForPassenger)) {
         	if(textField.getText().equals(""))
             	displayTable=TableOps.select("passenger#,flight#,plane#,startCity,stopCity,departure,class,seat,price " +
           			  				   "FROM FlightInfo,TicketInfo");
-           	else
-            	displayTable=TableOps.select("flight#,plane#,startCity,stopCity,departure,class,seat,price " +
-          			  				   "FROM FlightInfo,TicketInfo" +
-          			  				  "WHERE passenger#=" + textField.getText());
+        	else {
+        		try {
+        			int number=Integer.valueOf(textField.getText());
+                	displayTable=TableOps.select("flight#,plane#,startCity,stopCity,departure,class,seat,price " +
+			  				   "FROM FlightInfo,TicketInfo" +
+			  				  "WHERE passenger#=" + number);
+        		}
+        		catch(NumberFormatException e) {
+        			String name=textField.getText();
+					name="\"" + name.toUpperCase() + "\"";
+                	displayTable=TableOps.select("flight#,plane#,startCity,stopCity,departure,class,seat,price " +
+			  				   "FROM FlightInfo,TicketInfo,PassengerInfo" +
+			  				  "WHERE name=" + name);
+        		}
+        	}
         }
-        else if (e.getSource().equals(passengerLimit)) {
+        else if (action.getSource().equals(passengerLimit)) {
         	if(textField.getText().equals(""))
             	displayTable=TableOps.select("flight#,maxPassengerCount" +
           			  				   "FROM FlightInfo");
@@ -136,12 +167,12 @@ public class GetInfo extends JFrame implements ActionListener, KeyListener {
           			  				   "FROM FlightInfo" +
           			  				  "WHERE flight#=" + textField.getText());
         }
-        else if (e.getSource().equals(mealFlights)) {
+        else if (action.getSource().equals(mealFlights)) {
         	displayTable=TableOps.select("flight#, plane#, startCity, stopCity, departure" +
         						   "FROM FlightInfo" +
-        			 			  "WHERE mealInclude=\"yes\"");
+        			 			  "WHERE mealInclude=TRUE");
         }
-        else if (e.getSource().equals(getPlaneItinerary)) {
+        else if (action.getSource().equals(getPlaneItinerary)) {
         	if(textField.getText().equals(""))
             	displayTable=TableOps.select("plane#,flight#, startCity, stopCity, departure" +
             						   "FROM FlightInfo");
