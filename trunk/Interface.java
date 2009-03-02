@@ -15,6 +15,7 @@ public class Interface extends JFrame implements ActionListener {
 	JButton addTicketButton	= new JButton("Add Tickets");
 	JButton getInfoButton	= new JButton("Get Info");
 	JButton quitButton 		= new JButton("Quit");
+	JButton quitNoSaveButton= new JButton("Quit w/o Save");
 	
 	AddPassenger passWindow;
 	AddFlight flightWindow;
@@ -27,11 +28,11 @@ public class Interface extends JFrame implements ActionListener {
 	
 	JPanel panel = new JPanel();
 	
-	public Interface() {
-		passWindow	 = new AddPassenger(this);
-		flightWindow = new AddFlight(this);
-		ticketWindow = new AddTicket(this);
-		infoWindow	 = new GetInfo(this);
+	public Interface(AddPassenger ap, AddFlight af, AddTicket at, GetInfo gi) {
+		passWindow	 = ap;
+		flightWindow = af;
+		ticketWindow = at;
+		infoWindow	 = gi;
 		
 		passWindow.setCaller(this);
 		passWindow.dispose();
@@ -50,6 +51,7 @@ public class Interface extends JFrame implements ActionListener {
 		panel.add(addTicketButton);
 		panel.add(getInfoButton);
 		panel.add(quitButton);
+		panel.add(quitNoSaveButton);
 		getContentPane().add(panel);
 		
 		addPassButton.addActionListener(this);
@@ -57,6 +59,7 @@ public class Interface extends JFrame implements ActionListener {
 		getInfoButton.addActionListener(this);
 		addTicketButton.addActionListener(this);
 		quitButton.addActionListener(this);
+		quitNoSaveButton.addActionListener(this);
 		
 		dim = Toolkit.getDefaultToolkit().getScreenSize();
 		
@@ -84,7 +87,12 @@ public class Interface extends JFrame implements ActionListener {
 			this.dispose();
 			infoWindow.setVisible(true);
 		}
-		else if (e.getSource().equals(quitButton))
+		else if (e.getSource().equals(quitButton)) {
+	        loadDb.saveDatabase("restoreDb.txt");
 			dispose();
+		}
+		else if (e.getSource().equals(quitNoSaveButton)) {
+			dispose();
+		}
     }
 }

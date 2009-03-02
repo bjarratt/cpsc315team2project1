@@ -63,9 +63,9 @@ class TableOps {
         	args[0]=selectAs(args[0],selectedTable);
         args[0]+=',';
         if(!args[0].contains("*")) {
-        	for(int i=selectedTable.getColumnCount()-1; i>=0; --i) {
-        		if(!args[0].contains(selectedTable.getColName(i)+','))
-        			selectedTable.removeColumn(i);
+        	for(int selectedTableCtr=selectedTable.getColumnCount()-1; selectedTableCtr>=0; --selectedTableCtr) {
+        		if(!args[0].contains(selectedTable.getColName(selectedTableCtr)+','))
+        			selectedTable.removeColumn(selectedTableCtr);
         	}
     		String[] colNames=args[0].split("[ \t\n]*,[ \t\n]*");
     		Vector<String> colName=new Vector<String>();
@@ -169,7 +169,9 @@ class TableOps {
     	for(int i=0; i<values.length; ++i) {
     		if(values[i].contains(")"))
     			values[i]=values[i].substring(0, values[i].lastIndexOf(")"));
-    		if (thisTable.getColType(i).equals(CompareOps.STRING))
+    		if(values[i].equals(""))
+    				newRow.add(null);
+    		else if (thisTable.getColType(i).equals(CompareOps.STRING))
     			newRow.add(new String(values[i]));
     		else if (thisTable.getColType(i).equals(CompareOps.DOUBLE))
     			newRow.add(new Double(values[i]));
