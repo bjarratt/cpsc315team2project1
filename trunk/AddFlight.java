@@ -4,7 +4,7 @@ import java.awt.event.*;
 import javax.swing.*;
 
 
-public class AddFlight extends JFrame implements ActionListener, WindowListener {
+public class AddFlight extends JFrame implements ActionListener, WindowListener, ItemListener {
 	
 	private static final long serialVersionUID = 2L;
 	
@@ -16,13 +16,13 @@ public class AddFlight extends JFrame implements ActionListener, WindowListener 
 	final JLabel numPassLabel	= new JLabel("# Passengers");
     final JLabel depCityLabel	= new JLabel("Departure City");
 	final JLabel arrCityLabel	= new JLabel("Arrival City");
-    final JLabel mealLabel  	= new JLabel("Meal? (yes/no)");
+    final JLabel mealLabel  	= new JLabel("Meal?");
 	final JLabel timeLabel		= new JLabel("Departure Time");
 	
 	// Text fields	
 	JTextField flightNumField 	= new JTextField(20);
     JTextField planeNumField 	= new JTextField(20);
-    JTextField mealField        = new JTextField(20);
+    JCheckBox  mealBox       	= new JCheckBox();
 	JTextField numPassField		= new JTextField(20);
 	JTextField depCityField		= new JTextField(20);
 	JTextField arrCityField		= new JTextField(20);
@@ -38,6 +38,7 @@ public class AddFlight extends JFrame implements ActionListener, WindowListener 
 	final int height = 275;
 	final int width  = 300;
 	Dimension dim;
+	String meal = CompareOps.FALSE;
 	
 	
 	/* Pass the calling interface so that it can be 
@@ -61,7 +62,7 @@ public class AddFlight extends JFrame implements ActionListener, WindowListener 
 		panel.add(arrCityLabel);
 		panel.add(arrCityField);
         panel.add(mealLabel);
-        panel.add(mealField);
+        panel.add(mealBox);
 		panel.add(timeLabel);
 		panel.add(timeField);
 		panel.add(addButton);
@@ -77,6 +78,8 @@ public class AddFlight extends JFrame implements ActionListener, WindowListener 
 		
 		addButton.addActionListener(this);
 		backButton.addActionListener(this);
+		mealBox.addItemListener(this);
+		mealBox.setSelected(false);
 		
 		addWindowListener(this);
 		setSize(width,height);
@@ -106,11 +109,10 @@ public class AddFlight extends JFrame implements ActionListener, WindowListener 
             else {
                 TableOps.insertInto("FlightInfo VALUES (" + flightNumField.getText() + "," + planeNumField.getText()
                         + "," + numPassField.getText() + ","  +  depCityField.getText() + "," + arrCityField.getText()
-                        + "," + mealField.getText() + "," + timeField.getText() + ")");
+                        + "," + meal + "," + timeField.getText() + ")");
 
                 flightNumField.setText("");
                 planeNumField.setText("");
-                mealField.setText("");
                 numPassField.setText("");
                 depCityField.setText("");
                 arrCityField.setText("");
@@ -157,6 +159,15 @@ public class AddFlight extends JFrame implements ActionListener, WindowListener 
 
 	@Override
 	public void windowOpened(WindowEvent e) {
+		
+	}
+
+	@Override
+	public void itemStateChanged(ItemEvent e) {
+		if (e.getStateChange() == ItemEvent.DESELECTED)
+			meal = CompareOps.FALSE;
+		else if (e.getStateChange() == ItemEvent.SELECTED)
+			meal = CompareOps.TRUE;
 		
 	}
 }
