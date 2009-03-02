@@ -45,14 +45,21 @@ public class GetInfo extends JFrame implements ActionListener, KeyListener {
         
         topPanel.add(textField);
         
-        topMiddlePanel.setLayout(new FlowLayout());
-        topMiddlePanel.add(backButton);
+        topMiddlePanel.setLayout(new SpringLayout());
         topMiddlePanel.add(passengersOnFlight);
         topMiddlePanel.add(passengerInfo);
         topMiddlePanel.add(flightsForPassenger);
         topMiddlePanel.add(passengerLimit);
         topMiddlePanel.add(mealFlights);
         topMiddlePanel.add(getPlaneItinerary);
+        topMiddlePanel.add(backButton);
+        topMiddlePanel.add(new JLabel(""));
+        topMiddlePanel.setAlignmentX(CENTER_ALIGNMENT);
+
+        SpringUtilities.makeCompactGrid(topMiddlePanel,
+                4, 2,	//rows, cols
+                6, 6,	//initX, initY
+                6, 6);	//xPad, yPad
         
         northPanel.setLayout(new BorderLayout());
         northPanel.add(topPanel, BorderLayout.NORTH);
@@ -138,9 +145,10 @@ public class GetInfo extends JFrame implements ActionListener, KeyListener {
           			  				   "FROM FlightInfo" +
           			  				  "WHERE plane#=" + textField.getText());
         }
-        else
-        	displayTable=new Table();
-		textArea.setText(displayTable.toString());
+//        else
+//        	displayTable=new Table();
+//        textArea.setText(displayTable.toString());
+//        textArea.setText("Nothing found.");
 	}
 
 	public void keyPressed(KeyEvent e) {
