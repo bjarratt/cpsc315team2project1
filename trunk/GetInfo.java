@@ -73,6 +73,11 @@ public class GetInfo extends JFrame implements ActionListener, KeyListener {
 
         passengersOnFlight.addActionListener(this);
         backButton.addActionListener(this);
+        passengerInfo.addActionListener(this);
+        flightsForPassenger.addActionListener(this);
+        passengerLimit.addActionListener(this);
+        mealFlights.addActionListener(this);
+        getPlaneItinerary.addActionListener(this);
         textField.addKeyListener(this);
 
         dim = Toolkit.getDefaultToolkit().getScreenSize();
@@ -97,7 +102,7 @@ public class GetInfo extends JFrame implements ActionListener, KeyListener {
 		}
         else if (e.getSource().equals(passengersOnFlight)) {
         	if(textField.getText().equals(""))
-            	displayTable=TableOps.select("name,addr,passenger#,age" +
+            	displayTable=TableOps.select("flight#,name,addr,passenger#,age" +
             						   "FROM TicketInfo,PassengerInfo");
         	else
         		displayTable=TableOps.select("name,addr,passenger#,age" +
@@ -107,15 +112,15 @@ public class GetInfo extends JFrame implements ActionListener, KeyListener {
         else if (e.getSource().equals(passengerInfo)) {
         	if(textField.getText().equals(""))
             	displayTable=TableOps.select("*" +
-            						   "FROM PassengerInfo" +
-            						  "WHERE passenger#=" + textField.getText());
+ 				   "FROM PassengerInfo");
            	else
             	displayTable=TableOps.select("*" +
-          			  				   "FROM PassengerInfo");
+						   "FROM PassengerInfo" +
+						  "WHERE passenger#=" + textField.getText());
         }
         else if (e.getSource().equals(flightsForPassenger)) {
         	if(textField.getText().equals(""))
-            	displayTable=TableOps.select("flight#,plane#,startCity,stopCity,departure,class,seat,price " +
+            	displayTable=TableOps.select("passenger#,flight#,plane#,startCity,stopCity,departure,class,seat,price " +
           			  				   "FROM FlightInfo,TicketInfo");
            	else
             	displayTable=TableOps.select("flight#,plane#,startCity,stopCity,departure,class,seat,price " +
@@ -124,7 +129,7 @@ public class GetInfo extends JFrame implements ActionListener, KeyListener {
         }
         else if (e.getSource().equals(passengerLimit)) {
         	if(textField.getText().equals(""))
-            	displayTable=TableOps.select("maxPassengerCount" +
+            	displayTable=TableOps.select("flight#,maxPassengerCount" +
           			  				   "FROM FlightInfo");
            	else
             	displayTable=TableOps.select("maxPassengerCount" +
@@ -134,21 +139,20 @@ public class GetInfo extends JFrame implements ActionListener, KeyListener {
         else if (e.getSource().equals(mealFlights)) {
         	displayTable=TableOps.select("flight#, plane#, startCity, stopCity, departure" +
         						   "FROM FlightInfo" +
-        			 			  "WHERE mealInclude=TRUE");
+        			 			  "WHERE mealInclude=\"yes\"");
         }
         else if (e.getSource().equals(getPlaneItinerary)) {
         	if(textField.getText().equals(""))
-            	displayTable=TableOps.select("flight#, startCity, stopCity, departure" +
+            	displayTable=TableOps.select("plane#,flight#, startCity, stopCity, departure" +
             						   "FROM FlightInfo");
            	else
             	displayTable=TableOps.select("flight#, startCity, stopCity, departure" +
           			  				   "FROM FlightInfo" +
           			  				  "WHERE plane#=" + textField.getText());
         }
-//        else
-//        	displayTable=new Table();
-//        textArea.setText(displayTable.toString());
-//        textArea.setText("Nothing found.");
+        else
+        	displayTable=new Table();
+        textArea.setText(displayTable.toString());
 	}
 
 	public void keyPressed(KeyEvent e) {

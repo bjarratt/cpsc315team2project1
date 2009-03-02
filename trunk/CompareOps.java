@@ -92,7 +92,7 @@ class CompareOps {
 
         for (int i = 0; i < numRows; i++) {
         	// Check type and assign
-            if (lTable.getColType(0).equals(STRING)) {
+            if (lTable.getColType(0).equals(STRING) || lTable.getColType(0).equals(BOOLEAN)) {
             	String lval = (String) lTable.getValueAt(i, 0);
             	String rval = (String) rTable.getValueAt(i, 0);
                 // 0 means they are same
