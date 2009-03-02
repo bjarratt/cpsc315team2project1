@@ -9,18 +9,19 @@ public class GetInfo extends JFrame implements ActionListener, WindowListener {
 	Interface caller;
 	
     // Buttons
-    JButton passengersOnFlight = new JButton("Get Passengers On Flight");
-    JButton passengerInfo = new JButton("Info on a passenger");
+    JButton passengersOnFlight	= new JButton("Get Passengers On Flight");
+    JButton passengerInfo		= new JButton("Info on a passenger");
     JButton flightsForPassenger = new JButton("Flights for passenger");
-    JButton passengerLimit = new JButton("Max Passengers for a flight");
-    JButton mealFlights = new JButton("get Flights that provide a meal");
-    JButton getPlaneItinerary = new JButton("get itinerary for a plane");
-    JButton backButton	= new JButton("< Back");
+    JButton passengerLimit		= new JButton("Max Passengers for a flight");
+    JButton mealFlights			= new JButton("get Flights that provide a meal");
+    JButton getPlaneItinerary	= new JButton("get itinerary for a plane");
+    JButton backButton			= new JButton("< Back");
+    JButton helpButton			= new JButton("Help");
     
     // Text boxes
-    JTextArea textArea = new JTextArea("Enter query here");
-    JTextField textField = new JTextField();
-    JScrollPane scrollPane = new JScrollPane(textArea);
+    JTextArea textArea 		= new JTextArea("Enter query here");
+    JTextField textField 	= new JTextField();
+    JScrollPane scrollPane 	= new JScrollPane(textArea);
     
     // Organization panels
     JPanel topPanel			= new JPanel();
@@ -29,7 +30,7 @@ public class GetInfo extends JFrame implements ActionListener, WindowListener {
     JPanel fullPanel  		= new JPanel();
 
     final int width  = 600;
-    final int height = 400;
+    final int height = 450;
     Dimension dim;
 
     
@@ -46,8 +47,9 @@ public class GetInfo extends JFrame implements ActionListener, WindowListener {
         
         
         topPanel.add(textField);
+        topPanel.setAlignmentX(CENTER_ALIGNMENT);
         
-        topMiddlePanel.setLayout(new SpringLayout());
+        topMiddlePanel.setLayout(new GridLayout(4,2));
         topMiddlePanel.add(passengersOnFlight);
         topMiddlePanel.add(passengerInfo);
         topMiddlePanel.add(flightsForPassenger);
@@ -55,21 +57,18 @@ public class GetInfo extends JFrame implements ActionListener, WindowListener {
         topMiddlePanel.add(mealFlights);
         topMiddlePanel.add(getPlaneItinerary);
         topMiddlePanel.add(backButton);
-        topMiddlePanel.add(new JLabel(""));
-        topMiddlePanel.setAlignmentX(CENTER_ALIGNMENT);
-
-        SpringUtilities.makeCompactGrid(topMiddlePanel,
-                4, 2,	//rows, cols
-                6, 6,	//initX, initY
-                6, 6);	//xPad, yPad
+        topMiddlePanel.add(helpButton);
+        topMiddlePanel.setAlignmentX(CENTER_ALIGNMENT); 
         
         northPanel.setLayout(new BorderLayout());
         northPanel.add(topPanel, BorderLayout.NORTH);
         northPanel.add(topMiddlePanel, BorderLayout.SOUTH);
+        northPanel.setAlignmentX(CENTER_ALIGNMENT);
 
         fullPanel.setLayout(new BorderLayout());
         fullPanel.add(northPanel, BorderLayout.NORTH);
         fullPanel.add(scrollPane, BorderLayout.CENTER);
+        fullPanel.setAlignmentX(CENTER_ALIGNMENT);
 
         getContentPane().add(fullPanel, BorderLayout.CENTER);
 
@@ -77,10 +76,10 @@ public class GetInfo extends JFrame implements ActionListener, WindowListener {
         flightsForPassenger.addActionListener(this);
         mealFlights.addActionListener(this);
         getPlaneItinerary.addActionListener(this);
-
         passengerInfo.addActionListener(this);
         passengerLimit.addActionListener(this);
         backButton.addActionListener(this);
+        helpButton.addActionListener(this);
 
         dim = Toolkit.getDefaultToolkit().getScreenSize();
         
@@ -95,13 +94,17 @@ public class GetInfo extends JFrame implements ActionListener, WindowListener {
 	}
 
 	public void actionPerformed(ActionEvent action) {
-    	Table displayTable;
+    	Table displayTable = new Table();
+    	boolean needsHelp = false;
 		if (action.getSource().equals(backButton)) {
-			textArea.setText("Enter in any one piece of information that\n" +
-    			"may exist about a flight or passenger.");
+			textArea.setText("Enter in any one piece of information that may exist about a flight or passenger.");
 			caller.setVisible(true);
 			dispose();
 			displayTable=new Table();
+		}
+		else if (action.getSource().equals(helpButton)) {
+			textArea.setText("Enter in any one piece of information that may exist about a flight or passenger.");
+			needsHelp = true;
 		}
         else if (action.getSource().equals(passengersOnFlight)) {
         	if(textField.getText().equals(""))
@@ -183,9 +186,9 @@ public class GetInfo extends JFrame implements ActionListener, WindowListener {
           			  				   "FROM FlightInfo" +
           			  				  "WHERE plane#=" + textField.getText());
         }
-        else
-        	displayTable=new Table();
-        textArea.setText(displayTable.toString());
+
+        if(!needsHelp)
+        	textArea.setText(displayTable.toString());
 	}
 	
 	@Override
@@ -195,8 +198,7 @@ public class GetInfo extends JFrame implements ActionListener, WindowListener {
 
 	@Override
 	public void windowClosed(WindowEvent e) {
-		textArea.setText("Enter in any one piece of information that\n" +
-			"may exist about a flight or passenger.");
+		textArea.setText("Enter in any one piece of information that may exist about a flight or passenger.");
 		caller.setVisible(true);	
 	}
 
