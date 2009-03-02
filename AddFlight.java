@@ -1,9 +1,10 @@
 import java.awt.*;
 import java.awt.event.*;
+
 import javax.swing.*;
 
 
-public class AddFlight extends JFrame implements ActionListener {
+public class AddFlight extends JFrame implements ActionListener, WindowListener {
 	
 	private static final long serialVersionUID = 2L;
 	
@@ -77,6 +78,7 @@ public class AddFlight extends JFrame implements ActionListener {
 		addButton.addActionListener(this);
 		backButton.addActionListener(this);
 		
+		addWindowListener(this);
 		setSize(width,height);
 		setLocation((dim.width-width)/2,(dim.height-height)/2);
 		setDefaultCloseOperation(DISPOSE_ON_CLOSE);
@@ -117,5 +119,44 @@ public class AddFlight extends JFrame implements ActionListener {
                 JOptionPane.showMessageDialog(null, "Flight added successfully.");
             }
 		}
+	}
+
+	@Override
+	public void windowActivated(WindowEvent e) {
+		
+	}
+
+	@Override
+	public void windowClosed(WindowEvent e) {
+		flightNumField.setText("");
+		numPassField.setText("");
+		depCityField.setText("");
+		arrCityField.setText("");
+		timeField.setText("");
+		caller.setVisible(true);		
+	}
+
+	@Override
+	public void windowClosing(WindowEvent e) {
+	}
+
+	@Override
+	public void windowDeactivated(WindowEvent e) {
+		
+	}
+
+	@Override
+	public void windowDeiconified(WindowEvent e) {
+		
+	}
+
+	@Override
+	public void windowIconified(WindowEvent e) {
+		
+	}
+
+	@Override
+	public void windowOpened(WindowEvent e) {
+		
 	}
 }

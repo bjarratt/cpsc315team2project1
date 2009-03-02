@@ -1,8 +1,9 @@
 import java.awt.*;
 import java.awt.event.*;
+
 import javax.swing.*;
 
-public class GetInfo extends JFrame implements ActionListener, KeyListener {
+public class GetInfo extends JFrame implements ActionListener, WindowListener {
 
 	private static final long serialVersionUID = 3L;
 	Interface caller;
@@ -76,13 +77,14 @@ public class GetInfo extends JFrame implements ActionListener, KeyListener {
         flightsForPassenger.addActionListener(this);
         mealFlights.addActionListener(this);
         getPlaneItinerary.addActionListener(this);
+
         passengerInfo.addActionListener(this);
         passengerLimit.addActionListener(this);
         backButton.addActionListener(this);
-        textField.addKeyListener(this);
 
         dim = Toolkit.getDefaultToolkit().getScreenSize();
         
+        addWindowListener(this);
         setSize(width, height);
         setLocation((dim.width-width)/2,(dim.height-height)/2);
         setDefaultCloseOperation(DISPOSE_ON_CLOSE);
@@ -185,20 +187,40 @@ public class GetInfo extends JFrame implements ActionListener, KeyListener {
         	displayTable=new Table();
         textArea.setText(displayTable.toString());
 	}
-
-	public void keyPressed(KeyEvent e) {
-		// Make it nice and easy for the user to press enter
-        if (e.getKeyCode() == KeyEvent.VK_ENTER) {
-            passengersOnFlight.doClick();
-        }
-	}
-
-	public void keyReleased(KeyEvent e) {
-		// Nothing here
+	
+	@Override
+	public void windowActivated(WindowEvent e) {
 		
 	}
 
-	public void keyTyped(KeyEvent e) {
-		// Nothing here		
+	@Override
+	public void windowClosed(WindowEvent e) {
+		textArea.setText("Enter in any one piece of information that\n" +
+			"may exist about a flight or passenger.");
+		caller.setVisible(true);	
+	}
+
+	@Override
+	public void windowClosing(WindowEvent e) {
+	}
+
+	@Override
+	public void windowDeactivated(WindowEvent e) {
+		
+	}
+
+	@Override
+	public void windowDeiconified(WindowEvent e) {
+		
+	}
+
+	@Override
+	public void windowIconified(WindowEvent e) {
+		
+	}
+
+	@Override
+	public void windowOpened(WindowEvent e) {
+		
 	}
 }

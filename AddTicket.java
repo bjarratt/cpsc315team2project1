@@ -4,7 +4,7 @@ import java.util.Vector;
 import javax.swing.*;
 
 
-public class AddTicket extends JFrame implements ActionListener {
+public class AddTicket extends JFrame implements ActionListener, WindowListener {
 	
 	private static final long serialVersionUID = 2L;
 	
@@ -79,6 +79,7 @@ public class AddTicket extends JFrame implements ActionListener {
 		backButton.addActionListener(this);
         nameBox.addActionListener(this);
 		
+        addWindowListener(this);
 		setSize(width,height);
 		setLocation((dim.width-width)/2,(dim.height-height)/2);
 		setDefaultCloseOperation(DISPOSE_ON_CLOSE);
@@ -141,5 +142,44 @@ public class AddTicket extends JFrame implements ActionListener {
             Table newID = TableOps.select("passenger# FROM PassengerInfo WHERE name=" + name);
             passengerText.setText(newID.getValueAt(0, 0).toString());
         }
+	}
+	
+	@Override
+	public void windowActivated(WindowEvent e) {
+		
+	}
+
+	@Override
+	public void windowClosed(WindowEvent e) {
+		passengerText.setText("");
+        classField.setText("");
+        seatField.setText("");
+		costField.setText("");
+		caller.setVisible(true);
+        populated = false;
+	}
+
+	@Override
+	public void windowClosing(WindowEvent e) {
+	}
+
+	@Override
+	public void windowDeactivated(WindowEvent e) {
+		
+	}
+
+	@Override
+	public void windowDeiconified(WindowEvent e) {
+		
+	}
+
+	@Override
+	public void windowIconified(WindowEvent e) {
+		
+	}
+
+	@Override
+	public void windowOpened(WindowEvent e) {
+		
 	}
 }
