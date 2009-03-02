@@ -1,4 +1,4 @@
-FlightInfo (flight# INTEGER, plane# INTEGER, passenger# INTEGER, startCity STRING, stopCity STRING, mealInclude STRING, departure STRING)
+FlightInfo (flight# INTEGER, plane# INTEGER, maxPassengerCount INTEGER, startCity STRING, stopCity STRING, mealInclude STRING, departure STRING)
 1,1,10,Alban,Amarillo,yes,2/19/09 19:30
 2,1,10,Antioco,Alban,yes,2/20/09 17:30
 3,1,10,Ashur,Amarillo,no,2/21/09 15:30

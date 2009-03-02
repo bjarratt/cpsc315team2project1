@@ -9,6 +9,9 @@ public class Table {
 
     //Blank should be used ONLY to evade table not initialized error
     Table() {
+        table=new Vector<Vector<Object>>();
+        colTypes=new Vector<String>();
+        colNames=new Vector<String>();
     }
 
     //Copy
