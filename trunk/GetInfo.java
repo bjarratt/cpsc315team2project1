@@ -8,8 +8,12 @@ public class GetInfo extends JFrame implements ActionListener, KeyListener {
 	Interface caller;
 	
     // Buttons
-    JButton flightButton = new JButton("Query Flights");
-    JButton passButton = new JButton("Query Passengers");
+    JButton passengersOnFlight = new JButton("Get Passengers On Flight");
+    JButton passengerInfo = new JButton("Info on a passenger");
+    JButton flightsForPassenger = new JButton("Flights for passenger");
+    JButton passengerLimit = new JButton("Max Passengers for a flight");
+    JButton mealFlights = new JButton("get Flights that provide a meal");
+    JButton getPlaneItinerary = new JButton("get itinerary for a plane");
     JButton backButton	= new JButton("< Back");
     
     // Text boxes
@@ -43,8 +47,12 @@ public class GetInfo extends JFrame implements ActionListener, KeyListener {
         
         topMiddlePanel.setLayout(new FlowLayout());
         topMiddlePanel.add(backButton);
-        topMiddlePanel.add(flightButton);
-        topMiddlePanel.add(passButton);
+        topMiddlePanel.add(passengersOnFlight);
+        topMiddlePanel.add(passengerInfo);
+        topMiddlePanel.add(flightsForPassenger);
+        topMiddlePanel.add(passengerLimit);
+        topMiddlePanel.add(mealFlights);
+        topMiddlePanel.add(getPlaneItinerary);
         
         northPanel.setLayout(new BorderLayout());
         northPanel.add(topPanel, BorderLayout.NORTH);
@@ -56,7 +64,7 @@ public class GetInfo extends JFrame implements ActionListener, KeyListener {
 
         getContentPane().add(fullPanel, BorderLayout.CENTER);
 
-        flightButton.addActionListener(this);
+        passengersOnFlight.addActionListener(this);
         backButton.addActionListener(this);
         textField.addKeyListener(this);
 
@@ -72,30 +80,73 @@ public class GetInfo extends JFrame implements ActionListener, KeyListener {
 	}
 
 	public void actionPerformed(ActionEvent e) {
+    	Table displayTable;
 		if (e.getSource().equals(backButton)) {
 			textArea.setText("Enter in any one piece of information that\n" +
     			"may exist about a flight or passenger.");
 			caller.setVisible(true);
 			dispose();
+			displayTable=new Table();
 		}
-        else if (e.getSource().equals(flightButton)) {
-            /* TODO implement a flight-related query.
-             * Table.toString will be useful for setting the
-             * text area. Multiple tables will be returned?
-             * */
+        else if (e.getSource().equals(passengersOnFlight)) {
+        	if(textField.getText().equals(""))
+            	displayTable=TableOps.select("name,addr,passenger#,age" +
+            						   "FROM TicketInfo,PassengerInfo");
+        	else
+        		displayTable=TableOps.select("name,addr,passenger#,age" +
+        							   "FROM TicketInfo,PassengerInfo" +
+        							  "WHERE flight#=" + textField.getText());
         }
-        else if (e.getSource().equals(passButton)) {
-            /* TODO implement a passenger-related query.
-             * Table.toString will be useful for setting the
-             * text area. Multiple tables will be returned?
-             * */
+        else if (e.getSource().equals(passengerInfo)) {
+        	if(textField.getText().equals(""))
+            	displayTable=TableOps.select("*" +
+            						   "FROM PassengerInfo" +
+            						  "WHERE passenger#=" + textField.getText());
+           	else
+            	displayTable=TableOps.select("*" +
+          			  				   "FROM PassengerInfo");
         }
+        else if (e.getSource().equals(flightsForPassenger)) {
+        	if(textField.getText().equals(""))
+            	displayTable=TableOps.select("flight#,plane#,startCity,stopCity,departure,class,seat,price " +
+          			  				   "FROM FlightInfo,TicketInfo");
+           	else
+            	displayTable=TableOps.select("flight#,plane#,startCity,stopCity,departure,class,seat,price " +
+          			  				   "FROM FlightInfo,TicketInfo" +
+          			  				  "WHERE passenger#=" + textField.getText());
+        }
+        else if (e.getSource().equals(passengerLimit)) {
+        	if(textField.getText().equals(""))
+            	displayTable=TableOps.select("maxPassengerCount" +
+          			  				   "FROM FlightInfo");
+           	else
+            	displayTable=TableOps.select("maxPassengerCount" +
+          			  				   "FROM FlightInfo" +
+          			  				  "WHERE flight#=" + textField.getText());
+        }
+        else if (e.getSource().equals(mealFlights)) {
+        	displayTable=TableOps.select("flight#, plane#, startCity, stopCity, departure" +
+        						   "FROM FlightInfo" +
+        			 			  "WHERE mealInclude=TRUE");
+        }
+        else if (e.getSource().equals(getPlaneItinerary)) {
+        	if(textField.getText().equals(""))
+            	displayTable=TableOps.select("flight#, startCity, stopCity, departure" +
+            						   "FROM FlightInfo");
+           	else
+            	displayTable=TableOps.select("flight#, startCity, stopCity, departure" +
+          			  				   "FROM FlightInfo" +
+          			  				  "WHERE plane#=" + textField.getText());
+        }
+        else
+        	displayTable=new Table();
+		textArea.setText(displayTable.toString());
 	}
 
 	public void keyPressed(KeyEvent e) {
 		// Make it nice and easy for the user to press enter
         if (e.getKeyCode() == KeyEvent.VK_ENTER) {
-            flightButton.doClick();
+            passengersOnFlight.doClick();
         }
 	}
 
