@@ -16,7 +16,7 @@ public class Interface extends JFrame implements ActionListener {
         JButton addFlightButton = new JButton("Add Flights");
         JButton addTicketButton = new JButton("Add Tickets");
         JButton getInfoButton   = new JButton("Get Info");
-        JButton quitButton      = new JButton("Quit");
+        JButton quitButton      = new JButton("Save & Quit");
         JButton quitNoSaveButton= new JButton("Quit w/o Save");
 
         
@@ -32,10 +32,10 @@ public class Interface extends JFrame implements ActionListener {
         JPanel panel = new JPanel();
         
         public Interface() {
-                passWindow       = new AddPassenger(this);
-                flightWindow = new AddFlight(this);
-                ticketWindow = new AddTicket(this);
-                infoWindow       = new GetInfo(this);
+                passWindow		= new AddPassenger(this);
+                flightWindow 	= new AddFlight(this);
+                ticketWindow	= new AddTicket(this);
+                infoWindow      = new GetInfo(this);
                 
                 passWindow.setCaller(this);
                 passWindow.dispose();

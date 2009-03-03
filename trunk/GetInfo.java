@@ -144,7 +144,7 @@ public class GetInfo extends JFrame implements ActionListener, WindowListener {
         	}
         }
         else if (action.getSource().equals(flightsForPassenger)) {
-        	if(textField.getText().equals(""))
+        	if(textField.getText().trim().equals(""))
             	displayTable=TableOps.select("passenger#,flight#,plane#,startCity,stopCity,departure,class,seat,price " +
           			  				   "FROM FlightInfo,TicketInfo");
         	else {
@@ -156,7 +156,7 @@ public class GetInfo extends JFrame implements ActionListener, WindowListener {
         		}
         		catch(NumberFormatException e) {
         			String name=textField.getText();
-					name="\"" + name.toUpperCase() + "\"";
+					name=name.toUpperCase();
                 	displayTable=TableOps.select("flight#,plane#,startCity,stopCity,departure,class,seat,price " +
 			  				   "FROM FlightInfo,TicketInfo,PassengerInfo" +
 			  				  "WHERE name=" + name);
