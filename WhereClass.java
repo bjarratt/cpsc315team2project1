@@ -1,5 +1,8 @@
 //Gabriel Copley
 //Last Revised 2/20/09
+//Modified 2/27/09 fixed subQuery ops
+//Modified 2/29/09 by drew fixed and or not comparison for names
+//Modified 3/02/09 added comments
 //WHERE portion of a SELECT query
 //USES table, SubQueryOperators, compareOps, and HelperFunctions
 
@@ -7,6 +10,7 @@ import java.util.Stack;
 import java.util.Vector;
 
 class WhereClass {
+	//This string must NOT exist within the query, it is used for storing incomplete operations
 	final String ctrlString="####";
 	Vector<Table> subQueries;
 	Table myTable;
@@ -18,9 +22,6 @@ class WhereClass {
 	}
 
 	//Returns all rows in argTable that returned true when the functions were performed.
-	//Note: This is for small dbs only, since it is faster to run
-	//  logic commands instead of retrieving data from the table,
-	//  parsing by row would be faster then by column.
 	public static Table where(Table argTable, String commands) {
 		//Bail if argTable is empty
 		if(argTable.getRowCount()==0)
@@ -34,7 +35,7 @@ class WhereClass {
 		Stack<Integer> openParens;
 		Table results;
 		//Handle any sub queries, the single | is deliberate in the case of multiple subQueries
-		while((selectIndex=commands.indexOf("(SELECT"))!=-1 | (inIndex=commands.indexOf("IN"))!=-1) {
+		while((selectIndex=commands.indexOf("(SELECT"))!=-1 | (inIndex=commands.indexOf(" IN "))!=-1) {
 			//Handle the IN function
 			if(inIndex!=-1 && (selectIndex==-1 || inIndex<selectIndex)) {
 				if((oParen=commands.substring(0,inIndex).lastIndexOf('('))!=-1) {
@@ -82,7 +83,7 @@ class WhereClass {
 					if((opIndex=args[0].indexOf("<"))!=-1 || (opIndex=args[0].indexOf(">"))!=-1 || (opIndex=args[0].indexOf("="))!=-1) {
 						whereObj.subQueries.add(SubQueryOperators.allOp(HelperFunctions.convertToTable(whereObj.myTable, args[0].substring(0, opIndex).trim()),args[0].substring(opIndex),args[1].trim()));
 					}
-					//??? Unknown operator
+					//??? Unknown operator, to reach here there must have been a SELECT but not an exists, any, or all?
 					else
 						whereObj.subQueries.add(HelperFunctions.createTable(CompareOps.FALSE, CompareOps.BOOLEAN, whereObj.myTable.getRowCount(), CompareOps.FALSE));
 				}
@@ -255,10 +256,9 @@ class WhereClass {
 		else if(command.trim().equals(CompareOps.TRUE))
 			return HelperFunctions.createTable(CompareOps.TRUE, CompareOps.BOOLEAN, myTable.getRowCount(), CompareOps.TRUE);
 		//Unknown Operator? return false
-		
 		return HelperFunctions.createTable(CompareOps.FALSE, CompareOps.BOOLEAN, myTable.getRowCount(), CompareOps.FALSE);
 	}
-	//Returns the closeParen assuming an openParen prior to this string
+	//Returns the closeParen assuming an openParen prior to this string, useful for subQueries
 	private static int getCParen(String command) {
 		int parenIndex=0;
 		int parenDepth=1;
