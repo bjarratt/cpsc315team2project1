@@ -1,4 +1,5 @@
 class SingleValOps {
+	//Gets the largest value in the column
 	static Double max(Table myTable, String colName) {
 		double maxVal=0;
 		int colNum=myTable.colWithName(colName);
@@ -6,7 +7,6 @@ class SingleValOps {
 		if(colNum!=-1) {
 			if(myTable.getRowCount()>0) {
 				if(myTable.getColType(colNum).equals(CompareOps.DOUBLE)) {
-					//System.out.println("COLW###" + maxVal);
 					maxVal=(Double) myTable.getValueAt(0,colNum);
 					for(int i=1; i<myTable.getRowCount(); ++i) {
 						if((Double) myTable.getValueAt(i,colNum)>maxVal)
@@ -24,6 +24,7 @@ class SingleValOps {
 		}
 		return maxVal;
 	}
+	//Gets the smallest value in the column
 	static Double min(Table myTable, String colName) {
 		double minVal=0;
 		int colNum=myTable.colWithName(colName);
@@ -48,12 +49,20 @@ class SingleValOps {
 		}
 		return minVal;
 	}
+	//Total number of NON-NULL values
 	static int count(Table myTable, String colName) {
-		//No nulls currently
-		if(myTable.colWithName(colName)==-1)
+		int count=0;
+		int colNum=myTable.colWithName(colName);
+		if(colNum==-1)
 			return 0;
-		return(myTable.getRowCount());
+		else {
+			for(int i=0; i<myTable.getRowCount(); ++i)
+				if(myTable.getValueAt(i,colNum)==null)
+					++count;
+		}
+		return(count);
 	}
+	//Sum of all values
 	static double sum(Table myTable, String colName) {
 		double sumVal=0;
 		int colNum=myTable.colWithName(colName);
