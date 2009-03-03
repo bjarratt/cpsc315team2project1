@@ -93,7 +93,7 @@ public class AddPassenger extends JFrame implements ActionListener, WindowListen
                     || ageField.getText().equals(""))
                 return;
             else {
-                TableOps.insertInto("PassengerInfo VALUES (" + nameField.getText() + "," + addressField.getText() +
+                TableOps.insertInto("PassengerInfo VALUES (" + nameField.getText().toUpperCase() + "," + addressField.getText() +
                         "," + flyerField.getText() + "," + ageField.getText() + ")");
 
                 nameField.setText("");
