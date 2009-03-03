@@ -8,6 +8,7 @@ class loadDb {
 	static boolean load(String fileName) {
 		try {
 			BufferedReader in= new BufferedReader(new FileReader(fileName));
+			//Inner try is to force an in.close() before return
 			try {
 				String nextLine;
 				String currentTable;
@@ -30,9 +31,11 @@ class loadDb {
 	static boolean saveDatabase(String fileName) {
 		try {
 			BufferedWriter out= new BufferedWriter(new FileWriter(fileName));
+			//Inner try is to force an out.close() before return
 			try {
 				for(int tableCtr=0; tableCtr<TableOps.db.size(); ++tableCtr) {
 					Table curTable=TableOps.db.get(tableCtr);
+					//Generate table schema
 					out.write(curTable.getName() + " (" );
 					if(curTable.getColumnCount()!=0)
 						out.write(curTable.getColName(0) + " " + curTable.getColType(0));
@@ -41,6 +44,7 @@ class loadDb {
 					}
 					out.write(")");
 					out.newLine();
+					//Generate values for the table
 					for(int rowCtr=0; rowCtr<curTable.getRowCount(); ++rowCtr) {
 						try {
 							out.write(curTable.getValueAt(rowCtr,0).toString());
